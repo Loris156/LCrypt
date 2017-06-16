@@ -1,0 +1,524 @@
+﻿<controls:MetroWindow x:Class="LCrypt.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:p="clr-namespace:LCrypt.Properties"
+        mc:Ignorable="d"
+        Title="LCRYPT" Height="540" Width="400"
+        RightWindowCommandsOverlayBehavior="Never" 
+        ResizeMode="CanMinimize" 
+        WindowStartupLocation="CenterScreen">
+
+    <controls:MetroWindow.Resources>
+        <Style x:Key="ColorSelection" TargetType="Rectangle">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="0"/>
+            <Setter Property="Margin" Value="2"/>
+            <EventSetter Event="MouseEnter" Handler="ColorSelection_OnMouseEnter"/>
+            <EventSetter Event="MouseLeave" Handler="ColorSelection_OnMouseLeave"/>
+            <EventSetter Event="MouseUp" Handler="ColorSelection_OnMouseUp"/>
+        </Style>
+    </controls:MetroWindow.Resources>
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button x:Name="BtSettings" Content="{x:Static p:Localization.Settings}" Click="BtSettings_OnClick" />
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+    <controls:MetroWindow.Flyouts>
+        <controls:FlyoutsControl>
+            <controls:Flyout x:Name="SettingsFlyout" Width="290" AnimateOpacity="True" Position="Right" Header="{x:Static p:Localization.Settings}">
+                <StackPanel>
+                    <TabControl x:Name="TcSettings">
+                        <TabItem Header="{x:Static p:Localization.General}">
+                            <StackPanel>
+                                <TextBlock Text="{x:Static p:Localization.Language}" FontSize="14" Margin="10">:</TextBlock>
+                                <ComboBox x:Name="CoBLanguage" IsReadOnly="True" FontSize="14" Margin="10, 0, 10, 10">
+                                    <ComboBoxItem>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="pack://application:,,/Resources/de.png" Margin="0, 0, 5, 0"></Image>
+                                            <TextBlock Text="{x:Static p:Localization.GermanGerman}"></TextBlock>
+                                        </StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="pack://application:,,/Resources/us.png" Margin="0, 0, 5, 0"></Image>
+                                            <TextBlock Text="{x:Static p:Localization.EnglishAmerican}"></TextBlock>
+                                        </StackPanel>
+                                    </ComboBoxItem>
+                                </ComboBox>
+                                <Separator x:Name="Separator" Visibility="Hidden"/>
+                                <Button x:Name="BtRestart" Content="{x:Static p:Localization.RestartToApplyChanges}" Margin="10" Visibility="Hidden" Click="BtRestart_OnClick"></Button>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="{x:Static p:Localization.Appearance}">
+                            <StackPanel>
+                                <TextBlock Text="{x:Static p:Localization.Theme}" FontSize="14" Margin="10">:</TextBlock>
+                                <ComboBox x:Name="CoBAppTheme" IsReadOnly="True" FontSize="14" Margin="10, 0, 10, 10">
+                                    <ComboBoxItem Content="{x:Static p:Localization.Light}"></ComboBoxItem>
+                                    <ComboBoxItem Content="{x:Static p:Localization.Dark}"></ComboBoxItem>
+                                </ComboBox>
+                                <Separator/>
+                                <TextBlock Text="{x:Static p:Localization.AccentColor}" FontSize="14" Margin="10">:</TextBlock>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <Rectangle x:Uid="Red" Style="{StaticResource ColorSelection}" Fill="Red"></Rectangle>
+                                    <Rectangle x:Uid="Green" Grid.Column="1" Grid.Row="0" Style="{StaticResource ColorSelection}" Fill="Green"></Rectangle>
+                                    <Rectangle x:Uid="Blue" Grid.Column="2" Grid.Row="0" Style="{StaticResource ColorSelection}" Fill="#41B1E1"></Rectangle>
+                                    <Rectangle x:Uid="Purple" Grid.Column="3" Grid.Row="0" Style="{StaticResource ColorSelection}" Fill="Purple"></Rectangle>
+                                    <Rectangle x:Uid="Orange" Grid.Column="4" Grid.Row="0" Style="{StaticResource ColorSelection}" Fill="Orange"></Rectangle>
+                                    <Rectangle x:Uid="Lime" Grid.Column="5" Grid.Row="0" Style="{StaticResource ColorSelection}" Fill="Lime"></Rectangle>
+
+                                    <Rectangle x:Uid="Emerald" Grid.Column="0" Grid.Row="1" Style="{StaticResource ColorSelection}" Fill="#50C878"></Rectangle>
+                                    <Rectangle x:Uid="Teal" Grid.Column="1" Grid.Row="1" Style="{StaticResource ColorSelection}" Fill="Teal"></Rectangle>
+                                    <Rectangle x:Uid="Cyan" Grid.Column="2" Grid.Row="1" Style="{StaticResource ColorSelection}" Fill="Cyan"></Rectangle>
+                                    <Rectangle x:Uid="Cobalt" Grid.Column="3" Grid.Row="1" Style="{StaticResource ColorSelection}" Fill="#0047AB"></Rectangle>
+                                    <Rectangle x:Uid="Indigo" Grid.Column="4" Grid.Row="1" Style="{StaticResource ColorSelection}" Fill="Indigo"></Rectangle>
+                                    <Rectangle x:Uid="Violet" Grid.Column="5" Grid.Row="1" Style="{StaticResource ColorSelection}" Fill="Violet"></Rectangle>
+
+                                    <Rectangle x:Uid="Pink" Grid.Column="0" Grid.Row="2" Style="{StaticResource ColorSelection}"  Fill="Pink"></Rectangle>
+                                    <Rectangle x:Uid="Magenta" Grid.Column="1" Grid.Row="2" Style="{StaticResource ColorSelection}" Fill="Magenta"></Rectangle>
+                                    <Rectangle x:Uid="Crimson" Grid.Column="2" Grid.Row="2" Style="{StaticResource ColorSelection}" Fill="Crimson"></Rectangle>
+                                    <Rectangle x:Uid="Amber" Grid.Column="3" Grid.Row="2" Style="{StaticResource ColorSelection}" Fill="#FFBF00"></Rectangle>
+                                    <Rectangle x:Uid="Yellow" Grid.Column="4" Grid.Row="2" Style="{StaticResource ColorSelection}" Fill="Yellow"></Rectangle>
+                                    <Rectangle x:Uid="Brown" Grid.Column="5" Grid.Row="2" Style="{StaticResource ColorSelection}" Fill="Brown"></Rectangle>
+
+                                    <Rectangle x:Uid="Olive" Grid.Column="0" Grid.Row="3" Style="{StaticResource ColorSelection}"  Fill="Olive"></Rectangle>
+                                    <Rectangle x:Uid="Steel" Grid.Column="1" Grid.Row="3" Style="{StaticResource ColorSelection}" Fill="#576573"></Rectangle>
+                                    <Rectangle x:Uid="Mauve" Grid.Column="2" Grid.Row="3" Style="{StaticResource ColorSelection}" Fill="#E0B0FF"></Rectangle>
+                                    <Rectangle x:Uid="Taupe" Grid.Column="3" Grid.Row="3" Style="{StaticResource ColorSelection}" Fill="#483C32"></Rectangle>
+                                    <Rectangle x:Uid="Sienna" Grid.Column="4" Grid.Row="3" Style="{StaticResource ColorSelection}" Fill="Sienna"></Rectangle>
+                                </Grid>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+            </controls:Flyout>
+        </controls:FlyoutsControl>
+    </controls:MetroWindow.Flyouts>
+
+
+    <TabControl>
+        <TabItem Header="{x:Static p:Localization.File}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="ImgSelectedFile" Source="pack://application:,,/Resources/file.png" Height="70" Width="70" Margin="10"></Image>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="TblSelectedFile" VerticalAlignment="Center" Text="{x:Static p:Localization.NoFileSelected}" FontSize="15" FontFamily="Consolas" TextWrapping="WrapWithOverflow"></TextBlock>
+                    </Grid>
+
+                </StackPanel>
+                <Button x:Name="BtChooseFile" Margin="70, 10, 70, 10" Click="BtChooseFile_OnClick" AllowDrop="True" DragEnter="BtChooseFile_DragEnter" Drop="BtChooseFile_Drop">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,/Resources/folder.png" Height="30" Margin="0, 3, 15, 3"/>
+                        <TextBlock Text="{x:Static p:Localization.ChooseFile}" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <GroupBox Header="{x:Static p:Localization.Settings}">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <RadioButton x:Name="RbEncrypt" Grid.Column="0" Grid.Row="0" Margin="5" IsChecked="True">
+                                <TextBlock Text="{x:Static p:Localization.Encrypt}" FontSize="14"></TextBlock>
+                            </RadioButton>
+                            <RadioButton x:Name="RbDecrypt" Grid.Column="1" Grid.Row="0" Margin="5">
+                                <TextBlock Text="{x:Static p:Localization.Decrypt}" FontSize="14"></TextBlock>
+                            </RadioButton>
+                            <TextBlock Text="{x:Static p:Localization.Algorithm}" Grid.Column="0" Grid.Row="1" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
+                            <ComboBox x:Name="CoBAlgorithm"  Grid.Column="1" Grid.Row="1" Margin="5" FontSize="14" IsReadOnly="True" SelectionChanged="CoBAlgorithm_SelectionChanged">
+                                <ComboBoxItem Content="Advanced Encryption Standard (AES-256)"/>
+                                <ComboBoxItem Content="Data Encryption Standard (DES-64)"/>
+                                <ComboBoxItem Content="Triple Data Encryption Algorithm (TDEA-192)"/>
+                                <ComboBoxItem Content="Rivest Cipher 2 (RC2-128)"/>
+                            </ComboBox>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{x:Static p:Localization.Password}" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
+                            <PasswordBox x:Name="PbPassword" Grid.Column="1" Margin="5" MaxLength="256" PasswordChanged="PbPassword_PasswordChanged"></PasswordBox>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Static p:Localization.FileDestination}" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
+                    <TextBox x:Name="TbFileDestination" Grid.Column="1" Margin="6, 5, 5, 5" FontSize="14" MaxLines="1" MaxLength="260"></TextBox>
+                    <Button x:Name="BtChooseOutputDirectory" Grid.Column="2" Margin="5, 5, 10, 5" Click="BtChooseOutputDirectory_OnClick">...</Button>
+                </Grid>
+                <Button x:Name="BtStart" Margin="70, 10, 70, 10" IsEnabled="False" Click="BtStart_OnClick">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,/Resources/start.png" Height="30" Margin="0, 3, 15, 3"/>
+                        <TextBlock Text="{x:Static p:Localization.Begin}" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                    </StackPanel>
+                </Button>
+                <ProgressBar x:Name="ProgressBar" Margin="20, 5, 20, 5"></ProgressBar>
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="TblSpeed" Grid.Column="0">- MiB/s</TextBlock>
+                    <TextBlock x:Name="TblProgress" Grid.Column="1" HorizontalAlignment="Right">- / - MiB</TextBlock>
+                </Grid>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="{x:Static p:Localization.Text}">
+            <TabControl>
+                <TabItem Header="{x:Static p:Localization.Encrypt}">
+                    <StackPanel>
+                        <TextBlock Text="{x:Static p:Localization.Input}" Margin="10, 5, 0, 5" FontSize="14">:</TextBlock>
+                        <TextBox x:Name="TbTextEncryptInput" Margin="10, 0, 10, 10" Height="80" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14" TextChanged="TbTextEncryptInput_TextChanged"></TextBox>
+
+                        <GroupBox Header="{x:Static p:Localization.Settings}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{x:Static p:Localization.Algorithm}" Grid.Column="0" Grid.Row="0" FontSize="14" VerticalAlignment="Center" Margin="5">:</TextBlock>
+                                <ComboBox x:Name="CoBTextEncryptAlgorithm" Grid.Column="1" Grid.Row="0" Margin="5" FontSize="14" SelectionChanged="CoBTextEncrypt_SelectionChanged">
+                                    <ComboBoxItem Content="Advanced Encryption Standard (AES-256)"/>
+                                    <ComboBoxItem Content="Data Encryption Standard (DES-64)"/>
+                                    <ComboBoxItem Content="Triple Data Encryption Algorithm (TDEA-192)"/>
+                                    <ComboBoxItem Content="Rivest Cipher 2 (RC2-128)"/>
+                                </ComboBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Encoding}" Grid.Column="0" Grid.Row="1" FontSize="14" VerticalAlignment="Center" Margin="5">:</TextBlock>
+                                <ComboBox x:Name="CoBTextEncryptEncoding" Grid.Column="1" Grid.Row="1" Margin="5" FontSize="14" SelectionChanged="CoBTextEncrypt_SelectionChanged" IsReadOnly="True">
+                                    <ComboBoxItem>ASCII</ComboBoxItem>
+                                    <ComboBoxItem>UTF-7</ComboBoxItem>
+                                    <ComboBoxItem>UTF-8 (Standard)</ComboBoxItem>
+                                    <ComboBoxItem>UTF-16 (Windows Unicode)</ComboBoxItem>
+                                    <ComboBoxItem>Big Endian UTF-16</ComboBoxItem>
+                                    <ComboBoxItem>UTF-32</ComboBoxItem>
+                                </ComboBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Password}" Grid.Column="0" Grid.Row="2" Margin="5" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <PasswordBox x:Name="PbTextEncrypt" Grid.Column="1" Grid.Row="2" Margin="5" MaxLength="256" FontSize="14" PasswordChanged="PbTextEncrypt_PasswordChanged"></PasswordBox>
+                            </Grid>
+                        </GroupBox>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Localization.Output}" Margin="10, 5, 0, 5" FontSize="14">:</TextBlock>
+
+                            <RadioButton x:Name="RbTextEncryptHexadecimal" Margin="20, 5, 5, 5" IsChecked="True">
+                                <TextBlock Text="{x:Static p:Localization.Hexadecimal}" FontSize="14"></TextBlock>
+                            </RadioButton>
+                            <RadioButton x:Name="RbTextEncryptBase64" Margin="20, 5, 5, 5">
+                                <TextBlock Text="Base64" FontSize="14"></TextBlock>
+                            </RadioButton>
+                        </StackPanel>
+                        
+                        <TextBox x:Name="TbTextEncryptOutput" Margin="10, 0, 10, 10" Height="100" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
+
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="{x:Static p:Localization.Decrypt}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Localization.Input}" Margin="10, 5, 0, 5" FontSize="14">:</TextBlock>
+                            
+                            <RadioButton x:Name="RbTextDecryptHexadecimal"  Margin="20, 5, 5, 5" IsChecked="True">
+                                <TextBlock Text="{x:Static p:Localization.Hexadecimal}" FontSize="14"></TextBlock>
+                            </RadioButton>
+                            <RadioButton x:Name="RbTextDecryptBase64" Margin="20, 5, 5, 5">
+                                <TextBlock Text="Base64" FontSize="14"></TextBlock>
+                            </RadioButton>
+                        </StackPanel>
+                        <TextBox x:Name="TbTextDecryptInput" Margin="10, 0, 10, 10" Height="80" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14" TextChanged="TbTextDecryptInput_TextChanged"/>
+
+                        <GroupBox Header="{x:Static p:Localization.Settings}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{x:Static p:Localization.Algorithm}" Grid.Column="0" Grid.Row="0" FontSize="14" VerticalAlignment="Center" Margin="5">:</TextBlock>
+                                <ComboBox x:Name="CoBTextDecryptAlgorithm" Grid.Column="1" Grid.Row="0" Margin="5" FontSize="14" SelectionChanged="CoBTextDecrypt_SelectionChanged">
+                                    <ComboBoxItem Content="Advanced Encryption Standard (AES-256)"/>
+                                    <ComboBoxItem Content="Data Encryption Standard (DES-64)"/>
+                                    <ComboBoxItem Content="Triple Data Encryption Algorithm (TDEA-192)"/>
+                                    <ComboBoxItem Content="Rivest Cipher 2 (RC2-128)"/>
+                                </ComboBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Encoding}" Grid.Column="0" Grid.Row="1" FontSize="14" VerticalAlignment="Center" Margin="5">:</TextBlock>
+                                <ComboBox x:Name="CoBTextDecryptEncoding" Grid.Column="1" Grid.Row="1" Margin="5" FontSize="14" SelectionChanged="CoBTextDecrypt_SelectionChanged">
+                                    <ComboBoxItem>ASCII</ComboBoxItem>
+                                    <ComboBoxItem>UTF-7</ComboBoxItem>
+                                    <ComboBoxItem>UTF-8 (Standard)</ComboBoxItem>
+                                    <ComboBoxItem>UTF-16 (Windows Unicode)</ComboBoxItem>
+                                    <ComboBoxItem>Big Endian UTF-16</ComboBoxItem>
+                                    <ComboBoxItem>UTF-32</ComboBoxItem>
+                                </ComboBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Password}" Grid.Column="0" Grid.Row="2" Margin="5" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <PasswordBox x:Name="PbTextDecrypt" Grid.Column="1" Grid.Row="2" Margin="5" MaxLength="256" FontSize="14" PasswordChanged="PbTextDecrypt_PasswordChanged"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <TextBlock Text="{x:Static p:Localization.Output}" Margin="10, 5, 0, 5" FontSize="14">:</TextBlock>
+                        <TextBox x:Name="TbTextDecryptOutput" Margin="10, 0, 10, 10" Height="100" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
+
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </TabItem>
+        <TabItem Header="Hashing">
+            <TabControl>
+                <TabItem Header="Text">
+                    <StackPanel>
+                        <TextBox x:Name="TbHashInput" Height="100" Margin="10" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" FontSize="14" TextChanged="TbHashInput_TextChanged"></TextBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{x:Static p:Localization.Algorithm}" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" FontSize="14" Margin="5">:</TextBlock>
+                            <ComboBox x:Name="CoBHashAlgorithm" Grid.Column="1" Grid.Row="0" Margin="5" IsReadOnly="True" FontSize="14" SelectionChanged="CoBHashAlgorithm_SelectionChanged">
+                                <ComboBoxItem>Message Digest Algorithm 5 (MD5)</ComboBoxItem>
+                                <ComboBoxItem>Secure Hash Algorithm 1 (SHA-1)</ComboBoxItem>
+                                <ComboBoxItem>Secure Hash Algorithm 256 (SHA-256)</ComboBoxItem>
+                                <ComboBoxItem>Secure Hash Algorithm 384 (SHA-384)</ComboBoxItem>
+                                <ComboBoxItem>Secure Hash Algorithm 512 (SHA-512)</ComboBoxItem>
+                            </ComboBox>
+                            <TextBlock Text="{x:Static p:Localization.Encoding}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Margin="5">:</TextBlock>
+                            <ComboBox x:Name="CoBHashEncoding" Grid.Column="1" Grid.Row="1" Margin="5" IsReadOnly="True" FontSize="14" SelectionChanged="CoBHashEncoding_SelectionChanged">
+                                <ComboBoxItem>ASCII</ComboBoxItem>
+                                <ComboBoxItem>UTF-7</ComboBoxItem>
+                                <ComboBoxItem>UTF-8 (Standard)</ComboBoxItem>
+                                <ComboBoxItem>UTF-16 (Windows Unicode)</ComboBoxItem>
+                                <ComboBoxItem>Big Endian UTF-16</ComboBoxItem>
+                                <ComboBoxItem>UTF-32</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                        <TextBox x:Name="TbHashOutput" Height="100" Margin="10" VerticalScrollBarVisibility="Auto" FontSize="14" TextWrapping="Wrap"></TextBox>
+                        <GroupBox Header="{x:Static p:Localization.Output}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton x:Name="RbBase64" Grid.Column="0" IsChecked="True">
+                                    <TextBlock  FontSize="14">Base64</TextBlock>
+                                </RadioButton>
+                                <RadioButton x:Name="RbHexadecimal" Grid.Column="1">
+                                    <TextBlock Text="{x:Static p:Localization.Hexadecimal}" FontSize="14"></TextBlock>
+                                </RadioButton>
+                                <CheckBox x:Name="ChBHexadecimalHyphens" Grid.Column="2" IsEnabled="False">
+                                    <TextBlock Text="{x:Static p:Localization.Hyphens}" FontSize="14"></TextBlock>
+                                </CheckBox>
+                            </Grid>
+                        </GroupBox>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="{x:Static p:Localization.Checksum}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="ImgChecksumSelectedFile" Source="pack://application:,,/Resources/file.png" Height="70" Width="70" Margin="10"></Image>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="300"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="TblChecksumSelectedFile" VerticalAlignment="Center" Text="{x:Static p:Localization.NoFileSelected}" FontSize="15" FontFamily="Consolas" TextWrapping="WrapWithOverflow"></TextBlock>
+                            </Grid>
+
+                        </StackPanel>
+                        <Button x:Name="BtChecksumChooseFile" Margin="70, 10, 70, 5" Click="BtChecksumChooseFile_Click" AllowDrop="True" DragEnter="BtChecksumChooseFile_DragEnter" Drop="BtChecksumChooseFile_Drop">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="pack://application:,,/Resources/folder.png" Height="30" Margin="0, 3, 15, 3"/>
+                                <TextBlock Text="{x:Static p:Localization.ChooseFile}" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                        <GroupBox Header="{x:Static p:Localization.Output}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="250"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="MD5:" Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbChecksumMd5" Grid.Column="1" Grid.Row="0" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <controls:ProgressRing x:Name="PrMd5" Grid.Column="2" Grid.Row="0" Height="30" Width="30" IsActive="False"/>
+                                
+                                <TextBlock Text="SHA-1:" Grid.Column="0" Grid.Row="1"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                                <TextBox x:Name="TbChecksumSha1" Grid.Column="1" Grid.Row="1" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <controls:ProgressRing x:Name="PrSha1" Grid.Column="2" Grid.Row="1" Height="30" Width="30" IsActive="False"/>
+                                
+                                <TextBlock Text="SHA-256:" Grid.Column="0" Grid.Row="2"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                                <TextBox x:Name="TbChecksumSha256" Grid.Column="1" Grid.Row="2" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <controls:ProgressRing x:Name="PrSha256" Grid.Column="2" Grid.Row="2" Height="30" Width="30" IsActive="False"/>
+                                
+                                <TextBlock Text="SHA-384:" Grid.Column="0" Grid.Row="3"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                                <TextBox x:Name="TbChecksumSha384" Grid.Column="1" Grid.Row="3" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <controls:ProgressRing x:Name="PrSha384" Grid.Column="2" Grid.Row="3" Height="30" Width="30" IsActive="False"/>
+                                
+                                <TextBlock Text="SHA-512:" Grid.Column="0" Grid.Row="4"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
+                                <TextBox x:Name="TbChecksumSha512" Grid.Column="1" Grid.Row="4" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <controls:ProgressRing x:Name="PrSha512" Grid.Column="2" Grid.Row="4" Height="30" Width="30" IsActive="False"/>
+                            </Grid>
+                        </GroupBox>
+
+
+                        <Button x:Name="BtChecksumExport" FontSize="14" Margin="290, 0, 5, 5" Click="BtChecksumExport_Click">
+                            <TextBlock Text="{x:Static p:Localization.Export}"></TextBlock>
+                        </Button>
+                        
+                        
+                        </StackPanel>
+
+
+                </TabItem>
+            </TabControl>
+        </TabItem>
+        <TabItem Header="Tools">
+            <TabControl>
+                <TabItem Header="{x:Static p:Localization.PasswordGenerator}">
+                    <StackPanel>
+                        <GroupBox Header="{x:Static p:Localization.Settings}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{x:Static p:Localization.Length}" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <controls:NumericUpDown x:Name="NudPasswordLength" Grid.Column="1" Grid.Row="0" Margin="5" FontSize="14" Value="10" Minimum="1" Maximum="100"></controls:NumericUpDown>
+
+                                <CheckBox x:Name="CbPasswordConsonants" Grid.Column="0" Grid.Row="1" Margin="5" FontSize="14" IsChecked="True">
+                                    <TextBlock Text="{x:Static p:Localization.Consonants}"/>
+                                </CheckBox>
+
+                                <CheckBox x:Name="CbPasswordVocals" Grid.Column="1" Grid.Row="1" Margin="5" FontSize="14" IsChecked="True">
+                                    <TextBlock Text="{x:Static p:Localization.Vocals}"/>
+                                </CheckBox>
+
+                                <CheckBox x:Name="CbPasswordNumbers" Grid.Column="0" Grid.Row="2" Margin="5" FontSize="14" IsChecked="True">
+                                    <TextBlock Text="{x:Static p:Localization.Numbers}"/>
+                                </CheckBox>
+
+                                <CheckBox x:Name="CbPasswordSymbols" Grid.Column="1" Grid.Row="2" Margin="5" FontSize="14" IsChecked="True">
+                                    <TextBlock Text="{x:Static p:Localization.Symbols}"/>
+                                </CheckBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Letters}" Grid.Column="0" Grid.Row="3" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <ComboBox x:Name="CoBPasswordLetters" Grid.Column="1" Grid.Row="3" Margin="5" FontSize="14" SelectedIndex="0">
+                                    <ComboBoxItem>
+                                        <TextBlock Text="{x:Static p:Localization.Both}"></TextBlock>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="{x:Static p:Localization.UpperCase}"></TextBlock>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="{x:Static p:Localization.LowerCase}"></TextBlock>
+                                    </ComboBoxItem>
+                                </ComboBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Count}" Grid.Column="0" Grid.Row="4" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <controls:NumericUpDown x:Name="NudPasswordCount" Grid.Column="1" Grid.Row="4" Margin="5" FontSize="14" Value="10" Minimum="1" Maximum="100"></controls:NumericUpDown>
+                            </Grid>
+                        </GroupBox>
+
+                        <ListBox x:Name="LbPasswords" Margin="10" Height="120" BorderThickness="2"></ListBox>
+                        <Grid HorizontalAlignment="Left" Margin="0,0,-0.4,0" Width="382">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button x:Name="BtCopyPassword" Margin="5" FontSize="14" Click="BtCopyPassword_Click">
+                                <TextBlock Text="{x:Static p:Localization.Copy}"></TextBlock>
+                            </Button>
+
+                            <Button x:Name="BtCopyAllPasswords" Grid.Column="1" Margin="5" FontSize="14" Click="BtCopyAllPasswords_Click">
+                                <TextBlock Text="{x:Static p:Localization.CopyAll}"></TextBlock>
+                            </Button>
+
+                            <Button x:Name="BtClearPasswords" Grid.Column="2" Margin="5" FontSize="14" Click="BtClearPasswords_Click">
+                                <TextBlock Text="{x:Static p:Localization.Clear}"></TextBlock>
+                            </Button>
+
+                            <Button x:Name="BtGeneratePasswords" Grid.Column="3" Margin="5" FontSize="14" Click="BtGeneratePasswords_Click">
+                                <TextBlock Text="{x:Static p:Localization.Generate}"></TextBlock>
+                            </Button>
+
+                        </Grid>
+                        <TextBlock Text="{x:Static p:Localization.PasswordsStay10SecondsInClipboard}" HorizontalAlignment="Center" Margin="0, 5, 0, 0" Foreground="Red"></TextBlock>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </TabItem>
+    </TabControl>
+</controls:MetroWindow>
