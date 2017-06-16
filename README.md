@@ -2,7 +2,7 @@
 ##### LCrypt is the all-in-one solution for file and text encryption.
 
 LCrypt is a free and open-source software that provides encryption, hashing and generation techniques.
-It was written in `C#` and uses WPF as UI framework. The application window can be themed 
+It was written in `C#` and uses WPF as UI framework. The application window can be themed and a custom color scheme is available.
 
 ### Features
 
