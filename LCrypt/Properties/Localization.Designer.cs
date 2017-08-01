@@ -367,6 +367,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hover here to display..
+        /// </summary>
+        public static string HoverHereToDisplay {
+            get {
+                return ResourceManager.GetString("HoverHereToDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hyphens.
         /// </summary>
         public static string Hyphens {
@@ -430,6 +439,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Medium.
+        /// </summary>
+        public static string Medium {
+            get {
+                return ResourceManager.GetString("Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -475,6 +493,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your password consists of common word or a variation..
+        /// </summary>
+        public static string PasswordContainsCommonWord {
+            get {
+                return ResourceManager.GetString("PasswordContainsCommonWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password Generator.
         /// </summary>
         public static string PasswordGenerator {
@@ -489,6 +516,15 @@ namespace LCrypt.Properties {
         public static string PasswordsStay10SecondsInClipboard {
             get {
                 return ResourceManager.GetString("PasswordsStay10SecondsInClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password will be removed after 5 seconds..
+        /// </summary>
+        public static string PasswordWillBeRemovedIn5Seconds {
+            get {
+                return ResourceManager.GetString("PasswordWillBeRemovedIn5Seconds", resourceCulture);
             }
         }
         
@@ -516,6 +552,24 @@ namespace LCrypt.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strength.
+        /// </summary>
+        public static string Strength {
+            get {
+                return ResourceManager.GetString("Strength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strong.
+        /// </summary>
+        public static string Strong {
+            get {
+                return ResourceManager.GetString("Strong", resourceCulture);
             }
         }
         
@@ -583,11 +637,38 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Very Strong.
+        /// </summary>
+        public static string VeryStrong {
+            get {
+                return ResourceManager.GetString("VeryStrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Very weak.
+        /// </summary>
+        public static string VeryWeak {
+            get {
+                return ResourceManager.GetString("VeryWeak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vocals.
         /// </summary>
         public static string Vocals {
             get {
                 return ResourceManager.GetString("Vocals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weak.
+        /// </summary>
+        public static string Weak {
+            get {
+                return ResourceManager.GetString("Weak", resourceCulture);
             }
         }
         

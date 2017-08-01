@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using LCrypt.Algorithms;
 using LCrypt.Enumerations;
@@ -12,11 +13,13 @@ using System.Media;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using HashAlgorithm = LCrypt.Enumerations.HashAlgorithm;
 using Localization = LCrypt.Properties.Localization;
 using Path = System.IO.Path;
@@ -62,6 +65,12 @@ namespace LCrypt
             TcSettings.SelectedIndex = 0;
             Separator.Visibility = Visibility.Hidden;
             BtRestart.Visibility = Visibility.Hidden;
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
 
         private void CoBLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -826,7 +835,7 @@ namespace LCrypt
             if (CbPasswordNumbers.IsChecked == true)
                 contentBuilder.Append("0123456789");
             if (CbPasswordSymbols.IsChecked == true)
-                contentBuilder.Append(@"!§$%&/()=?\}][{<>|,;.:-_#+*~^");
+                contentBuilder.Append(@"!§$@%&/()=?\}][{<>|,;.:-_#+*~^");
 
             var passwordList = new List<string>(0);
             if (!NudPasswordLength.Value.HasValue)
@@ -867,7 +876,7 @@ namespace LCrypt
             timer.Elapsed += (o, ev) =>
             {
                 SystemSounds.Asterisk.Play();
-                var resetThread = new Thread(Clipboard.Clear);
+                var resetThread = new Thread(Clipboard.Clear); // Clipboard must be cleared from a different thread.
                 resetThread.SetApartmentState(ApartmentState.STA);
                 resetThread.Start();
 
@@ -892,14 +901,107 @@ namespace LCrypt
             timer.Elapsed += (o, ev) =>
             {
                 SystemSounds.Asterisk.Play();
-                var resetThread = new Thread(Clipboard.Clear);
-                resetThread.SetApartmentState(ApartmentState.STA);
+                var resetThread = new Thread(Clipboard.Clear); // Clipboard must be cleared from a different thread.
+                resetThread.SetApartmentState(ApartmentState.STA); 
                 resetThread.Start();
 
                 timer.Stop();
                 timer.Dispose();
             };
             Clipboard.SetText(passwordBuilder.ToString());
+        }
+
+        private Timer _clearPasswordTimer;
+
+        private void PbPasswordCheck_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (_clearPasswordTimer == null)
+            {
+                _clearPasswordTimer = new Timer(TimeSpan.FromSeconds(5).TotalMilliseconds);
+                _clearPasswordTimer.Elapsed += (o, ev) =>
+                {
+                    PbPasswordCheck.Dispatcher.Invoke(() => PbPasswordCheck.Clear());
+                };
+                _clearPasswordTimer.AutoReset = false;
+            }
+            _clearPasswordTimer.Stop();
+            _clearPasswordTimer.Start();
+
+            TbPasswordLength.Text = PbPasswordCheck.Password.Length.ToString();
+
+            int letters = 0, numbers = 0, symbols = 0;
+            foreach (var character in PbPasswordCheck.Password)
+            {
+                if (char.IsLetter(character))
+                {
+                    letters++;
+                    continue;
+                }
+                if (char.IsDigit(character))
+                {
+                    numbers++;
+                    continue;
+                }
+
+                if (!Regex.Match(character.ToString(), @"[!,§,@,$,%,&,/,(,),=,?,},\],\[,{,<,>,|,,,;,.,:,-,_,#,+,*,~,^]",
+                    RegexOptions.ECMAScript).Success) continue;
+                symbols++;
+            }
+
+            TbPasswordLetters.Text = letters.ToString();
+            TbPasswordNumbers.Text = numbers.ToString();
+            TbPasswordSymbols.Text = symbols.ToString();
+
+            var strength = PasswordCheck.GetStrength(PbPasswordCheck.Password);
+
+            switch (strength)
+            {
+                case PasswordStrength.Blank:
+                    TblPasswordStrength.Text = "-";
+                    PrBPasswordStrength.Value = 0;
+                    break;
+                case PasswordStrength.VeryWeak:
+                    TblPasswordStrength.Text = Localization.VeryWeak;
+                    PrBPasswordStrength.Value = 20;
+                    PrBPasswordStrength.Foreground = new SolidColorBrush(Color.FromRgb(224, 11, 11));
+                    break;
+                case PasswordStrength.Weak:
+                    TblPasswordStrength.Text = Localization.Weak;
+                    PrBPasswordStrength.Value = 40;
+                    PrBPasswordStrength.Foreground = new SolidColorBrush(Color.FromRgb(169, 113, 10));
+                    break;
+                case PasswordStrength.Medium:
+                    TblPasswordStrength.Text = Localization.Medium;
+                    PrBPasswordStrength.Value = 60;
+                    PrBPasswordStrength.Foreground = new SolidColorBrush(Color.FromRgb(8, 111, 158));
+                    break;
+                case PasswordStrength.Strong:
+                    TblPasswordStrength.Text = Localization.Strong;
+                    PrBPasswordStrength.Value = 80;
+                    PrBPasswordStrength.Foreground = new SolidColorBrush(Color.FromRgb(11, 68, 7));
+                    break;
+                case PasswordStrength.VeryStrong:
+                    TblPasswordStrength.Text = Localization.VeryStrong;
+                    PrBPasswordStrength.Value = 100;
+                    PrBPasswordStrength.Foreground = new SolidColorBrush(Color.FromRgb(41, 235, 26));
+                    break;
+                default:
+                    TblPasswordStrength.Text = "-";
+                    PrBPasswordStrength.Value = 0;
+                    break;
+            }
+            var commonWord = PasswordCheck.IsCommonPassword(PbPasswordCheck.Password);
+            if (commonWord != null)
+            {
+                TblPasswordBadWord.Visibility = Visibility.Visible;
+                TblPasswordHover.Visibility = Visibility.Visible;
+                TblPasswordHover.ToolTip = commonWord;
+            }
+            else
+            {
+                TblPasswordBadWord.Visibility = Visibility.Hidden;
+                TblPasswordHover.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

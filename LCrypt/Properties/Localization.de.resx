@@ -289,12 +289,39 @@
     <value>Leeren</value>
   </data>
   <data name="PasswordsStay10SecondsInClipboard" xml:space="preserve">
-    <value>Passwörter bleiben nur 10 Sekunden in der Zwischenablage gespeichert!</value>
+    <value>Passwörter bleiben nur zehn Sek. in der Zwischenablage gespeichert!</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>Generieren</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>Anzahl</value>
+  </data>
+  <data name="Strength" xml:space="preserve">
+    <value>Stärke</value>
+  </data>
+  <data name="VeryWeak" xml:space="preserve">
+    <value>Sehr schwach</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Schwach</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>In Ordnung</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Stark</value>
+  </data>
+  <data name="VeryStrong" xml:space="preserve">
+    <value>Sehr stark</value>
+  </data>
+  <data name="PasswordWillBeRemovedIn5Seconds" xml:space="preserve">
+    <value>Passwort wird nach fünf Sekunden entfernt.</value>
+  </data>
+  <data name="PasswordContainsCommonWord" xml:space="preserve">
+    <value>Ihr Password ist ein häufig genutztes Wort.</value>
+  </data>
+  <data name="HoverHereToDisplay" xml:space="preserve">
+    <value>Hier hovern zum Anzeigen.</value>
   </data>
 </root>

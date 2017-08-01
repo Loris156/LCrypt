@@ -297,4 +297,31 @@
   <data name="Count" xml:space="preserve">
     <value>Count</value>
   </data>
+  <data name="Strength" xml:space="preserve">
+    <value>Strength</value>
+  </data>
+  <data name="VeryWeak" xml:space="preserve">
+    <value>Very weak</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Weak</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Strong</value>
+  </data>
+  <data name="VeryStrong" xml:space="preserve">
+    <value>Very Strong</value>
+  </data>
+  <data name="PasswordWillBeRemovedIn5Seconds" xml:space="preserve">
+    <value>Password will be removed after 5 seconds.</value>
+  </data>
+  <data name="PasswordContainsCommonWord" xml:space="preserve">
+    <value>Your password consists of common word or a variation.</value>
+  </data>
+  <data name="HoverHereToDisplay" xml:space="preserve">
+    <value>Hover here to display.</value>
+  </data>
 </root>

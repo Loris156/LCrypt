@@ -35,6 +35,24 @@
                     <TabControl x:Name="TcSettings">
                         <TabItem Header="{x:Static p:Localization.General}">
                             <StackPanel>
+                                <TextBlock FontSize="14" Margin="10, 5, 0, 0">Links:</TextBlock>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock HorizontalAlignment="Right" Margin="0, 0, 5, 5">
+                                        <Hyperlink TextDecorations="None" NavigateUri="mailto:lorisleitner@live.com?subject=LCrypt" RequestNavigate="Hyperlink_RequestNavigate">
+                                            <Image Source="pack://application:,,/Resources/email.png" Width="48" Height="48"></Image>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5, 0, 0, 5">
+                                        <Hyperlink TextDecorations="None" NavigateUri="https://www.github.com/Loris156/LCrypt" RequestNavigate="Hyperlink_RequestNavigate">
+                                            <Image Source="pack://application:,,/Resources/github.png" Width="48" Height="48"></Image>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                </Grid>
+                                <Separator/>
                                 <TextBlock Text="{x:Static p:Localization.Language}" FontSize="14" Margin="10">:</TextBlock>
                                 <ComboBox x:Name="CoBLanguage" IsReadOnly="True" FontSize="14" Margin="10, 0, 10, 10">
                                     <ComboBoxItem>
@@ -113,7 +131,6 @@
             </controls:Flyout>
         </controls:FlyoutsControl>
     </controls:MetroWindow.Flyouts>
-
 
     <TabControl>
         <TabItem Header="{x:Static p:Localization.File}">
@@ -251,7 +268,7 @@
                                 <TextBlock Text="Base64" FontSize="14"></TextBlock>
                             </RadioButton>
                         </StackPanel>
-                        
+
                         <TextBox x:Name="TbTextEncryptOutput" Margin="10, 0, 10, 10" Height="100" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
 
                     </StackPanel>
@@ -260,7 +277,7 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{x:Static p:Localization.Input}" Margin="10, 5, 0, 5" FontSize="14">:</TextBlock>
-                            
+
                             <RadioButton x:Name="RbTextDecryptHexadecimal"  Margin="20, 5, 5, 5" IsChecked="True">
                                 <TextBlock Text="{x:Static p:Localization.Hexadecimal}" FontSize="14"></TextBlock>
                             </RadioButton>
@@ -403,34 +420,29 @@
                                 <TextBlock Text="MD5:" Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"/>
                                 <TextBox x:Name="TbChecksumMd5" Grid.Column="1" Grid.Row="0" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
                                 <controls:ProgressRing x:Name="PrMd5" Grid.Column="2" Grid.Row="0" Height="30" Width="30" IsActive="False"/>
-                                
+
                                 <TextBlock Text="SHA-1:" Grid.Column="0" Grid.Row="1"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
                                 <TextBox x:Name="TbChecksumSha1" Grid.Column="1" Grid.Row="1" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
                                 <controls:ProgressRing x:Name="PrSha1" Grid.Column="2" Grid.Row="1" Height="30" Width="30" IsActive="False"/>
-                                
+
                                 <TextBlock Text="SHA-256:" Grid.Column="0" Grid.Row="2"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
                                 <TextBox x:Name="TbChecksumSha256" Grid.Column="1" Grid.Row="2" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
                                 <controls:ProgressRing x:Name="PrSha256" Grid.Column="2" Grid.Row="2" Height="30" Width="30" IsActive="False"/>
-                                
+
                                 <TextBlock Text="SHA-384:" Grid.Column="0" Grid.Row="3"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
                                 <TextBox x:Name="TbChecksumSha384" Grid.Column="1" Grid.Row="3" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
                                 <controls:ProgressRing x:Name="PrSha384" Grid.Column="2" Grid.Row="3" Height="30" Width="30" IsActive="False"/>
-                                
+
                                 <TextBlock Text="SHA-512:" Grid.Column="0" Grid.Row="4"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
                                 <TextBox x:Name="TbChecksumSha512" Grid.Column="1" Grid.Row="4" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
                                 <controls:ProgressRing x:Name="PrSha512" Grid.Column="2" Grid.Row="4" Height="30" Width="30" IsActive="False"/>
                             </Grid>
                         </GroupBox>
 
-
                         <Button x:Name="BtChecksumExport" FontSize="14" Margin="290, 0, 5, 5" Click="BtChecksumExport_Click">
                             <TextBlock Text="{x:Static p:Localization.Export}"></TextBlock>
                         </Button>
-                        
-                        
-                        </StackPanel>
-
-
+                    </StackPanel>
                 </TabItem>
             </TabControl>
         </TabItem>
@@ -518,7 +530,57 @@
                         <TextBlock Text="{x:Static p:Localization.PasswordsStay10SecondsInClipboard}" HorizontalAlignment="Center" Margin="0, 5, 0, 0" Foreground="Red"></TextBlock>
                     </StackPanel>
                 </TabItem>
+                <TabItem Header="{x:Static p:Localization.Strength}">
+                    <StackPanel>
+                        <GroupBox Header="{x:Static p:Localization.Input}">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Static p:Localization.Password}" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                    <PasswordBox x:Name="PbPasswordCheck" Grid.Column="1" Grid.Row="0" Margin="5" controls:TextBoxHelper.ClearTextButton="True" PasswordChanged="PbPasswordCheck_PasswordChanged"/>
+                                </Grid>
+                                <TextBlock Text="{x:Static p:Localization.PasswordWillBeRemovedIn5Seconds}" HorizontalAlignment="Center" Margin="0, 5, 0, 0" Foreground="Red"></TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="{x:Static p:Localization.Output}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{x:Static p:Localization.Length}" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <TextBox x:Name="TbPasswordLength" Grid.Column="1" Grid.Row="0" FontSize="14" Margin="5" IsReadOnly="True"></TextBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Letters}" Grid.Column="0" Grid.Row="1" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <TextBox x:Name="TbPasswordLetters" Grid.Column="1" Grid.Row="1" FontSize="14" Margin="5" IsReadOnly="True"></TextBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Numbers}" Grid.Column="0" Grid.Row="2" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <TextBox x:Name="TbPasswordNumbers" Grid.Column="1" Grid.Row="2" FontSize="14" Margin="5" IsReadOnly="True"></TextBox>
+
+                                <TextBlock Text="{x:Static p:Localization.Symbols}" Grid.Column="0" Grid.Row="3" FontSize="14" VerticalAlignment="Center">:</TextBlock>
+                                <TextBox x:Name="TbPasswordSymbols" Grid.Column="1" Grid.Row="3" FontSize="14" Margin="5" IsReadOnly="True"></TextBox>
+                            </Grid>
+                        </GroupBox>
+
+                        <controls:MetroProgressBar x:Name="PrBPasswordStrength" Margin="20, 20, 20, 10" Height="15"/>
+                        <TextBlock x:Name="TblPasswordStrength" Text="-" HorizontalAlignment="Center" FontSize="17"/>
+
+                        <TextBlock x:Name="TblPasswordBadWord" Text="{x:Static p:Localization.PasswordContainsCommonWord}" FontSize="15" HorizontalAlignment="Center" Margin="0, 5, 0, 0" Foreground="Red" FontWeight="DemiBold" Visibility="Hidden"/>
+                        <TextBlock x:Name="TblPasswordHover" Text="{x:Static p:Localization.HoverHereToDisplay}" FontSize="15" HorizontalAlignment="Center" Margin="0, 1, 0, 0" Foreground="OrangeRed" FontStyle="Italic" TextDecorations="Underline" Visibility="Hidden"/>
+                    </StackPanel>
+                </TabItem>
             </TabControl>
         </TabItem>
     </TabControl>
 </controls:MetroWindow>
+    

@@ -64,6 +64,8 @@
     <Compile Include="Enumerations\Algorithm.cs" />
     <Compile Include="Enumerations\HashAlgorithm.cs" />
     <Compile Include="Enumerations\Encoding.cs" />
+    <Compile Include="Enumerations\PasswordStrength.cs" />
+    <Compile Include="Utility\PasswordCheck.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -143,6 +145,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\email.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\github.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
