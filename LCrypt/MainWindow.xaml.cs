@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using LCrypt.Algorithms;
 using LCrypt.Enumerations;
@@ -64,6 +65,12 @@ namespace LCrypt
             TcSettings.SelectedIndex = 0;
             Separator.Visibility = Visibility.Hidden;
             BtRestart.Visibility = Visibility.Hidden;
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
 
         private void CoBLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
