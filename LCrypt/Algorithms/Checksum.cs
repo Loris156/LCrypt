@@ -10,7 +10,7 @@ namespace LCrypt.Algorithms
 {
     public static class Checksum
     {
-        public static async Task CalculateHash(string path, TextBox output, ProgressRing indicator, HashAlgorithm algorithm)
+        public static async Task CalculateHash(string path, TextBox output, ProgressRing indicator, Button copyButton, HashAlgorithm algorithm)
         {
             await indicator.Dispatcher.InvokeAsync(() =>
             {
@@ -28,6 +28,8 @@ namespace LCrypt.Algorithms
                             .ToLower();
                     }
                 }
+
+                await copyButton.Dispatcher.InvokeAsync(() => copyButton.IsEnabled = true);
             }
             catch (Exception e)
             {

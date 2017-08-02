@@ -57,14 +57,16 @@ namespace LCrypt
 
             RbTextDecryptHexadecimal.Checked += RbTextDecryptInputFormat;
             RbTextDecryptBase64.Checked += RbTextDecryptInputFormat;
+
+            TblVersion.Text = Assembly.GetExecutingAssembly().GetName().Name + " Version " + Assembly.GetExecutingAssembly().GetName().Version.RemoveTrailingZeros();
         }
 
         private void BtSettings_OnClick(object sender, RoutedEventArgs e)
         {
             SettingsFlyout.IsOpen = !SettingsFlyout.IsOpen;
             TcSettings.SelectedIndex = 0;
-            Separator.Visibility = Visibility.Hidden;
-            BtRestart.Visibility = Visibility.Hidden;
+            Separator.Visibility = Visibility.Collapsed;
+            BtRestart.Visibility = Visibility.Collapsed;
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -623,6 +625,12 @@ namespace LCrypt
             TbChecksumSha384.Clear();
             TbChecksumSha512.Clear();
 
+            BtCopyMd5.IsEnabled = false;
+            BtCopySha1.IsEnabled = false;
+            BtCopySha256.IsEnabled = false;
+            BtCopySha384.IsEnabled = false;
+            BtCopySha512.IsEnabled = false;
+
             var length = _selectedChecksumFile.Length;
             double adaptedLength;
             string unit;
@@ -656,20 +664,49 @@ namespace LCrypt
             ImgChecksumSelectedFile.Source = Util.GetIconByFilename(_selectedChecksumFile.FullName).ToImageSource();
 
             await Task.WhenAll(
-                Task.Run(async () => await Checksum.CalculateHash(_selectedChecksumFile.FullName, TbChecksumMd5, PrMd5,
-                    HashAlgorithm.Md5)),
+                Task.Run(async () => await Checksum.CalculateHash(_selectedChecksumFile.FullName, TbChecksumMd5,
+                    PrMd5, BtCopyMd5, HashAlgorithm.Md5)),
                 Task.Run(async () => await Checksum.CalculateHash(_selectedChecksumFile.FullName, TbChecksumSha1,
-                    PrSha1, HashAlgorithm.Sha1)),
+                    PrSha1, BtCopySha1, HashAlgorithm.Sha1)),
                 Task.Run(async () => await Checksum.CalculateHash(_selectedChecksumFile.FullName, TbChecksumSha256,
-                    PrSha256, HashAlgorithm.Sha256)),
+                    PrSha256, BtCopySha256, HashAlgorithm.Sha256)),
                 Task.Run(async () => await Checksum.CalculateHash(_selectedChecksumFile.FullName, TbChecksumSha384,
-                    PrSha384, HashAlgorithm.Sha384)),
+                    PrSha384, BtCopySha384, HashAlgorithm.Sha384)),
                 Task.Run(async () => await Checksum.CalculateHash(_selectedChecksumFile.FullName, TbChecksumSha512,
-                    PrSha512, HashAlgorithm.Sha512)));
+                    PrSha512, BtCopySha512, HashAlgorithm.Sha512)));
 
             BtChecksumChooseFile.IsEnabled = true;
             BtChecksumChooseFile.AllowDrop = true;
             BtChecksumExport.IsEnabled = true;
+        }
+
+        private void BtCopyChecksum_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedChecksumFile == null) return;
+
+            var button = sender as Button;
+            if (button == null) return;
+            switch (button.Name)
+            {
+                case "BtCopyMd5":
+                    Clipboard.SetText(TbChecksumMd5.Text);
+                    break;
+                case "BtCopySha1":
+                    Clipboard.SetText(TbChecksumSha1.Text);
+                    break;
+                case "BtCopySha256":
+                    Clipboard.SetText(TbChecksumSha256.Text);
+                    break;
+                case "BtCopySha384":
+                    Clipboard.SetText(TbChecksumSha384.Text);
+                    break;
+                case "BtCopySha512":
+                    Clipboard.SetText(TbChecksumSha512.Text);
+                    break;
+                default:
+                    Clipboard.SetText("Unknown checksum!");
+                    break;
+            }
         }
 
         private void BtChecksumChooseFile_Click(object sender, RoutedEventArgs e)
@@ -752,7 +789,8 @@ namespace LCrypt
                 DefaultExt = ".txt",
                 Filter = $"Text|*.txt|{Localization.AllFiles}(*.*)|*.*",
                 ValidateNames = true,
-                OverwritePrompt = true
+                OverwritePrompt = true,
+                FileName = _selectedChecksumFile.Name + " - LCrypt Checksums"
             };
 
             if (saveFileDialog.ShowDialog() != true)
@@ -902,7 +940,7 @@ namespace LCrypt
             {
                 SystemSounds.Asterisk.Play();
                 var resetThread = new Thread(Clipboard.Clear); // Clipboard must be cleared from a different thread.
-                resetThread.SetApartmentState(ApartmentState.STA); 
+                resetThread.SetApartmentState(ApartmentState.STA);
                 resetThread.Start();
 
                 timer.Stop();
