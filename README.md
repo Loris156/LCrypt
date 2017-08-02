@@ -13,6 +13,7 @@ It was written in `C#` and uses WPF as UI framework. The application window feat
 - Text hashing to Base64 or hexadecimal
 - File checksum verification
 - Password generation
+- Password strength checker
 
 **For encryption, LCrypt provides the following algorithms:**
 - Advanced Encryption Standard (AES-256)
