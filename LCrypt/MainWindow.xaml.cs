@@ -680,7 +680,11 @@ namespace LCrypt
 
         private void BtCopyChecksum_Click(object sender, RoutedEventArgs e)
         {
-            switch ((sender as Button).Name)
+            if (_selectedChecksumFile == null) return;
+
+            var button = sender as Button;
+            if (button == null) return;
+            switch (button.Name)
             {
                 case "BtCopyMd5":
                     Clipboard.SetText(TbChecksumMd5.Text);
@@ -696,6 +700,9 @@ namespace LCrypt
                     break;
                 case "BtCopySha512":
                     Clipboard.SetText(TbChecksumSha512.Text);
+                    break;
+                default:
+                    Clipboard.SetText("Unknown checksum!");
                     break;
             }
         }
@@ -780,7 +787,8 @@ namespace LCrypt
                 DefaultExt = ".txt",
                 Filter = $"Text|*.txt|{Localization.AllFiles}(*.*)|*.*",
                 ValidateNames = true,
-                OverwritePrompt = true
+                OverwritePrompt = true,
+                FileName = _selectedChecksumFile.Name + " - LCrypt Checksums"
             };
 
             if (saveFileDialog.ShowDialog() != true)
