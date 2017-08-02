@@ -46,5 +46,18 @@ namespace LCrypt.Utility
 
             return val;
         }
+
+        public static string RemoveTrailingZeros(this Version version)
+        {
+            if (version == null)
+                throw new ArgumentNullException(nameof(version));
+
+            var output = version.ToString();
+            while (output.EndsWith("0"))
+            {
+                output = output.Remove(output.Length - 2);
+            }
+            return output;
+        }
     }
 }

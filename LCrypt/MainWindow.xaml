@@ -68,8 +68,10 @@
                                         </StackPanel>
                                     </ComboBoxItem>
                                 </ComboBox>
-                                <Separator x:Name="Separator" Visibility="Hidden"/>
-                                <Button x:Name="BtRestart" Content="{x:Static p:Localization.RestartToApplyChanges}" Margin="10" Visibility="Hidden" Click="BtRestart_OnClick"></Button>
+                                <Separator x:Name="Separator" Visibility="Collapsed"/>
+                                <Button x:Name="BtRestart" Content="{x:Static p:Localization.RestartToApplyChanges}" Margin="10" Visibility="Collapsed" Click="BtRestart_OnClick"></Button>
+                                <Separator/>
+                                <TextBlock x:Name="TblVersion" Margin="10, 5, 5, 5" FontSize="14">Version Info</TextBlock>
                             </StackPanel>
                         </TabItem>
                         <TabItem Header="{x:Static p:Localization.Appearance}">

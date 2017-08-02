@@ -57,14 +57,16 @@ namespace LCrypt
 
             RbTextDecryptHexadecimal.Checked += RbTextDecryptInputFormat;
             RbTextDecryptBase64.Checked += RbTextDecryptInputFormat;
+
+            TblVersion.Text = Assembly.GetExecutingAssembly().GetName().Name + " Version " + Assembly.GetExecutingAssembly().GetName().Version.RemoveTrailingZeros();
         }
 
         private void BtSettings_OnClick(object sender, RoutedEventArgs e)
         {
             SettingsFlyout.IsOpen = !SettingsFlyout.IsOpen;
             TcSettings.SelectedIndex = 0;
-            Separator.Visibility = Visibility.Hidden;
-            BtRestart.Visibility = Visibility.Hidden;
+            Separator.Visibility = Visibility.Collapsed;
+            BtRestart.Visibility = Visibility.Collapsed;
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
