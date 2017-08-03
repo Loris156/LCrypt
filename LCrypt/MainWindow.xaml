@@ -421,35 +421,35 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Text="MD5:" Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"/>
-                                <TextBox x:Name="TbChecksumMd5" Grid.Column="1" Grid.Row="0" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbChecksumMd5" Grid.Column="1" Grid.Row="0" Margin="5" IsReadOnly="True" FontSize="14" VerticalAlignment="Center"/>
                                 <Button x:Name="BtCopyMd5" Grid.Column="2" Grid.Row="0" Margin="5" Padding="0" Click="BtCopyChecksum_Click" IsEnabled="False">
                                     <Image Source="pack://application:,,/Resources/clipboard.png" Height="30"/>
                                 </Button>
                                 <controls:ProgressRing x:Name="PrMd5" Grid.Column="3" Grid.Row="0" Height="30" Width="30" IsActive="False"/>
 
                                 <TextBlock Text="SHA-1:" Grid.Column="0" Grid.Row="1" Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"/>
-                                <TextBox x:Name="TbChecksumSha1" Grid.Column="1" Grid.Row="1" Margin="5" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbChecksumSha1" Grid.Column="1" Grid.Row="1" Margin="5"  IsReadOnly="True" FontSize="14" VerticalAlignment="Center"/>
                                 <Button x:Name="BtCopySha1" Grid.Column="2" Grid.Row="1" Margin="5" Padding="0" Click="BtCopyChecksum_Click" IsEnabled="False">
                                     <Image Source="pack://application:,,/Resources/clipboard.png" Height="30"/>
                                 </Button>
                                 <controls:ProgressRing x:Name="PrSha1" Grid.Column="3" Grid.Row="1" Width="30" Height="30" IsActive="False"/>
 
                                 <TextBlock Text="SHA-256:" Grid.Column="0" Grid.Row="2"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
-                                <TextBox x:Name="TbChecksumSha256" Grid.Column="1" Grid.Row="2" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbChecksumSha256" Grid.Column="1" Grid.Row="2" Margin="5" IsReadOnly="True" FontSize="14" VerticalAlignment="Center"/>
                                 <Button x:Name="BtCopySha256" Grid.Column="2" Grid.Row="2" Margin="5" Padding="0" Click="BtCopyChecksum_Click" IsEnabled="False">
                                     <Image Source="pack://application:,,/Resources/clipboard.png" Height="30"/>
                                 </Button>
                                 <controls:ProgressRing x:Name="PrSha256" Grid.Column="3" Grid.Row="2" Height="30" Width="30" IsActive="False"/>
 
                                 <TextBlock Text="SHA-384:" Grid.Column="0" Grid.Row="3"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
-                                <TextBox x:Name="TbChecksumSha384" Grid.Column="1" Grid.Row="3" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbChecksumSha384" Grid.Column="1" Grid.Row="3" Margin="5" IsReadOnly="True" FontSize="14" VerticalAlignment="Center"/>
                                 <Button x:Name="BtCopySha384" Grid.Column="2" Grid.Row="3" Margin="5" Padding="0" Click="BtCopyChecksum_Click" IsEnabled="False">
                                     <Image Source="pack://application:,,/Resources/clipboard.png" Height="30"/>
                                 </Button>
                                 <controls:ProgressRing x:Name="PrSha384" Grid.Column="3" Grid.Row="3" Height="30" Width="30" IsActive="False"/>
 
                                 <TextBlock Text="SHA-512:" Grid.Column="0" Grid.Row="4"  Margin="10, 5, 5, 5" FontSize="14" VerticalAlignment="Center"></TextBlock>
-                                <TextBox x:Name="TbChecksumSha512" Grid.Column="1" Grid.Row="4" Margin="5" IsReadOnly="True" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbChecksumSha512" Grid.Column="1" Grid.Row="4" Margin="5" IsReadOnly="True" FontSize="14" VerticalAlignment="Center"/>
                                 <Button x:Name="BtCopySha512" Grid.Column="2" Grid.Row="4" Margin="5" Padding="0" Click="BtCopyChecksum_Click" IsEnabled="False">
                                     <Image Source="pack://application:,,/Resources/clipboard.png" Height="30"/>
                                 </Button>
