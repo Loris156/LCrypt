@@ -70,6 +70,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access permission.
+        /// </summary>
+        public static string AccessPermission {
+            get {
+                return ResourceManager.GetString("AccessPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Algorithm.
         /// </summary>
         public static string Algorithm {
@@ -210,6 +219,15 @@ namespace LCrypt.Properties {
         public static string Decrypt {
             get {
                 return ResourceManager.GetString("Decrypt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encryptions using DPAPI are bound to this account or machine. Files can be only decrypted by using this account/machine! This method works best with small files..
+        /// </summary>
+        public static string DpApiInfo {
+            get {
+                return ResourceManager.GetString("DpApiInfo", resourceCulture);
             }
         }
         
@@ -624,6 +642,24 @@ namespace LCrypt.Properties {
         public static string Theme {
             get {
                 return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This account.
+        /// </summary>
+        public static string ThisAccount {
+            get {
+                return ResourceManager.GetString("ThisAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This computer.
+        /// </summary>
+        public static string ThisComputer {
+            get {
+                return ResourceManager.GetString("ThisComputer", resourceCulture);
             }
         }
         

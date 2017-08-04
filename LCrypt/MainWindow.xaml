@@ -177,9 +177,10 @@
                                 <ComboBoxItem Content="Data Encryption Standard (DES-64)"/>
                                 <ComboBoxItem Content="Triple Data Encryption Algorithm (TDEA-192)"/>
                                 <ComboBoxItem Content="Rivest Cipher 2 (RC2-128)"/>
+                                <ComboBoxItem Content="Windows Data Protection (DPAPI)"/>
                             </ComboBox>
                         </Grid>
-                        <Grid>
+                        <Grid x:Name="GrFileEncryptionPassword">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
                                 <ColumnDefinition/>
@@ -188,6 +189,21 @@
                             <TextBlock Text="{x:Static p:Localization.Password}" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
                             <PasswordBox x:Name="PbPassword" Grid.Column="1" Margin="5" MaxLength="256" PasswordChanged="PbPassword_PasswordChanged"></PasswordBox>
                         </Grid>
+                        <StackPanel x:Name="SpDpApiSettings" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton x:Name="RbThisAccount" Grid.Column="0" Grid.Row="0" Margin="5" IsChecked="True">
+                                    <TextBlock Text="{x:Static p:Localization.ThisAccount}" FontSize="14"></TextBlock>
+                                </RadioButton>
+                                <RadioButton x:Name="RbThisComputer" Grid.Column="1" Grid.Row="0" Margin="5">
+                                    <TextBlock Text="{x:Static p:Localization.ThisComputer}" FontSize="14"></TextBlock>
+                                </RadioButton>
+                            </Grid>
+                            <TextBlock Text="{x:Static p:Localization.DpApiInfo}" TextWrapping="Wrap" Foreground="Red" FontWeight="Bold" TextAlignment="Center"/>
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
 
@@ -203,12 +219,12 @@
                 </Grid>
                 <Button x:Name="BtStart" Margin="70, 10, 70, 10" IsEnabled="False" Click="BtStart_OnClick">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,/Resources/start.png" Height="30" Margin="0, 3, 15, 3"/>
+                        <Image Source="pack://application:,,/Resources/start.png" Height="25" Margin="0, 3, 15, 3"/>
                         <TextBlock Text="{x:Static p:Localization.Begin}" FontSize="14" VerticalAlignment="Center"></TextBlock>
                     </StackPanel>
                 </Button>
-                <ProgressBar x:Name="ProgressBar" Margin="20, 5, 20, 5" Height="20"></ProgressBar>
-                <Grid Margin="10">
+                <controls:MetroProgressBar x:Name="PrBFileEncryption" Margin="20, 5, 20, 5" Height="10"/>
+                <Grid Margin="10, 5, 10, 5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>

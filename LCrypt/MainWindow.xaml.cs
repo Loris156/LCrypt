@@ -286,7 +286,7 @@ namespace LCrypt
                 $"{Path.GetFileName(_selectedFile)} ({adaptedLength} {unit})";
             ImgSelectedFile.Source = Util.GetIconByFilename(_selectedFile).ToImageSource();
 
-            TbFileDestination.Text = //TODO: Filename Encrypted or Decrypted
+            TbFileDestination.Text =
                 $"{Path.GetDirectoryName(_selectedFile)}\\{Path.GetFileNameWithoutExtension(_selectedFile)}_{(RbEncrypt.IsChecked == true ? "Encrypted" : "Decrypted")}{Path.GetExtension(_selectedFile)}";
 
             CheckFields();
@@ -294,28 +294,46 @@ namespace LCrypt
 
         private async void BtStart_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_selectedFile != null &&
-                _selectedFileInfo != null &&
-                !string.IsNullOrWhiteSpace(PbPassword.Password) &&
-                CoBAlgorithm.SelectedItem != null &&
-                !string.IsNullOrWhiteSpace(TbFileDestination.Text))
-            {
-                BtChooseFile.IsEnabled = false;
-                BtChecksumChooseFile.AllowDrop = false;
-                RbEncrypt.IsEnabled = false;
-                RbDecrypt.IsEnabled = false;
-                TbFileDestination.IsEnabled = false;
-                CoBAlgorithm.IsEnabled = false;
-                PbPassword.IsEnabled = false;
-                BtStart.IsEnabled = false;
+            if (_selectedFile == null || _selectedFileInfo == null || CoBAlgorithm.SelectedItem == null ||
+                string.IsNullOrWhiteSpace(TbFileDestination.Text)) return;
 
-                ProgressBar.Value = 0;
-                ProgressBar.Maximum = _selectedFileInfo.Length;
-                TblSpeed.Text = "0 MiB/s";
-                TblProgress.Text = $"0 / {_lengthInMiB} MiB";
-                try
+
+            BtChooseFile.IsEnabled = false;
+            BtChecksumChooseFile.AllowDrop = false;
+            RbEncrypt.IsEnabled = false;
+            RbDecrypt.IsEnabled = false;
+            TbFileDestination.IsEnabled = false;
+            CoBAlgorithm.IsEnabled = false;
+            PbPassword.IsEnabled = false;
+            RbThisAccount.IsEnabled = false;
+            RbThisComputer.IsEnabled = false;
+            BtStart.IsEnabled = false;
+
+            PrBFileEncryption.Value = 0;
+            PrBFileEncryption.Maximum = _selectedFileInfo.Length;
+            TblSpeed.Text = "0 MiB/s";
+            TblProgress.Text = $"0 / {_lengthInMiB} MiB";
+
+            try
+            {
+                var encrypt = RbEncrypt.IsChecked == true;
+
+                if (CoBAlgorithm.Text == "Windows Data Protection (DPAPI)")
                 {
-                    bool encrypt = RbEncrypt.IsChecked == true;
+                    PrBFileEncryption.IsIndeterminate = true;
+
+                    var dpApi = new DpApi(this, _selectedFileInfo, TbFileDestination.Text, _lengthInMiB,
+                        RbThisAccount.IsChecked == true
+                            ? DataProtectionScope.CurrentUser
+                            : DataProtectionScope.LocalMachine);
+
+                    if (encrypt)
+                        await dpApi.Encrypt();
+                    else
+                        await dpApi.Decrypt();
+                }
+                else
+                {
                     using (var algorithm = ((Algorithm)CoBAlgorithm.SelectedIndex).GetAlgorithm())
                     {
                         if (encrypt)
@@ -346,44 +364,71 @@ namespace LCrypt
                         }
                     }
                 }
-                catch (Exception)
-                {
-                    await Dispatcher.InvokeAsync(async delegate
-                    {
-                        await this.ShowMessageAsync("LCrypt",
-                            string.Format(Localization.EncryptionDecryptionFailed, _selectedFileInfo.Name),
-                            MessageDialogStyle.Affirmative, new MetroDialogSettings
-                            {
-                                AffirmativeButtonText = "OK",
-                                AnimateShow = true,
-                                AnimateHide = false
-                            });
-                    });
-                }
-                finally
-                {
-                    await Dispatcher.InvokeAsync(delegate
-                    {
-                        BtChooseFile.IsEnabled = true;
-                        BtChecksumChooseFile.AllowDrop = false;
-                        RbEncrypt.IsEnabled = true;
-                        RbDecrypt.IsEnabled = true;
-                        TbFileDestination.IsEnabled = true;
-                        CoBAlgorithm.IsEnabled = true;
-                        PbPassword.IsEnabled = true;
-                        BtStart.IsEnabled = true;
 
-                        ProgressBar.Maximum = 1;
-                        ProgressBar.Value = 0;
-                        TblSpeed.Text = "- MiB/s";
-                        TblProgress.Text = "0 / - MiB";
+                await this.ShowMessageAsync("LCrypt",
+                    string.Format(Localization.SuccessfullyEncrypted, _selectedFileInfo.Name, Path.GetFileName(TbFileDestination.Text), CoBAlgorithm.Text),
+                    MessageDialogStyle.Affirmative, new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = "OK",
+                        AnimateShow = true,
+                        AnimateHide = false
                     });
-                }
+            }
+            catch (Exception)
+            {
+                await this.ShowMessageAsync("LCrypt",
+                    string.Format(Localization.EncryptionDecryptionFailed, _selectedFileInfo.Name),
+                    MessageDialogStyle.Affirmative, new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = "OK",
+                        AnimateShow = true,
+                        AnimateHide = false
+                    });
+            }
+            finally
+            {
+                BtChooseFile.IsEnabled = true;
+                BtChecksumChooseFile.AllowDrop = false;
+                RbEncrypt.IsEnabled = true;
+                RbDecrypt.IsEnabled = true;
+                TbFileDestination.IsEnabled = true;
+                CoBAlgorithm.IsEnabled = true;
+                PbPassword.IsEnabled = true;
+                RbThisAccount.IsEnabled = true;
+                RbThisComputer.IsEnabled = true;
+                BtStart.IsEnabled = true;
+
+                PrBFileEncryption.Maximum = 1;
+                PrBFileEncryption.Value = 0;
+                PrBFileEncryption.IsIndeterminate = false;
+                TblSpeed.Text = "- MiB/s";
+                TblProgress.Text = "0 / - MiB";
             }
         }
 
         private void CheckFields()
         {
+            if (CoBAlgorithm.SelectedIndex == 4)
+            {
+                SpDpApiSettings.Visibility = Visibility.Visible;
+                GrFileEncryptionPassword.Visibility = Visibility.Collapsed;
+                PbPassword.Clear();
+
+                if (_selectedFile != null &&
+                    _selectedFileInfo != null &&
+                    CoBAlgorithm.SelectedItem != null &&
+                    !string.IsNullOrWhiteSpace(TbFileDestination.Text)
+                )
+                    BtStart.IsEnabled = true;
+                else
+                    BtStart.IsEnabled = false;
+
+                return;
+            }
+
+            SpDpApiSettings.Visibility = Visibility.Collapsed;
+            GrFileEncryptionPassword.Visibility = Visibility.Visible;
+
             if (_selectedFile != null &&
                 _selectedFileInfo != null &&
                 !string.IsNullOrWhiteSpace(PbPassword.Password) &&
@@ -424,7 +469,7 @@ namespace LCrypt
             }
             else if (RbHexadecimal.IsChecked == true)
             {
-                string hex = BitConverter.ToString(computedHash);
+                var hex = BitConverter.ToString(computedHash);
                 if (ChBHexadecimalHyphens.IsChecked == false)
                     hex = hex.Replace("-", string.Empty);
                 TbHashOutput.Text = hex.ToLower();
@@ -552,7 +597,7 @@ namespace LCrypt
 
                 using (var inputStream = new MemoryStream(input, false))
                 {
-                    byte[] salt = new byte[8];
+                    var salt = new byte[8];
                     inputStream.Read(salt, 0, 8);
 
                     using (var algorithm = ((Algorithm)CoBTextDecryptAlgorithm.SelectedIndex).GetAlgorithm())

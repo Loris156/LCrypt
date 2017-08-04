@@ -324,4 +324,16 @@
   <data name="HoverHereToDisplay" xml:space="preserve">
     <value>Hier hovern zum Anzeigen.</value>
   </data>
+  <data name="AccessPermission" xml:space="preserve">
+    <value>Zugriffsberechtigung</value>
+  </data>
+  <data name="ThisComputer" xml:space="preserve">
+    <value>Dieser Computer</value>
+  </data>
+  <data name="ThisAccount" xml:space="preserve">
+    <value>Dieses Konto</value>
+  </data>
+  <data name="DpApiInfo" xml:space="preserve">
+    <value>Verschlüsselungen mit der DPAPI sind an dieses Konto/diesen PC gebunden und können nur hier wieder entschlüsselt werden! Diese Methode funktioniert am besten mit kleinen Dateien.</value>
+  </data>
 </root>

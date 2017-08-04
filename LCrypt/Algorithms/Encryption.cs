@@ -46,11 +46,10 @@ namespace LCrypt.Algorithms
                 MainWindow.TblProgress.Text = $"{progressMiB} / {LengthInMiB} MiB";
             });
 
-            MainWindow.ProgressBar.Dispatcher.InvokeAsync(delegate
+            MainWindow.PrBFileEncryption.Dispatcher.InvokeAsync(delegate
             {
-                MainWindow.ProgressBar.Value = _totalBytes;
+                MainWindow.PrBFileEncryption.Value = _totalBytes;
             });
-
         }
 
         public async Task Encrypt()
@@ -66,7 +65,7 @@ namespace LCrypt.Algorithms
                 Algorithm.Key = password.GetBytes(Algorithm.KeySize / 8);
                 Algorithm.GenerateIV();
 
-                using (var sourceStream = new FileStream(Source.FullName, FileMode.Open, FileAccess.Read))
+                using (var sourceStream = new FileStream(Source.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true))
                 {
                     using (var destinationStream = new FileStream(Destination, FileMode.Create, FileAccess.Write))
                     {
@@ -97,19 +96,7 @@ namespace LCrypt.Algorithms
                     }
                 }
             }
-
             _timer.Stop();
-            await MainWindow.Dispatcher.InvokeAsync(delegate
-            {
-                MainWindow.ShowMessageAsync("LCrypt",
-                    string.Format(Localization.SuccessfullyEncrypted, Source.Name, Path.GetFileName(Destination), MainWindow.CoBAlgorithm.Text),
-                    MessageDialogStyle.Affirmative, new MetroDialogSettings
-                    {
-                        AffirmativeButtonText = "OK",
-                        AnimateShow = true,
-                        AnimateHide = false
-                    });
-            });
         }
     }
 }
