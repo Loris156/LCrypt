@@ -324,4 +324,16 @@
   <data name="HoverHereToDisplay" xml:space="preserve">
     <value>Hover here to display.</value>
   </data>
+  <data name="AccessPermission" xml:space="preserve">
+    <value>Access permission</value>
+  </data>
+  <data name="ThisComputer" xml:space="preserve">
+    <value>This computer</value>
+  </data>
+  <data name="ThisAccount" xml:space="preserve">
+    <value>This account</value>
+  </data>
+  <data name="DpApiInfo" xml:space="preserve">
+    <value>Encryptions using DPAPI are bound to this account or machine. Files can be only decrypted by using this account/machine! This method works best with small files.</value>
+  </data>
 </root>
