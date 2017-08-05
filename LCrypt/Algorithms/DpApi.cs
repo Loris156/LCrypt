@@ -1,30 +1,21 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
-using LCrypt.Properties;
 using LCrypt.Utility;
-using MahApps.Metro.Controls.Dialogs;
-using Timer = System.Timers.Timer;
 
 namespace LCrypt.Algorithms
 {
     public class DpApi
     {
-        public MainWindow MainWindow { get; set; }
-
-        public FileInfo Source { get; set; }
-        public string Destination { get; set; }
+        private FileInfo Source { get; }
+        private string Destination { get; }
 
         private readonly DataProtectionScope _protectionScope;
 
-        public DpApi(MainWindow window, FileInfo source, string destination, string lengthInMiB,
+        public DpApi(FileInfo source, string destination,
             DataProtectionScope protectionScope)
         {
-            MainWindow = window;
             Source = source;
             Destination = destination;
             _protectionScope = protectionScope;

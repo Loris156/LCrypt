@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LCrypt.Utility
 {
-    public class Util
+    public static class Util
     {
         public static Icon GetIconByFilename(string path)
         {

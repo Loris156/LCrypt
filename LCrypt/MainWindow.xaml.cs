@@ -322,7 +322,7 @@ namespace LCrypt
                 {
                     PrBFileEncryption.IsIndeterminate = true;
 
-                    var dpApi = new DpApi(this, _selectedFileInfo, TbFileDestination.Text, _lengthInMiB,
+                    var dpApi = new DpApi(_selectedFileInfo, TbFileDestination.Text,
                         RbThisAccount.IsChecked == true
                             ? DataProtectionScope.CurrentUser
                             : DataProtectionScope.LocalMachine);

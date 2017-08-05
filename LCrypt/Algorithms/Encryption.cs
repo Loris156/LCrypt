@@ -4,8 +4,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Timers;
-using LCrypt.Properties;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace LCrypt.Algorithms
 {
