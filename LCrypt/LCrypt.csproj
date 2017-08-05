@@ -129,7 +129,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="LICENSE.TXT" />
     <Resource Include="Resources\us.png" />
   </ItemGroup>
   <ItemGroup>

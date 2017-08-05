@@ -20,6 +20,7 @@ It was written in `C#` and uses WPF as UI framework. The application window feat
 - Data Encryption Standard (DES-64)
 - Triple Data Encryption Algorithm (TDEA-192)
 - Rivest Cipher 2 (RC2-128)
+- Windows Data Protection API (DPAPI)
 - more coming soon...
 
 **For hashing, LCrypt provides the following algorithms:**
