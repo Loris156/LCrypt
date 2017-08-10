@@ -4,7 +4,9 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Windows;
+using LCrypt.Password_Manager;
 
 namespace LCrypt
 {
@@ -31,12 +33,17 @@ namespace LCrypt
 
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            if (Settings.UpgradeRequired)
+            {
+                Settings.Upgrade();
+                Settings.UpgradeRequired = false;
+            }
 
             if (e.Args.Length == 1)
             {
                 if (File.Exists(e.Args[0]))
                 {
-                    //Open encryption window
+                    //TODO: Implement open file from argument.
                 }
             }
             if (e.Args.Length > 1)
@@ -60,7 +67,8 @@ namespace LCrypt
                 Settings.Theme = "BaseDark";
 
             ThemeManager.ChangeAppStyle(Current, ThemeManager.GetAccent(Settings.Accent), ThemeManager.GetAppTheme(Settings.Theme));
-            var window = new MainWindow();
+           // var window = new MainWindow();
+            var window = new PasswordManagerWindow(new PasswordStorage());
             window.Show();
         }
     }

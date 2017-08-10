@@ -10,7 +10,7 @@
         RightWindowCommandsOverlayBehavior="Never" 
         ResizeMode="CanMinimize" 
         WindowStartupLocation="CenterScreen">
-
+    
     <controls:MetroWindow.Resources>
         <Style x:Key="ColorSelection" TargetType="Rectangle">
             <Setter Property="Height" Value="42"/>
@@ -22,9 +22,13 @@
             <EventSetter Event="MouseLeave" Handler="ColorSelection_OnMouseLeave"/>
             <EventSetter Event="MouseUp" Handler="ColorSelection_OnMouseUp"/>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
+            <Button Visibility="{Binding Source={x:Static p:Settings.Default}, Path=EnablePasswordManager, Converter={StaticResource BoolToVisibilityConverter}}" Click="PasswordManagerOnClick">
+                <TextBlock Text="{x:Static p:Localization.PasswordManager}"></TextBlock>
+            </Button>
             <Button x:Name="BtSettings" Content="{x:Static p:Localization.Settings}" Click="BtSettings_OnClick" />
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
@@ -70,6 +74,10 @@
                                 </ComboBox>
                                 <Separator x:Name="Separator" Visibility="Collapsed"/>
                                 <Button x:Name="BtRestart" Content="{x:Static p:Localization.RestartToApplyChanges}" Margin="10" Visibility="Collapsed" Click="BtRestart_OnClick"></Button>
+                                <Separator/>
+                                <CheckBox Margin="10" FontSize="14" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=EnablePasswordManager, Mode=TwoWay}">
+                                    <TextBlock Text="{x:Static p:Localization.EnablePasswordManager}"/>
+                                </CheckBox>
                                 <Separator/>
                                 <TextBlock x:Name="TblVersion" Margin="10, 5, 5, 5" FontSize="14">Version Info</TextBlock>
                             </StackPanel>

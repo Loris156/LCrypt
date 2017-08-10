@@ -133,6 +133,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checksum.
         /// </summary>
         public static string Checksum {
@@ -169,11 +178,38 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments.
+        /// </summary>
+        public static string Comments {
+            get {
+                return ResourceManager.GetString("Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Consonants.
         /// </summary>
         public static string Consonants {
             get {
                 return ResourceManager.GetString("Consonants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue.
+        /// </summary>
+        public static string Continue {
+            get {
+                return ResourceManager.GetString("Continue", resourceCulture);
             }
         }
         
@@ -268,6 +304,33 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emails.
+        /// </summary>
+        public static string Emails {
+            get {
+                return ResourceManager.GetString("Emails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Password Manager.
+        /// </summary>
+        public static string EnablePasswordManager {
+            get {
+                return ResourceManager.GetString("EnablePasswordManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encoding.
         /// </summary>
         public static string Encoding {
@@ -318,6 +381,15 @@ namespace LCrypt.Properties {
         public static string ErrorWhileExporting {
             get {
                 return ResourceManager.GetString("ErrorWhileExporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Everything.
+        /// </summary>
+        public static string Everything {
+            get {
+                return ResourceManager.GetString("Everything", resourceCulture);
             }
         }
         
@@ -457,6 +529,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Master Password.
+        /// </summary>
+        public static string MasterPassword {
+            get {
+                return ResourceManager.GetString("MasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Medium.
         /// </summary>
         public static string Medium {
@@ -529,6 +610,24 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password Manager.
+        /// </summary>
+        public static string PasswordManager {
+            get {
+                return ResourceManager.GetString("PasswordManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords are not equal! Please try again..
+        /// </summary>
+        public static string PasswordsAreNotEqual {
+            get {
+                return ResourceManager.GetString("PasswordsAreNotEqual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passwords will stay only 10 seconds in clipboard!.
         /// </summary>
         public static string PasswordsStay10SecondsInClipboard {
@@ -561,6 +660,33 @@ namespace LCrypt.Properties {
         public static string RestartToApplyChanges {
             get {
                 return ResourceManager.GetString("RestartToApplyChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Result.
+        /// </summary>
+        public static string Result {
+            get {
+                return ResourceManager.GetString("Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Results.
+        /// </summary>
+        public static string Results {
+            get {
+                return ResourceManager.GetString("Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         
@@ -664,11 +790,47 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please type in your Master Password..
+        /// </summary>
+        public static string TypeInMasterPassword {
+            get {
+                return ResourceManager.GetString("TypeInMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please type in your Master Password again..
+        /// </summary>
+        public static string TypeInMasterPasswordAgain {
+            get {
+                return ResourceManager.GetString("TypeInMasterPasswordAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uppercase.
         /// </summary>
         public static string UpperCase {
             get {
                 return ResourceManager.GetString("UpperCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string Username {
+            get {
+                return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usernames.
+        /// </summary>
+        public static string Usernames {
+            get {
+                return ResourceManager.GetString("Usernames", resourceCulture);
             }
         }
         
@@ -705,6 +867,24 @@ namespace LCrypt.Properties {
         public static string Weak {
             get {
                 return ResourceManager.GetString("Weak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string Website {
+            get {
+                return ResourceManager.GetString("Website", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to the LCrypt Password Manager! First, you have to set your Master Password. Without it, you can&apos;t decrypt your password file, so be sure to remember it!.
+        /// </summary>
+        public static string WelcomeToPasswordManager {
+            get {
+                return ResourceManager.GetString("WelcomeToPasswordManager", resourceCulture);
             }
         }
         

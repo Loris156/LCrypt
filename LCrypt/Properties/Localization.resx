@@ -336,4 +336,64 @@
   <data name="DpApiInfo" xml:space="preserve">
     <value>Encryptions using DPAPI are bound to this account or machine. Files can be only decrypted by using this account/machine! This method works best with small files.</value>
   </data>
+  <data name="PasswordManager" xml:space="preserve">
+    <value>Password Manager</value>
+  </data>
+  <data name="EnablePasswordManager" xml:space="preserve">
+    <value>Enable Password Manager</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Master Password</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="WelcomeToPasswordManager" xml:space="preserve">
+    <value>Welcome to the LCrypt Password Manager! First, you have to set your Master Password. Without it, you can't decrypt your password file, so be sure to remember it!</value>
+  </data>
+  <data name="TypeInMasterPassword" xml:space="preserve">
+    <value>Please type in your Master Password.</value>
+  </data>
+  <data name="TypeInMasterPasswordAgain" xml:space="preserve">
+    <value>Please type in your Master Password again.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="PasswordsAreNotEqual" xml:space="preserve">
+    <value>Passwords are not equal! Please try again.</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="Everything" xml:space="preserve">
+    <value>Everything</value>
+  </data>
+  <data name="Usernames" xml:space="preserve">
+    <value>Usernames</value>
+  </data>
+  <data name="Emails" xml:space="preserve">
+    <value>Emails</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
 </root>

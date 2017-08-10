@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -12,14 +15,14 @@ namespace LCrypt.Utility
     {
         public static ImageSource ToImageSource(this Icon icon)
         {
-            if(icon == null)
+            if (icon == null)
                 throw new ArgumentNullException(nameof(icon));
 
             using (var bitmap = icon.ToBitmap())
             {
                 return Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
                     BitmapSizeOptions.FromEmptyOptions());
-            }       
+            }
         }
 
         public static int GetNextInt32(this RNGCryptoServiceProvider rng, int maxValue)
@@ -58,6 +61,25 @@ namespace LCrypt.Utility
                 output = output.Remove(output.Length - 2);
             }
             return output;
+        }
+
+        public static byte[] ToArray(this SecureString secureString)
+        {
+            if (secureString == null)
+                throw new ArgumentNullException(nameof(secureString));
+
+            var unmanagedString = IntPtr.Zero;
+
+            try
+            {
+                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
+                return Encoding.Unicode.GetBytes(Marshal.PtrToStringUni(unmanagedString));
+            }
+            finally
+            {
+                if (unmanagedString != IntPtr.Zero)
+                    Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
         }
     }
 }

@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using LCrypt.Algorithms;
+﻿using LCrypt.Algorithms;
 using LCrypt.Enumerations;
 using LCrypt.Utility;
 using MahApps.Metro;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Media;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,11 +22,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
+using LCrypt.Password_Manager;
+using Encoding = LCrypt.Enumerations.Encoding;
 using HashAlgorithm = LCrypt.Enumerations.HashAlgorithm;
 using Localization = LCrypt.Properties.Localization;
 using Path = System.IO.Path;
-using System.Windows.Shapes;
-using Encoding = LCrypt.Enumerations.Encoding;
 using Timer = System.Timers.Timer;
 
 namespace LCrypt
@@ -59,6 +62,67 @@ namespace LCrypt
             RbTextDecryptBase64.Checked += RbTextDecryptInputFormat;
 
             TblVersion.Text = Assembly.GetExecutingAssembly().GetName().Name + " Version " + Assembly.GetExecutingAssembly().GetName().Version.RemoveTrailingZeros();
+        }
+
+        private async void PasswordManagerOnClick(object sender, RoutedEventArgs e)
+        {
+            var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (File.Exists(Path.Combine(myDocuments, "LCrypt", "wallet.lcrypt")))
+            {
+
+            }
+            else
+            {
+                Directory.CreateDirectory(Path.Combine(myDocuments, "LCrypt"));
+                Directory.CreateDirectory(Path.Combine(myDocuments, "LCrypt", "Backups"));
+
+                await this.ShowMessageAsync(Localization.PasswordManager, Localization.WelcomeToPasswordManager,
+                     MessageDialogStyle.Affirmative, new MetroDialogSettings
+                     {
+                         AffirmativeButtonText = Localization.Continue
+                     });
+
+                var passwordsAreEqual = false;
+                SecureString password;
+
+                do
+                {
+                    var firstPasswortInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                        Localization.TypeInMasterPassword, new LoginDialogSettings
+                        {
+                            ShouldHideUsername = true,
+                            PasswordWatermark = Localization.Password,
+                            AffirmativeButtonText = Localization.Continue,
+                            NegativeButtonVisibility = Visibility.Visible,
+                            NegativeButtonText = Localization.Cancel
+                        });
+                    if (string.IsNullOrWhiteSpace(firstPasswortInput?.Password)) return;
+
+                    var secondPasswortInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                        Localization.TypeInMasterPasswordAgain, new LoginDialogSettings
+                        {
+                            ShouldHideUsername = true,
+                            PasswordWatermark = Localization.Password,
+                            AffirmativeButtonText = Localization.Continue,
+                            NegativeButtonVisibility = Visibility.Visible,
+                            NegativeButtonText = Localization.Cancel
+                        });
+                    if (string.IsNullOrWhiteSpace(secondPasswortInput?.Password)) return;
+
+                    if (firstPasswortInput.Password.Equals(secondPasswortInput.Password))
+                        passwordsAreEqual = true;
+                    else
+                        if (await this.ShowMessageAsync(Localization.MasterPassword, Localization.PasswordsAreNotEqual,
+                            MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+                            {
+                                AffirmativeButtonText = Localization.Continue,
+                                NegativeButtonText = Localization.Cancel
+                            }) == MessageDialogResult.Negative)
+                        return;
+                    password = firstPasswortInput.SecurePassword;
+                } while (!passwordsAreEqual);
+            }
         }
 
         private void BtSettings_OnClick(object sender, RoutedEventArgs e)
