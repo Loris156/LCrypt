@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -57,9 +59,7 @@ namespace LCrypt.Utility
 
             var output = version.ToString();
             while (output.EndsWith("0"))
-            {
                 output = output.Remove(output.Length - 2);
-            }
             return output;
         }
 
@@ -79,6 +79,78 @@ namespace LCrypt.Utility
             {
                 if (unmanagedString != IntPtr.Zero)
                     Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
+        }
+
+        public static string UppercaseFirst(this string s)
+        {
+            if (s == null)
+                throw new ArgumentNullException(nameof(s));
+            if (string.IsNullOrWhiteSpace(s))
+                throw new ArgumentException("Cannot uppercase empty string.", nameof(s));
+
+            var chars = s.ToCharArray();
+            chars[0] = char.ToUpper(chars[0]);
+            return new string(chars);
+        }
+
+        /// <summary>
+        /// Encrypts a string to a byte array.
+        /// </summary>
+        /// <param name="algorithm">Symmetric algorithm for the encryption.</param>
+        /// <param name="s">String to encrypt.</param>
+        /// <param name="encoding">Byte encoding for encryption. If not specified, UTF-16 is used.</param>
+        /// <returns>Encrypted bytes in Task.</returns>
+        public static async Task<byte[]> EncryptStringAsync(this SymmetricAlgorithm algorithm, string s,
+            Encoding encoding = null)
+        {
+            if (algorithm == null)
+                throw new ArgumentNullException(nameof(algorithm));
+            if (s == null)
+                throw new ArgumentNullException(nameof(s));
+
+            encoding = encoding ?? Encoding.Unicode;
+
+            using (var ms = new MemoryStream())
+            {
+                using (var transform = algorithm.CreateEncryptor())
+                {
+                    using (var cs = new CryptoStream(ms, transform, CryptoStreamMode.Write))
+                    {
+                        await cs.WriteAsync(encoding.GetBytes(s), 0, encoding.GetByteCount(s));
+                    }
+                }
+                return ms.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Encrypts a string to a byte array.
+        /// </summary>
+        /// <param name="algorithm">Symmetric algorithm for the decryption.</param>
+        /// <param name="cipher">Encrypted string bytes to decrypt.</param>
+        /// <param name="encoding">Byte encoding for decryption. If not specified, UTF-16 is used.</param>
+        /// <returns>Decrypted string in a Task.</returns>
+        public static async Task<string> DecryptStringAsync(this SymmetricAlgorithm algorithm, byte[] cipher,
+            Encoding encoding = null)
+        {
+            if (algorithm == null)
+                throw new ArgumentNullException(nameof(algorithm));
+            if (cipher == null)
+                throw new ArgumentNullException(nameof(cipher));
+
+            encoding = encoding ?? Encoding.Unicode;
+
+            using (var ms = new MemoryStream())
+            {
+                using (var transform = algorithm.CreateDecryptor())
+                {
+                    using (var cs = new CryptoStream(ms, transform, CryptoStreamMode.Write))
+                    {
+                        await cs.WriteAsync(cipher, 0, cipher.Length);
+                    }
+                }
+                return encoding.GetString(ms.ToArray());
             }
         }
     }

@@ -1,48 +1,40 @@
-﻿using System;
+﻿using LCrypt.Utility;
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace LCrypt.Password_Manager
 {
-    [Serializable]
+    [DataContract(Name = "PasswordStorage", Namespace = "https://www.github.com/Loris156/LCrypt")]
     public class PasswordStorage
     {
         /// <summary>
-        /// Guid of this password storage.
-        /// </summary>
-        public Guid Guid { get; set; }
-
-        /// <summary>
-        /// Name of password storage owner.
-        /// </summary>
-        public string Owner { get; set; }
-
-        public List<StorageEntry> Entries { get; }
-
-        public string Path { get => _path; set => _path = value; }
-
-        [NonSerialized] private string _path;
-
-        #region Encryption
-
-        public byte[] Key { set => _key = value; }
-        [NonSerialized] private byte[] _key;
-
-        public byte[] Iv { set => _iv = value; }
-        [NonSerialized] private byte[] _iv;
-
-        #endregion
-
-        /// <summary>
-        /// Initializes Guid and Entries.
+        /// Initialzed Guid, OwnerName, Entries and Created.
         /// </summary>
         public PasswordStorage()
         {
             Guid = Guid.NewGuid();
-            Entries = new List<StorageEntry>(0);
+            OwnerName = Environment.UserName.UppercaseFirst();
+            Entries = new List<StorageEntry>();
+            Created = LastModified = LastOpened = DateTime.Now;
         }
 
-        public void Save()
-        {
-        }
+        [DataMember]
+        public Guid Guid { get; private set; }
+
+        [DataMember]
+        public string OwnerName { get; set; }
+
+        [DataMember]
+        public List<StorageEntry> Entries { get; set; }
+
+        [DataMember]
+        public DateTime Created { get; private set; }
+
+        [DataMember]
+        public DateTime LastModified { get; set; }
+
+        [DataMember]
+        public DateTime LastOpened { get; set; }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,70 +16,55 @@ using MahApps.Metro.Controls.Dialogs;
 namespace LCrypt.Password_Manager
 {
 
-    public partial class PasswordManagerWindow
+    public partial class PasswordManagerWindow : INotifyPropertyChanged
     {
-        private readonly Timer _inactivityTimer = new Timer(TimeSpan.FromSeconds(1).TotalMilliseconds);
-        private readonly Stopwatch _timeSinceLastUserAction = new Stopwatch();
-
-        private PasswordStorage _passwordStorage;
-        public ObservableCollection<StorageEntry> DisplayedEntries { get; } = new ObservableCollection<StorageEntry>();
+        private PasswordStorage _storage;
+        private StorageEntry _selectedEntry;
+        private string _displayedPassword;
 
         public PasswordManagerWindow(PasswordStorage storage)
         {
             InitializeComponent();
 
-            _passwordStorage = storage;
-            _passwordStorage.Entries.ForEach(e => DisplayedEntries.Add(e));
+            DataContext = this;
 
-            _inactivityTimer.Elapsed += _inactivityTimer_Elapsed;
-            _inactivityTimer.Start();
+            _storage = storage;
+            DisplayedEntries = new ObservableCollection<StorageEntry>(_storage.Entries);
 
-            DisplayedEntries.Add(new StorageEntry
+        }
+
+        public ObservableCollection<StorageEntry> DisplayedEntries { get; set; }
+
+        public StorageEntry SelectedEntry
+        {
+            get => _selectedEntry;
+            set
             {
-                IconId = 239,
-                Username = "Loris156",
-                Name = "Mein Konto bei jemandem.",
-                Email = "lorisleitner@live.com",
-                Comment = "Mein Konto, aber ich weiß nicht wo!asdasdasdsadasdasdsadasdsadasdsadadsad",
-                
-            });
-
+                _selectedEntry = value;
+                OnPropertyChanged(nameof(SelectedEntry));
+            }
         }
 
-        private void _inactivityTimer_Elapsed(object sender, ElapsedEventArgs e)
+        public string DisplayedPassword
         {
-            if (_timeSinceLastUserAction.Elapsed > TimeSpan.FromMinutes(1))
-                Dispatcher.Invoke(Close);
-        }
-
-        private void OnUserAction(object sender, EventArgs e)
-        {
-            Debug.WriteLine("Close elapsed by " + e);
-            _timeSinceLastUserAction.Restart();
-        }
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            DisplayedEntries.Add(new StorageEntry
+            get => _displayedPassword;
+            set
             {
-                Name = "Neu!"
-            });
-
+                _displayedPassword = value;
+                OnPropertyChanged(nameof(DisplayedPassword));
+            }
         }
 
-        private void RmResult(object sender, RoutedEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            LbEntries.Items.RemoveAt(LbEntries.Items.Count - 1);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void LbEntries_MouseDown(object sender, MouseButtonEventArgs e)
+        private void ListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            LbEntries.SelectedItem = null;
-        }
-
-        private void LbEntries_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TblPassword.Text = (sender as ListBox).SelectedItem != null ? "••••" : string.Empty;
+            SelectedEntry = null;
         }
     }
 }

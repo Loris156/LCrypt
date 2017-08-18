@@ -5,8 +5,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.Windows;
+using System.Xml;
 using LCrypt.Password_Manager;
+using LCrypt.Utility;
 
 namespace LCrypt
 {
@@ -39,6 +43,43 @@ namespace LCrypt
                 Settings.UpgradeRequired = false;
             }
 
+            var storage = new PasswordStorage();
+            storage.Entries.Add(new StorageEntry
+            {
+                Name = "Microsoft",
+                Username = "Loris Leitner",
+                Email = "lorisleitner@live.com",
+                IconId = 277,
+                Password = new byte[23],
+                Comment = "Nix"                
+            });
+
+            storage.Entries.Add(new StorageEntry
+            {
+                Name = "League of Legends",
+                Username = "Loris156",
+                Email = "lorisleitner@gmail.com",
+                IconId = 43,
+                Password = new byte[43],
+                Comment = "Mein Main Account"
+            });
+
+            //var ms = new MemoryStream();
+            //{
+            //    var xml = XmlDictionaryWriter.CreateBinaryWriter(ms);
+            //    var dcs = new DataContractSerializer(typeof(PasswordStorage));
+            //    dcs.WriteObject(xml, storage);
+            //    xml.Flush();
+            //}
+            //ms.Position = 0;
+            //{
+            //    var xml = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max);
+            //    var dcs = new DataContractSerializer(typeof(PasswordStorage));
+            //    var obj = dcs.ReadObject(xml) as PasswordStorage;
+            //}
+
+
+
             if (e.Args.Length == 1)
             {
                 if (File.Exists(e.Args[0]))
@@ -68,7 +109,7 @@ namespace LCrypt
 
             ThemeManager.ChangeAppStyle(Current, ThemeManager.GetAccent(Settings.Accent), ThemeManager.GetAppTheme(Settings.Theme));
            // var window = new MainWindow();
-            var window = new PasswordManagerWindow(new PasswordStorage());
+            var window = new PasswordManagerWindow(storage);
             window.Show();
         }
     }

@@ -43,10 +43,12 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -65,11 +67,12 @@
     <Compile Include="Enumerations\Encoding.cs" />
     <Compile Include="Enumerations\PasswordStrength.cs" />
     <Compile Include="Password Manager\Int32ToPasswordImageSource.cs" />
+    <Compile Include="Password Manager\NullToBoolConverter.cs" />
+    <Compile Include="Password Manager\StorageEntry.cs" />
     <Compile Include="Password Manager\PasswordManagerWindow.xaml.cs">
       <DependentUpon>PasswordManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Password Manager\PasswordStorage.cs" />
-    <Compile Include="Password Manager\StorageEntry.cs" />
     <Compile Include="Utility\PasswordCheck.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -360,6 +363,7 @@
     <Resource Include="Resources\Password Manager Icons\273.png" />
     <Resource Include="Resources\Password Manager Icons\274.png" />
     <Resource Include="Resources\Password Manager Icons\275.png" />
+    <Resource Include="Resources\Password Manager Icons\276.png" />
     <Resource Include="Resources\Password Manager Icons\28.png" />
     <Resource Include="Resources\Password Manager Icons\29.png" />
     <Resource Include="Resources\Password Manager Icons\3.png" />
@@ -439,6 +443,9 @@
     <Resource Include="Resources\Password Manager Icons\97.png" />
     <Resource Include="Resources\Password Manager Icons\98.png" />
     <Resource Include="Resources\Password Manager Icons\99.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Password Manager Icons\277.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
