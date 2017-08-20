@@ -396,4 +396,7 @@
   <data name="Comments" xml:space="preserve">
     <value>Kommentare</value>
   </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Favoriten</value>
+  </data>
 </root>

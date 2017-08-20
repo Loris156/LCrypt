@@ -1,7 +1,9 @@
 ﻿using LCrypt.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 
 namespace LCrypt.Password_Manager
 {
@@ -9,13 +11,14 @@ namespace LCrypt.Password_Manager
     public class PasswordStorage
     {
         /// <summary>
-        /// Initialzed Guid, OwnerName, Entries and Created.
+        /// Initialzed Guid, Name, Entries and Created.
         /// </summary>
         public PasswordStorage()
         {
             Guid = Guid.NewGuid();
-            OwnerName = Environment.UserName.UppercaseFirst();
+            Name = Environment.UserName.UppercaseFirst();
             Entries = new List<StorageEntry>();
+            Categories = new List<StorageCategory>();
             Created = LastModified = LastOpened = DateTime.Now;
         }
 
@@ -23,10 +26,12 @@ namespace LCrypt.Password_Manager
         public Guid Guid { get; private set; }
 
         [DataMember]
-        public string OwnerName { get; set; }
+        public string Name { get; set; }
 
         [DataMember]
         public List<StorageEntry> Entries { get; set; }
+
+        public List<StorageCategory> Categories { get; set; }
 
         [DataMember]
         public DateTime Created { get; private set; }
@@ -36,5 +41,9 @@ namespace LCrypt.Password_Manager
 
         [DataMember]
         public DateTime LastOpened { get; set; }
+
+        public string Path { get; set; }
+
+        public AesManaged Aes { get; set; }
     }
 }

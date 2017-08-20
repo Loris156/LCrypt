@@ -44,14 +44,32 @@ namespace LCrypt
             }
 
             var storage = new PasswordStorage();
+            storage.Path = "NicePath";
+
+            var cat1 = new StorageCategory
+            {
+                Name = "Konten",
+                IconId = 23
+            };
+
+            var cat2 = new StorageCategory
+            {
+                Name = "Bank",
+                IconId = 47
+            };
+
+            storage.Categories.Add(cat1);
+            storage.Categories.Add(cat2);
             storage.Entries.Add(new StorageEntry
             {
-                Name = "Microsoft",
+                Name = "Microsoftdfsdfsdfsdfstrgudjidsfijgopdfsgisfdiopgjfdipgjdfpgjdsgdfsg",
                 Username = "Loris Leitner",
                 Email = "lorisleitner@live.com",
                 IconId = 277,
                 Password = new byte[23],
-                Comment = "Nix"                
+                Comment = "Nix",
+                IsFavorite = true,
+                Category = cat1
             });
 
             storage.Entries.Add(new StorageEntry
@@ -61,24 +79,23 @@ namespace LCrypt
                 Email = "lorisleitner@gmail.com",
                 IconId = 43,
                 Password = new byte[43],
-                Comment = "Mein Main Account"
+                Comment = "Mein Main Account",
+                Category = cat2
             });
 
-            //var ms = new MemoryStream();
-            //{
-            //    var xml = XmlDictionaryWriter.CreateBinaryWriter(ms);
-            //    var dcs = new DataContractSerializer(typeof(PasswordStorage));
-            //    dcs.WriteObject(xml, storage);
-            //    xml.Flush();
-            //}
-            //ms.Position = 0;
-            //{
-            //    var xml = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max);
-            //    var dcs = new DataContractSerializer(typeof(PasswordStorage));
-            //    var obj = dcs.ReadObject(xml) as PasswordStorage;
-            //}
-
-
+            var ms = new MemoryStream();
+            {
+                var xml = XmlDictionaryWriter.CreateBinaryWriter(ms);
+                var dcs = new DataContractSerializer(typeof(PasswordStorage));
+                dcs.WriteObject(xml, storage);
+                xml.Flush();
+            }
+            ms.Position = 0;
+            {
+                var xml = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max);
+                var dcs = new DataContractSerializer(typeof(PasswordStorage));
+                var obj = dcs.ReadObject(xml) as PasswordStorage;
+            }
 
             if (e.Args.Length == 1)
             {
