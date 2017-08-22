@@ -63,7 +63,7 @@ namespace LCrypt.Password_Manager
             set
             {
                 _displayedEntries = value;
-                OnPropertyChanged(nameof(DisplayedEntries));
+                OnPropertyChanged();
             }
         }
 
@@ -73,7 +73,7 @@ namespace LCrypt.Password_Manager
             set
             {
                 _categories = value;
-                OnPropertyChanged(nameof(Categories));
+                OnPropertyChanged();
             }
         }
 
@@ -83,7 +83,7 @@ namespace LCrypt.Password_Manager
             set
             {
                 _selectedCategory = value;
-                OnPropertyChanged(nameof(SelectedCategory));
+                OnPropertyChanged();
 
                 switch (SelectedCategory.Tag)
                 {
@@ -112,7 +112,7 @@ namespace LCrypt.Password_Manager
             set
             {
                 _selectedEntry = value;
-                OnPropertyChanged(nameof(SelectedEntry));
+                OnPropertyChanged();
 
                 DisplayedPassword = SelectedEntry == null ? null : "•••••";
                 OnPropertyChanged(nameof(DisplayedPassword));
@@ -125,7 +125,7 @@ namespace LCrypt.Password_Manager
             set
             {
                 _displayedPassword = value;
-                OnPropertyChanged(nameof(DisplayedPassword));
+                OnPropertyChanged();
             }
         }
 
