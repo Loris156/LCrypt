@@ -542,5 +542,8 @@
   <ItemGroup>
     <Resource Include="Resources\Password Manager Icons\Category\81.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\showPassword.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

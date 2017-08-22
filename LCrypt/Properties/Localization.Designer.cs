@@ -79,6 +79,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accounts.
+        /// </summary>
+        public static string Accounts {
+            get {
+                return ResourceManager.GetString("Accounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Algorithm.
         /// </summary>
         public static string Algorithm {
@@ -129,6 +138,15 @@ namespace LCrypt.Properties {
         public static string Both {
             get {
                 return ResourceManager.GetString("Both", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business.
+        /// </summary>
+        public static string Business {
+            get {
+                return ResourceManager.GetString("Business", resourceCulture);
             }
         }
         
@@ -192,6 +210,15 @@ namespace LCrypt.Properties {
         public static string Comments {
             get {
                 return ResourceManager.GetString("Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Computer.
+        /// </summary>
+        public static string Computer {
+            get {
+                return ResourceManager.GetString("Computer", resourceCulture);
             }
         }
         
@@ -367,6 +394,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a name for your password storage. You can change this name anytime..
+        /// </summary>
+        public static string EnterAStorageName {
+            get {
+                return ResourceManager.GetString("EnterAStorageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -390,6 +426,24 @@ namespace LCrypt.Properties {
         public static string Everything {
             get {
                 return ResourceManager.GetString("Everything", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Example Entry.
+        /// </summary>
+        public static string ExampleEntry {
+            get {
+                return ResourceManager.GetString("ExampleEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a example password manager entry. Click on the eye icon above to display its password. You can delete this entry..
+        /// </summary>
+        public static string ExampleEntryComment {
+            get {
+                return ResourceManager.GetString("ExampleEntryComment", resourceCulture);
             }
         }
         
@@ -426,6 +480,15 @@ namespace LCrypt.Properties {
         public static string FileDestination {
             get {
                 return ResourceManager.GetString("FileDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finance.
+        /// </summary>
+        public static string Finance {
+            get {
+                return ResourceManager.GetString("Finance", resourceCulture);
             }
         }
         
@@ -520,6 +583,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to License.
+        /// </summary>
+        public static string License {
+            get {
+                return ResourceManager.GetString("License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Light.
         /// </summary>
         public static string Light {
@@ -552,6 +624,15 @@ namespace LCrypt.Properties {
         public static string Medium {
             get {
                 return ResourceManager.GetString("Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
         
@@ -624,6 +705,15 @@ namespace LCrypt.Properties {
         public static string PasswordManager {
             get {
                 return ResourceManager.GetString("PasswordManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password manager window is already open..
+        /// </summary>
+        public static string PasswordManagerAlreadyOpen {
+            get {
+                return ResourceManager.GetString("PasswordManagerAlreadyOpen", resourceCulture);
             }
         }
         
@@ -867,6 +957,15 @@ namespace LCrypt.Properties {
         public static string Vocals {
             get {
                 return ResourceManager.GetString("Vocals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wallet.
+        /// </summary>
+        public static string Wallet {
+            get {
+                return ResourceManager.GetString("Wallet", resourceCulture);
             }
         }
         

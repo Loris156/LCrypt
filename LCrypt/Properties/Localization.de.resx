@@ -399,4 +399,37 @@
   <data name="Favorites" xml:space="preserve">
     <value>Favoriten</value>
   </data>
+  <data name="EnterAStorageName" xml:space="preserve">
+    <value>Bitte geben Sie Ihrem Passwortspeicher einen Namen. Sie können diesen Namen jederzeit ändern.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Accounts" xml:space="preserve">
+    <value>Konten</value>
+  </data>
+  <data name="Computer" xml:space="preserve">
+    <value>Computer</value>
+  </data>
+  <data name="Finance" xml:space="preserve">
+    <value>Finanzen</value>
+  </data>
+  <data name="Business" xml:space="preserve">
+    <value>Geschäftlich</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>Lizenz</value>
+  </data>
+  <data name="Wallet" xml:space="preserve">
+    <value>Porte­mon­naie</value>
+  </data>
+  <data name="ExampleEntry" xml:space="preserve">
+    <value>Beispieleintrag</value>
+  </data>
+  <data name="ExampleEntryComment" xml:space="preserve">
+    <value>Dies ist ein Beispieleintrag im LCrypt Passwort-Manager. Klicken Sie auf das Augen-Symbol, um das Passwort anzuzeigen. Sie können diesen Eintrag löschen.</value>
+  </data>
+  <data name="PasswordManagerAlreadyOpen" xml:space="preserve">
+    <value>Der Passwort-Manager ist bereits geöffnet.</value>
+  </data>
 </root>

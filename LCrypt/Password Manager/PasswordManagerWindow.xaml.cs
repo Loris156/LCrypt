@@ -95,9 +95,12 @@ namespace LCrypt.Password_Manager
                             new ObservableCollection<StorageEntry>(_storage.Entries.Where(e => e.IsFavorite));
                         break;
                     default:
+
+                        var entries = _storage.Entries.Where(e => e.Category != null)
+                            .Where(e => e.Category.Equals(SelectedCategory));
+
                         DisplayedEntries =
-                            new ObservableCollection<StorageEntry>(
-                                _storage.Entries.Where(e => e.Category.Equals(SelectedCategory)));
+                            new ObservableCollection<StorageEntry>(entries);
                         break;
                 }
             }

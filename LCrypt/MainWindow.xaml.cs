@@ -12,6 +12,7 @@ using System.IO;
 using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,6 +24,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml;
 using LCrypt.Password_Manager;
 using Encoding = LCrypt.Enumerations.Encoding;
 using HashAlgorithm = LCrypt.Enumerations.HashAlgorithm;
@@ -39,6 +41,8 @@ namespace LCrypt
         private string _lengthInMiB = string.Empty;
 
         private FileInfo _selectedChecksumFile;
+
+        private PasswordManagerWindow _passwordManagerWindow;
 
         public MainWindow()
         {
@@ -61,16 +65,40 @@ namespace LCrypt
             RbTextDecryptHexadecimal.Checked += RbTextDecryptInputFormat;
             RbTextDecryptBase64.Checked += RbTextDecryptInputFormat;
 
-            TblVersion.Text = Assembly.GetExecutingAssembly().GetName().Name + " Version " + Assembly.GetExecutingAssembly().GetName().Version.RemoveTrailingZeros();
+            TblVersion.Text = Assembly.GetExecutingAssembly().GetName().Name + " Version " +
+                              Assembly.GetExecutingAssembly().GetName().Version.RemoveTrailingZeros();
         }
 
         private async void PasswordManagerOnClick(object sender, RoutedEventArgs e)
         {
-            var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            if (File.Exists(Path.Combine(myDocuments, "LCrypt", "wallet.lcrypt")))
+            if (_passwordManagerWindow != null)
             {
+                await this.ShowMessageAsync(Localization.PasswordManager, Localization.PasswordManagerAlreadyOpen,
+                    MessageDialogStyle.Affirmative, new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Localization.Cancel
+                    });
+                return;
+            }
 
+            var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var storageFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "LCrypt", "wallet.lcrypt");
+
+            if (File.Exists(storageFilePath))
+            {
+                var passwordInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                    Localization.TypeInMasterPassword, new LoginDialogSettings
+                    {
+                        ShouldHideUsername = true,
+                        PasswordWatermark = Localization.Password,
+                        AffirmativeButtonText = Localization.Continue,
+                        NegativeButtonVisibility = Visibility.Visible,
+                        NegativeButtonText = Localization.Cancel
+                    });
+                if (string.IsNullOrWhiteSpace(passwordInput?.Password)) return;
+
+                await OpenPasswordFile(storageFilePath, passwordInput.Password);
             }
             else
             {
@@ -78,17 +106,17 @@ namespace LCrypt
                 Directory.CreateDirectory(Path.Combine(myDocuments, "LCrypt", "Backups"));
 
                 await this.ShowMessageAsync(Localization.PasswordManager, Localization.WelcomeToPasswordManager,
-                     MessageDialogStyle.Affirmative, new MetroDialogSettings
-                     {
-                         AffirmativeButtonText = Localization.Continue
-                     });
+                    MessageDialogStyle.Affirmative, new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Localization.Continue
+                    });
 
                 var passwordsAreEqual = false;
-                SecureString password;
+                string password;
 
                 do
                 {
-                    var firstPasswortInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                    var firstPasswordInput = await this.ShowLoginAsync(Localization.MasterPassword,
                         Localization.TypeInMasterPassword, new LoginDialogSettings
                         {
                             ShouldHideUsername = true,
@@ -97,9 +125,9 @@ namespace LCrypt
                             NegativeButtonVisibility = Visibility.Visible,
                             NegativeButtonText = Localization.Cancel
                         });
-                    if (string.IsNullOrWhiteSpace(firstPasswortInput?.Password)) return;
+                    if (string.IsNullOrWhiteSpace(firstPasswordInput?.Password)) return;
 
-                    var secondPasswortInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                    var secondPasswordInput = await this.ShowLoginAsync(Localization.MasterPassword,
                         Localization.TypeInMasterPasswordAgain, new LoginDialogSettings
                         {
                             ShouldHideUsername = true,
@@ -108,20 +136,150 @@ namespace LCrypt
                             NegativeButtonVisibility = Visibility.Visible,
                             NegativeButtonText = Localization.Cancel
                         });
-                    if (string.IsNullOrWhiteSpace(secondPasswortInput?.Password)) return;
+                    if (string.IsNullOrWhiteSpace(secondPasswordInput?.Password)) return;
 
-                    if (firstPasswortInput.Password.Equals(secondPasswortInput.Password))
+                    if (firstPasswordInput.Password.Equals(secondPasswordInput.Password))
                         passwordsAreEqual = true;
-                    else
-                        if (await this.ShowMessageAsync(Localization.MasterPassword, Localization.PasswordsAreNotEqual,
-                            MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
-                            {
-                                AffirmativeButtonText = Localization.Continue,
-                                NegativeButtonText = Localization.Cancel
-                            }) == MessageDialogResult.Negative)
+                    else if (await this.ShowMessageAsync(Localization.MasterPassword, Localization.PasswordsAreNotEqual,
+                                 MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+                                 {
+                                     AffirmativeButtonText = Localization.Continue,
+                                     NegativeButtonText = Localization.Cancel
+                                 }) == MessageDialogResult.Negative)
                         return;
-                    password = firstPasswortInput.SecurePassword;
+                    password = firstPasswordInput.Password;
                 } while (!passwordsAreEqual);
+
+
+                var storageName = await this.ShowInputAsync(Localization.PasswordManager,
+                    Localization.EnterAStorageName,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Localization.Continue,
+                        NegativeButtonText = Localization.Cancel
+                    });
+                if (storageName == null)
+                    return;
+
+                if (string.IsNullOrWhiteSpace(storageName))
+                    storageName = Environment.UserName.UppercaseFirst();
+
+                var salt = Util.GetStrongRandomBytes(16);
+
+                var aes = new AesManaged();
+                aes.IV = Util.GetStrongRandomBytes(aes.BlockSize / 8);
+
+                using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, 30000))
+                {
+                    aes.Key = deriveBytes.GetBytes(aes.KeySize / 8);
+                }
+
+                using (var storage = new PasswordStorage
+                {
+                    Name = storageName,
+                    Path = storageFilePath,
+                    Aes = aes,
+                    Salt = salt
+                })
+                {
+                    storage.Categories.Add(new StorageCategory
+                    {
+                        Name = Localization.Accounts,
+                        IconId = 66
+                    });
+
+                    storage.Categories.Add(new StorageCategory
+                    {
+                        Name = Localization.Computer,
+                        IconId = 58
+                    });
+
+                    storage.Categories.Add(new StorageCategory
+                    {
+                        Name = Localization.Finance,
+                        IconId = 38
+                    });
+
+                    storage.Categories.Add(new StorageCategory
+                    {
+                        Name = Localization.Business,
+                        IconId = 11
+                    });
+
+                    storage.Categories.Add(new StorageCategory
+                    {
+                        Name = Localization.License,
+                        IconId = 5
+                    });
+
+                    storage.Categories.Add(new StorageCategory
+                    {
+                        Name = Localization.Wallet,
+                        IconId = 54
+                    });
+
+                    storage.Entries.Add(new StorageEntry
+                    {
+                        Name = Localization.ExampleEntry,
+                        IconId = 254,
+                        IsFavorite = true,
+                        Email = "lcrypt@example.com",
+                        Username = "LCrypt",
+                        Password = await aes.EncryptStringAsync("LCrypt is amazing!"),
+                        Comment = Localization.ExampleEntryComment
+                    });
+
+                    await storage.SaveAsync();
+                }
+                await OpenPasswordFile(storageFilePath, password);
+            }
+        }
+
+        private async Task OpenPasswordFile(string path, string password)
+        {
+            // TODO: Catch exceptions and show message
+            byte[] salt = new byte[16], iv = new byte[16];
+
+            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 4096,
+                useAsync: true))
+            {
+                await fileStream.ReadAsync(salt, 0, 16);
+                await fileStream.ReadAsync(iv, 0, 16);
+
+                var aes = new AesManaged { IV = iv };
+
+                using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, 30000))
+                {
+                    aes.Key = deriveBytes.GetBytes(aes.KeySize / 8);
+                }
+
+                using (var decryptedStream = new MemoryStream())
+                {
+                    using (var transform = aes.CreateDecryptor())
+                    {
+                        var cryptoStream = new CryptoStream(decryptedStream, transform, CryptoStreamMode.Write);
+
+                        await fileStream.CopyToAsync(cryptoStream);
+                        cryptoStream.FlushFinalBlock();
+                    }
+
+                    decryptedStream.Seek(0, SeekOrigin.Begin);
+
+                    var deserializer = new DataContractSerializer(typeof(PasswordStorage));
+                    using (var xmlReader =
+                        XmlDictionaryReader.CreateBinaryReader(decryptedStream, XmlDictionaryReaderQuotas.Max))
+                    {
+                        var storage = (PasswordStorage)deserializer.ReadObject(xmlReader);
+                        storage.Salt = salt;
+                        storage.Aes = aes;
+                        storage.Path = path;
+
+
+                        _passwordManagerWindow = new PasswordManagerWindow(storage);
+                        _passwordManagerWindow.Closed += (o, e) => _passwordManagerWindow = null;
+                        _passwordManagerWindow.Show();
+                    }
+                }
             }
         }
 
@@ -430,7 +588,8 @@ namespace LCrypt
                 }
 
                 await this.ShowMessageAsync("LCrypt",
-                    string.Format(Localization.SuccessfullyEncrypted, _selectedFileInfo.Name, Path.GetFileName(TbFileDestination.Text), CoBAlgorithm.Text),
+                    string.Format(Localization.SuccessfullyEncrypted, _selectedFileInfo.Name,
+                        Path.GetFileName(TbFileDestination.Text), CoBAlgorithm.Text),
                     MessageDialogStyle.Affirmative, new MetroDialogSettings
                     {
                         AffirmativeButtonText = "OK",

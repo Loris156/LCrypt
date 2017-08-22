@@ -399,4 +399,37 @@
   <data name="Favorites" xml:space="preserve">
     <value>Favorites</value>
   </data>
+  <data name="EnterAStorageName" xml:space="preserve">
+    <value>Please enter a name for your password storage. You can change this name anytime.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Accounts" xml:space="preserve">
+    <value>Accounts</value>
+  </data>
+  <data name="Computer" xml:space="preserve">
+    <value>Computer</value>
+  </data>
+  <data name="Finance" xml:space="preserve">
+    <value>Finance</value>
+  </data>
+  <data name="Business" xml:space="preserve">
+    <value>Business</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="Wallet" xml:space="preserve">
+    <value>Wallet</value>
+  </data>
+  <data name="ExampleEntry" xml:space="preserve">
+    <value>Example Entry</value>
+  </data>
+  <data name="ExampleEntryComment" xml:space="preserve">
+    <value>This is a example password manager entry. Click on the eye icon above to display its password. You can delete this entry.</value>
+  </data>
+  <data name="PasswordManagerAlreadyOpen" xml:space="preserve">
+    <value>The password manager window is already open.</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace LCrypt.Utility
@@ -34,6 +35,21 @@ namespace LCrypt.Utility
                 }
             }
             return bytes;
+        }
+
+        /// <summary>
+        /// Generates a cryptographically strong sequence of random values.
+        /// </summary>
+        /// <param name="count">Size of returned byte array.</param>
+        /// <returns>A filled byte array with random values.</returns>
+        public static byte[] GetStrongRandomBytes(int count)
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var bytes = new byte[count];
+                rng.GetBytes(bytes, 0, count);
+                return bytes;
+            }
         }
     }
 }
