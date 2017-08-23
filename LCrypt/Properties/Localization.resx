@@ -432,4 +432,16 @@
   <data name="PasswordManagerAlreadyOpen" xml:space="preserve">
     <value>The password manager window is already open.</value>
   </data>
+  <data name="IOException" xml:space="preserve">
+    <value>An error occurred while reading the password file. Please try again. Error: {0}</value>
+  </data>
+  <data name="CryptographicException" xml:space="preserve">
+    <value>Invalid password! Please try again!</value>
+  </data>
+  <data name="UnknownException" xml:space="preserve">
+    <value>An unknown error occurred. Please try again. Error: {0}</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
 </root>

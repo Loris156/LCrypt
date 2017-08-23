@@ -237,49 +237,81 @@ namespace LCrypt
 
         private async Task OpenPasswordFile(string path, string password)
         {
-            // TODO: Catch exceptions and show message
-            byte[] salt = new byte[16], iv = new byte[16];
-
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 4096,
-                useAsync: true))
+            try
             {
-                await fileStream.ReadAsync(salt, 0, 16);
-                await fileStream.ReadAsync(iv, 0, 16);
+                byte[] salt = new byte[16], iv = new byte[16];
 
-                var aes = new AesManaged { IV = iv };
-
-                using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, 30000))
+                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 4096,
+                    useAsync: true))
                 {
-                    aes.Key = deriveBytes.GetBytes(aes.KeySize / 8);
-                }
+                    await fileStream.ReadAsync(salt, 0, 16);
+                    await fileStream.ReadAsync(iv, 0, 16);
 
-                using (var decryptedStream = new MemoryStream())
-                {
-                    using (var transform = aes.CreateDecryptor())
+                    var aes = new AesManaged { IV = iv };
+
+                    using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, 30000))
                     {
-                        var cryptoStream = new CryptoStream(decryptedStream, transform, CryptoStreamMode.Write);
-
-                        await fileStream.CopyToAsync(cryptoStream);
-                        cryptoStream.FlushFinalBlock();
+                        aes.Key = deriveBytes.GetBytes(aes.KeySize / 8);
                     }
 
-                    decryptedStream.Seek(0, SeekOrigin.Begin);
-
-                    var deserializer = new DataContractSerializer(typeof(PasswordStorage));
-                    using (var xmlReader =
-                        XmlDictionaryReader.CreateBinaryReader(decryptedStream, XmlDictionaryReaderQuotas.Max))
+                    using (var decryptedStream = new MemoryStream())
                     {
-                        var storage = (PasswordStorage)deserializer.ReadObject(xmlReader);
-                        storage.Salt = salt;
-                        storage.Aes = aes;
-                        storage.Path = path;
+                        using (var transform = aes.CreateDecryptor())
+                        {
+                            var cryptoStream = new CryptoStream(decryptedStream, transform, CryptoStreamMode.Write);
+
+                            await fileStream.CopyToAsync(cryptoStream);
+                            cryptoStream.FlushFinalBlock();
+                        }
+
+                        decryptedStream.Seek(0, SeekOrigin.Begin);
+
+                        var deserializer = new DataContractSerializer(typeof(PasswordStorage));
+                        using (var xmlReader =
+                            XmlDictionaryReader.CreateBinaryReader(decryptedStream, XmlDictionaryReaderQuotas.Max))
+                        {
+                            var storage = (PasswordStorage)deserializer.ReadObject(xmlReader);
+                            storage.Salt = salt;
+                            storage.Aes = aes;
+                            storage.Path = path;
 
 
-                        _passwordManagerWindow = new PasswordManagerWindow(storage);
-                        _passwordManagerWindow.Closed += (o, e) => _passwordManagerWindow = null;
-                        _passwordManagerWindow.Show();
+                            _passwordManagerWindow = new PasswordManagerWindow(storage);
+                            _passwordManagerWindow.Closed += (o, e) => _passwordManagerWindow = null;
+                            _passwordManagerWindow.Show();
+                        }
                     }
                 }
+            }
+            catch (IOException ex)
+            {
+                await this.ShowMessageAsync(Localization.PasswordManager,
+                    string.Format(Localization.IOException, ex.Message), MessageDialogStyle.Affirmative,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Localization.Continue
+                    });
+            }
+            catch (CryptographicException)
+            {
+                if (await this.ShowMessageAsync(Localization.PasswordManager,
+                        string.Format(Localization.CryptographicException), MessageDialogStyle.AffirmativeAndNegative,
+                        new MetroDialogSettings
+                        {
+                            AffirmativeButtonText = Localization.Retry,
+                            NegativeButtonText = Localization.Cancel,
+                            AnimateShow = false
+                        }) == MessageDialogResult.Affirmative)
+                    PasswordManagerOnClick(null, null);
+            }
+            catch (Exception)
+            {
+                await this.ShowMessageAsync(Localization.PasswordManager,
+                    string.Format(Localization.UnknownException), MessageDialogStyle.Affirmative,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Localization.Continue
+                    });
             }
         }
 

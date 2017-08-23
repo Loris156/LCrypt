@@ -268,6 +268,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid password! Please try again!.
+        /// </summary>
+        public static string CryptographicException {
+            get {
+                return ResourceManager.GetString("CryptographicException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         public static string Dark {
@@ -556,6 +565,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while reading the password file. Please try again. Error: {0}.
+        /// </summary>
+        public static string IOException {
+            get {
+                return ResourceManager.GetString("IOException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string Language {
@@ -781,6 +799,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string Retry {
+            get {
+                return ResourceManager.GetString("Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search....
         /// </summary>
         public static string Search {
@@ -903,6 +930,15 @@ namespace LCrypt.Properties {
         public static string TypeInMasterPasswordAgain {
             get {
                 return ResourceManager.GetString("TypeInMasterPasswordAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unknown error occurred. Please try again. Error: {0}.
+        /// </summary>
+        public static string UnknownException {
+            get {
+                return ResourceManager.GetString("UnknownException", resourceCulture);
             }
         }
         

@@ -432,4 +432,16 @@
   <data name="PasswordManagerAlreadyOpen" xml:space="preserve">
     <value>Der Passwort-Manager ist bereits geöffnet.</value>
   </data>
+  <data name="IOException" xml:space="preserve">
+    <value>Ein Fehler ist während dem lesen der Passwort-Datei aufgetreten. Bitte versuchen Sie es erneut. Fehler: {0}</value>
+  </data>
+  <data name="CryptographicException" xml:space="preserve">
+    <value>Ungültiges Passwort! Bitte versuchen Sie erneut.</value>
+  </data>
+  <data name="UnknownException" xml:space="preserve">
+    <value>Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es erneut. Fehler: {0}</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Wiederholen</value>
+  </data>
 </root>
