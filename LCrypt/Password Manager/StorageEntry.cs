@@ -13,7 +13,7 @@ namespace LCrypt.Password_Manager
         {
             Guid = Guid.NewGuid();
             IconId = 0;
-            Name = Username = Email = string.Empty;
+            Name = Username = Email = Comment = string.Empty;
             IsFavorite = false;
             Created = LastModified = DateTime.Now;
         }

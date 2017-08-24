@@ -66,6 +66,8 @@
     <Compile Include="Enumerations\HashAlgorithm.cs" />
     <Compile Include="Enumerations\Encoding.cs" />
     <Compile Include="Enumerations\PasswordStrength.cs" />
+    <Compile Include="Enumerations\SearchScope.cs" />
+    <Compile Include="Password Manager\SearchScopeConverter.cs" />
     <Compile Include="Password Manager\IntToCategoryBitmapConverter.cs" />
     <Compile Include="Password Manager\IntToEntryBitmapConverter.cs" />
     <Compile Include="Password Manager\NullToBoolConverter.cs" />

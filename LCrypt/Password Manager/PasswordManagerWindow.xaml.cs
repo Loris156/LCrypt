@@ -9,6 +9,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using LCrypt.Enumerations;
 using LCrypt.Password_Manager;
 using LCrypt.Properties;
 using LCrypt.Utility;
@@ -31,6 +32,9 @@ namespace LCrypt.Password_Manager
         private ObservableCollection<StorageCategory> _categories;
 
         private bool _isBusy;
+
+        private string _searchQuery;
+        private SearchScope _searchScope;
 
         public PasswordManagerWindow(PasswordStorage storage)
         {
@@ -55,9 +59,11 @@ namespace LCrypt.Password_Manager
                     Tag = "favorites"
                 }
             };
-            SelectedCategory = Categories[0];
 
+            SelectedCategory = Categories[0];
             _storage.Categories.ForEach(c => Categories.Add(c));
+
+            SearchScope = SearchScope.Everything;
         }
 
         public ObservableCollection<StorageEntry> DisplayedEntries
@@ -141,6 +147,26 @@ namespace LCrypt.Password_Manager
             }
         }
 
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public SearchScope SearchScope
+        {
+            get => _searchScope;
+            set
+            {
+                _searchScope = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void ListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             SelectedEntry = null;
@@ -220,6 +246,47 @@ namespace LCrypt.Password_Manager
                 Console.WriteLine(exception);
                 throw;
             }
+        }
+
+        private void SearchEntries(object sender, RoutedEventArgs e)
+        {
+            SelectedCategory = Categories[0];
+
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                DisplayedEntries = new ObservableCollection<StorageEntry>(_storage.Entries);
+                return;
+            }
+                
+            var search = SearchQuery.ToUpper();
+            IEnumerable<StorageEntry> entries;
+
+            switch (SearchScope)
+            {
+                case SearchScope.Everything:
+                    entries = _storage.Entries.Where(x => x.Name.ToUpper().Contains(search) ||
+                                                          x.Username.ToUpper().Contains(search) ||
+                                                          x.Email.ToUpper().Contains(search) ||
+                                                          x.Comment.ToUpper().Contains(search));
+                    break;
+                case SearchScope.Name:
+                    entries = _storage.Entries.Where(x => x.Name.ToUpper().Contains(search));
+                    break;
+                case SearchScope.Username:
+                    entries = _storage.Entries.Where(x => x.Username.ToUpper().Contains(search));
+                    break;
+                case SearchScope.Email:
+                    entries = _storage.Entries.Where(x => x.Email.ToUpper().Contains(search));
+                    break;
+                case SearchScope.Comment:
+                    entries = _storage.Entries.Where(x => x.Comment.ToUpper().Contains(search));
+                    break;
+                default:
+                    entries = Enumerable.Empty<StorageEntry>();
+                    break;
+            }
+
+            DisplayedEntries = new ObservableCollection<StorageEntry>(entries);
         }
     }
 }

@@ -456,4 +456,7 @@
   <data name="LastModified" xml:space="preserve">
     <value>Last modified</value>
   </data>
+  <data name="Names" xml:space="preserve">
+    <value>Names</value>
+  </data>
 </root>

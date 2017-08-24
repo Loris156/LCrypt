@@ -303,10 +303,10 @@ namespace LCrypt
                         }) == MessageDialogResult.Affirmative)
                     PasswordManagerOnClick(null, null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await this.ShowMessageAsync(Localization.PasswordManager,
-                    string.Format(Localization.UnknownException), MessageDialogStyle.Affirmative,
+                    string.Format(Localization.UnknownException, ex.Message), MessageDialogStyle.Affirmative,
                     new MetroDialogSettings
                     {
                         AffirmativeButtonText = Localization.Continue

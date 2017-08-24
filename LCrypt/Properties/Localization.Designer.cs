@@ -673,6 +673,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Names.
+        /// </summary>
+        public static string Names {
+            get {
+                return ResourceManager.GetString("Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
