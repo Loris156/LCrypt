@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Markup;
 using LCrypt.Properties;
 using MahApps.Metro;
 
@@ -56,6 +57,10 @@ namespace LCrypt
                 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(Settings.Language);
                 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(Settings.Language);
             }
+
+            // Use current culture in XAML.
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
             if (string.IsNullOrWhiteSpace(Settings.Accent))
                 Settings.Accent = "Blue";

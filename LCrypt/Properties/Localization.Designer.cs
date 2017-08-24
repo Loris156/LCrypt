@@ -268,6 +268,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string Created {
+            get {
+                return ResourceManager.GetString("Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid password! Please try again!.
         /// </summary>
         public static string CryptographicException {
@@ -579,6 +588,15 @@ namespace LCrypt.Properties {
         public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last modified.
+        /// </summary>
+        public static string LastModified {
+            get {
+                return ResourceManager.GetString("LastModified", resourceCulture);
             }
         }
         

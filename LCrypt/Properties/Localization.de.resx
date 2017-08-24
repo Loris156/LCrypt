@@ -450,4 +450,10 @@
   <data name="VisitLCryptOnGitHub" xml:space="preserve">
     <value>LCrypt auf GitHub besuchen.</value>
   </data>
+  <data name="Created" xml:space="preserve">
+    <value>Erstellt</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Letzte Änderung</value>
+  </data>
 </root>

@@ -30,6 +30,8 @@ namespace LCrypt.Password_Manager
         private ObservableCollection<StorageEntry> _displayedEntries;
         private ObservableCollection<StorageCategory> _categories;
 
+        private bool _isBusy;
+
         public PasswordManagerWindow(PasswordStorage storage)
         {
             InitializeComponent();
@@ -125,6 +127,16 @@ namespace LCrypt.Password_Manager
             set
             {
                 _displayedPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
                 OnPropertyChanged();
             }
         }
