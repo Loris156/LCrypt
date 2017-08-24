@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using LCrypt.Password_Manager;
 using LCrypt.Properties;
+using LCrypt.Utility;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Localization = LCrypt.Properties.Localization;
@@ -133,6 +134,21 @@ namespace LCrypt.Password_Manager
             SelectedEntry = null;
         }
 
+        private async void ListBoxCopy_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var entryGuid = (Guid)((Button)sender).Tag;
+                var entry = DisplayedEntries.Single(x => x.Guid.Equals(entryGuid));
+                Util.CopyFor(await _storage.Aes.DecryptStringAsync(entry.Password), TimeSpan.FromSeconds(10));
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
+        }
+
         private void StarUnstarSelectedEntry_OnClick(object sender, RoutedEventArgs e)
         {
             SelectedEntry.IsFavorite = !SelectedEntry.IsFavorite;
@@ -149,6 +165,49 @@ namespace LCrypt.Password_Manager
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async void DisplayPassword_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DisplayedPassword != "•••••")
+                DisplayedPassword = "•••••";
+            else
+                DisplayedPassword = await _storage.Aes.DecryptStringAsync(SelectedEntry?.Password);
+            OnPropertyChanged(nameof(DisplayedPassword));
+        }
+
+        private async void SelectedEntryCopy_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var tag = (string)((Button)sender).Tag;
+                string toCopy;
+
+                switch (tag)
+                {
+                    case "Username":
+                        toCopy = SelectedEntry.Username;
+                        break;
+                    case "Email":
+                        toCopy = SelectedEntry.Email;
+                        break;
+                    case "Password":
+                        Util.CopyFor(await _storage.Aes.DecryptStringAsync(SelectedEntry.Password),
+                            TimeSpan.FromSeconds(10));
+                        return;
+                    case "Comment":
+                        toCopy = SelectedEntry.Comment;
+                        break;
+                    default: return;
+                }
+
+                Clipboard.SetText(toCopy);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
         }
     }
 }

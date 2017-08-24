@@ -2,7 +2,10 @@
 using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace LCrypt.Utility
 {
@@ -50,6 +53,26 @@ namespace LCrypt.Utility
                 rng.GetBytes(bytes, 0, count);
                 return bytes;
             }
+        }
+
+        public static void ClearClipboardSafe()
+        {
+            var thread = new Thread(Clipboard.Clear);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+        }
+
+        public static void CopyFor(string s, TimeSpan timeSpan)
+        {
+            Clipboard.SetText(s);
+            var timer = new DispatcherTimer {Interval = timeSpan};
+            timer.Start();
+            timer.Tick += (sender, eventArgs) =>
+            {              
+                ClearClipboardSafe();
+                var dispatcher = (DispatcherTimer)sender;
+                dispatcher.Stop();
+            };
         }
     }
 }
