@@ -6,11 +6,12 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:p="clr-namespace:LCrypt.Properties"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignData MainWindow}"
         Title="LCrypt" Height="570" Width="405"
         RightWindowCommandsOverlayBehavior="Never" 
         ResizeMode="CanMinimize" 
         WindowStartupLocation="CenterScreen">
-    
+
     <controls:MetroWindow.Resources>
         <Style x:Key="ColorSelection" TargetType="Rectangle">
             <Setter Property="Height" Value="42"/>
@@ -24,6 +25,11 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </controls:MetroWindow.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding OpenPasswordManagerCommand}"/>
+    </Window.InputBindings>
+
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <Button Visibility="{Binding Source={x:Static p:Settings.Default}, Path=EnablePasswordManager, Converter={StaticResource BoolToVisibilityConverter}}" Click="PasswordManagerOnClick">
@@ -56,7 +62,7 @@
                                             </Hyperlink.ToolTip>
                                         </Hyperlink>                                       
                                     </TextBlock>
-                                    
+
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5, 0, 0, 5">
                                         <Hyperlink TextDecorations="None" NavigateUri="https://www.github.com/Loris156/LCrypt" RequestNavigate="Hyperlink_RequestNavigate">
                                             <Image Source="pack://application:,,/Resources/github.png" Width="48" Height="48"/>

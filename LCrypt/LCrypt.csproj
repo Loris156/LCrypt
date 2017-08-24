@@ -77,6 +77,7 @@
       <DependentUpon>PasswordManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Password Manager\PasswordStorage.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="Utility\PasswordCheck.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

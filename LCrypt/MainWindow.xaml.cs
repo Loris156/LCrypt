@@ -47,6 +47,9 @@ namespace LCrypt
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = this;
+
             CoBLanguage.SelectedIndex = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("de") ? 0 : 1;
             CoBLanguage.SelectionChanged += CoBLanguage_SelectionChanged;
 
@@ -67,7 +70,12 @@ namespace LCrypt
 
             TblVersion.Text = Assembly.GetExecutingAssembly().GetName().Name + " Version " +
                               Assembly.GetExecutingAssembly().GetName().Version.RemoveTrailingZeros();
+
+            OpenPasswordManagerCommand = new RelayCommand(_ => PasswordManagerOnClick(null, null),
+                _ => this.GetCurrentDialogAsync<BaseMetroDialog>().Result == null);
         }
+
+        public ICommand OpenPasswordManagerCommand { get; }
 
         private async void PasswordManagerOnClick(object sender, RoutedEventArgs e)
         {
@@ -90,6 +98,7 @@ namespace LCrypt
                 var passwordInput = await this.ShowLoginAsync(Localization.MasterPassword,
                     Localization.TypeInMasterPassword, new LoginDialogSettings
                     {
+                        AnimateShow = false,
                         ShouldHideUsername = true,
                         PasswordWatermark = Localization.Password,
                         AffirmativeButtonText = Localization.Continue,
