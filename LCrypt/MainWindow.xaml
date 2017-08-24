@@ -39,7 +39,7 @@
                     <TabControl x:Name="TcSettings">
                         <TabItem Header="{x:Static p:Localization.General}">
                             <StackPanel>
-                                <TextBlock FontSize="14" Margin="10, 5, 0, 0">Links:</TextBlock>
+                                <TextBlock FontSize="14" Margin="10">Links:</TextBlock>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
@@ -47,12 +47,25 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock HorizontalAlignment="Right" Margin="0, 0, 5, 5">
                                         <Hyperlink TextDecorations="None" NavigateUri="mailto:lorisleitner@live.com?subject=LCrypt" RequestNavigate="Hyperlink_RequestNavigate">
-                                            <Image Source="pack://application:,,/Resources/email.png" Width="48" Height="48"></Image>
-                                        </Hyperlink>
+                                            <Image Source="pack://application:,,/Resources/email.png" Width="48" Height="48"/>
+                                            <Hyperlink.ToolTip>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="pack://application:,,/Resources/email.png" Height="24" Margin="5, 0"/>
+                                                    <TextBlock Text="{x:Static p:Localization.WriteAnEmailToLoris156}" Margin="5, 0"  VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Hyperlink.ToolTip>
+                                        </Hyperlink>                                       
                                     </TextBlock>
+                                    
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5, 0, 0, 5">
                                         <Hyperlink TextDecorations="None" NavigateUri="https://www.github.com/Loris156/LCrypt" RequestNavigate="Hyperlink_RequestNavigate">
-                                            <Image Source="pack://application:,,/Resources/github.png" Width="48" Height="48"></Image>
+                                            <Image Source="pack://application:,,/Resources/github.png" Width="48" Height="48"/>
+                                            <Hyperlink.ToolTip>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="pack://application:,,/Resources/github.png" Height="24" Margin="5, 0"/>
+                                                    <TextBlock Text="{x:Static p:Localization.VisitLCryptOnGitHub}" Margin="5, 0"  VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Hyperlink.ToolTip>
                                         </Hyperlink>
                                     </TextBlock>
                                 </Grid>

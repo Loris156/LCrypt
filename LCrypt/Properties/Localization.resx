@@ -444,4 +444,10 @@
   <data name="Retry" xml:space="preserve">
     <value>Retry</value>
   </data>
+  <data name="WriteAnEmailToLoris156" xml:space="preserve">
+    <value>Write an Email to Loris156.</value>
+  </data>
+  <data name="VisitLCryptOnGitHub" xml:space="preserve">
+    <value>Visit LCrypt on GitHub.</value>
+  </data>
 </root>

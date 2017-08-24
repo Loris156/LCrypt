@@ -988,6 +988,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Visit LCrypt on GitHub..
+        /// </summary>
+        public static string VisitLCryptOnGitHub {
+            get {
+                return ResourceManager.GetString("VisitLCryptOnGitHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vocals.
         /// </summary>
         public static string Vocals {
@@ -1029,6 +1038,15 @@ namespace LCrypt.Properties {
         public static string WelcomeToPasswordManager {
             get {
                 return ResourceManager.GetString("WelcomeToPasswordManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write an Email to Loris156..
+        /// </summary>
+        public static string WriteAnEmailToLoris156 {
+            get {
+                return ResourceManager.GetString("WriteAnEmailToLoris156", resourceCulture);
             }
         }
         

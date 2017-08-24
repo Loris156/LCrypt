@@ -143,13 +143,12 @@ namespace LCrypt
                     else if (await this.ShowMessageAsync(Localization.MasterPassword, Localization.PasswordsAreNotEqual,
                                  MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
                                  {
-                                     AffirmativeButtonText = Localization.Continue,
+                                     AffirmativeButtonText = Localization.Retry,
                                      NegativeButtonText = Localization.Cancel
                                  }) == MessageDialogResult.Negative)
                         return;
                     password = firstPasswordInput.Password;
                 } while (!passwordsAreEqual);
-
 
                 var storageName = await this.ShowInputAsync(Localization.PasswordManager,
                     Localization.EnterAStorageName,
