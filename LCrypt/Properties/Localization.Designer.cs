@@ -88,6 +88,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to favorites.
+        /// </summary>
+        public static string AddToFavorites {
+            get {
+                return ResourceManager.GetString("AddToFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Algorithm.
         /// </summary>
         public static string Algorithm {
@@ -259,6 +268,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy password.
+        /// </summary>
+        public static string CopyPassword {
+            get {
+                return ResourceManager.GetString("CopyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {
@@ -345,6 +363,15 @@ namespace LCrypt.Properties {
         public static string DragAndDropSingleFile {
             get {
                 return ResourceManager.GetString("DragAndDropSingleFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit entry.
+        /// </summary>
+        public static string EditEntry {
+            get {
+                return ResourceManager.GetString("EditEntry", resourceCulture);
             }
         }
         
@@ -799,6 +826,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove from favorites.
+        /// </summary>
+        public static string RemoveFromFavorites {
+            get {
+                return ResourceManager.GetString("RemoveFromFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restart to apply changes.
         /// </summary>
         public static string RestartToApplyChanges {
@@ -849,6 +885,15 @@ namespace LCrypt.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show password.
+        /// </summary>
+        public static string ShowPassword {
+            get {
+                return ResourceManager.GetString("ShowPassword", resourceCulture);
             }
         }
         

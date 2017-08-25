@@ -459,4 +459,19 @@
   <data name="Names" xml:space="preserve">
     <value>Names</value>
   </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Copy password</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="EditEntry" xml:space="preserve">
+    <value>Edit entry</value>
+  </data>
+  <data name="AddToFavorites" xml:space="preserve">
+    <value>Add to favorites</value>
+  </data>
+  <data name="RemoveFromFavorites" xml:space="preserve">
+    <value>Remove from favorites</value>
+  </data>
 </root>
