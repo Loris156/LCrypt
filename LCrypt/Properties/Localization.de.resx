@@ -498,4 +498,22 @@
   <data name="PasswordManagerNewName" xml:space="preserve">
     <value>Bitte geben Sie einen neuen Namen für Ihren Passwort-Speicher ein.</value>
   </data>
+  <data name="TypeInOldMasterPassword" xml:space="preserve">
+    <value>Bitte geben Sie Ihr altes Masterpasswort ein.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Ungültiges Passwort! Bitte versuchen Sie es erneut.</value>
+  </data>
+  <data name="TypeInNewMasterPassword" xml:space="preserve">
+    <value>Bitte geben Sie Ihr neues Masterpasswort ein.</value>
+  </data>
+  <data name="TypeInNewMasterPasswordAgain" xml:space="preserve">
+    <value>Bitte geben Sie Ihr neues Masterpasswort nochmals ein.</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Bitte warten...</value>
+  </data>
+  <data name="ChangingMasterPassword" xml:space="preserve">
+    <value>Masterpasswort wird geändert...</value>
+  </data>
 </root>

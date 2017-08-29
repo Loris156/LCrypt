@@ -498,4 +498,22 @@
   <data name="PasswordManagerNewName" xml:space="preserve">
     <value>Please enter a new name for this password storage.</value>
   </data>
+  <data name="TypeInOldMasterPassword" xml:space="preserve">
+    <value>Please type in your old Master Password.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Invalid password! Please try again.</value>
+  </data>
+  <data name="TypeInNewMasterPassword" xml:space="preserve">
+    <value>Please type in your new Master Password.</value>
+  </data>
+  <data name="TypeInNewMasterPasswordAgain" xml:space="preserve">
+    <value>Please type in your new Master Password again.</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="ChangingMasterPassword" xml:space="preserve">
+    <value>Changing Master Password...</value>
+  </data>
 </root>

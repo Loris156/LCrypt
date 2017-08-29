@@ -187,6 +187,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changing Master Password....
+        /// </summary>
+        public static string ChangingMasterPassword {
+            get {
+                return ResourceManager.GetString("ChangingMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checksum.
         /// </summary>
         public static string Checksum {
@@ -637,6 +646,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid password! Please try again..
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while reading the password file. Please try again. Error: {0}.
         /// </summary>
         public static string IOException {
@@ -871,6 +889,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please wait....
+        /// </summary>
+        public static string PleaseWait {
+            get {
+                return ResourceManager.GetString("PleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete &quot;{0}&quot;?.
         /// </summary>
         public static string ReallyDeleteEntry {
@@ -1074,6 +1101,33 @@ namespace LCrypt.Properties {
         public static string TypeInMasterPasswordAgain {
             get {
                 return ResourceManager.GetString("TypeInMasterPasswordAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please type in your new Master Password..
+        /// </summary>
+        public static string TypeInNewMasterPassword {
+            get {
+                return ResourceManager.GetString("TypeInNewMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please type in your new Master Password again..
+        /// </summary>
+        public static string TypeInNewMasterPasswordAgain {
+            get {
+                return ResourceManager.GetString("TypeInNewMasterPasswordAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please type in your old Master Password..
+        /// </summary>
+        public static string TypeInOldMasterPassword {
+            get {
+                return ResourceManager.GetString("TypeInOldMasterPassword", resourceCulture);
             }
         }
         

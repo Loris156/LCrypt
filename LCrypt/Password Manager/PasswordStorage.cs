@@ -80,6 +80,46 @@ namespace LCrypt.Password_Manager
             }
         }
 
+        public bool ValidatePassword(string password)
+        {
+            try
+            {
+                using (var rfc = new Rfc2898DeriveBytes(password, Salt, 30000))
+                {
+                    return Aes.Key.SequenceEqual(rfc.GetBytes(Aes.KeySize / 8));
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task ChangeMasterPassword(string newPassword, IProgress<int> progress)
+        {
+            Salt = Util.GetStrongRandomBytes(Salt.Length);
+
+            var newAes = new AesManaged();
+            newAes.IV = Util.GetStrongRandomBytes(newAes.BlockSize / 8);
+
+            using (var deriveBytes = new Rfc2898DeriveBytes(newPassword, Salt, 30000))
+            {
+                newAes.Key = deriveBytes.GetBytes(newAes.KeySize / 8);
+            }
+
+            for(var index = 0; index < Entries.Count; ++index)
+            {
+                var entry = Entries[index];
+
+                var password = await Aes.DecryptStringAsync(entry.Password);
+                entry.Password = await newAes.EncryptStringAsync(password);
+                progress.Report(index);
+            }
+
+            Aes.Dispose();
+            Aes = newAes;
+        }
+
         public void Dispose()
         {
             Aes?.Dispose();

@@ -157,6 +157,89 @@ namespace LCrypt.Password_Manager
                     await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
                 }
             });
+
+            EditMasterPasswordCommand = new RelayCommand(async _ =>
+            {
+                SelectedEntry = null;
+
+                var oldPassword = await this.ShowLoginAsync(Localization.MasterPassword,
+                    Localization.TypeInOldMasterPassword, new LoginDialogSettings
+                    {
+                        ShouldHideUsername = true,
+                        PasswordWatermark = Localization.Password,
+                        AffirmativeButtonText = Localization.Continue,
+                        NegativeButtonVisibility = Visibility.Visible,
+                        NegativeButtonText = Localization.Cancel
+                    });
+                if (string.IsNullOrWhiteSpace(oldPassword?.Password)) return;
+
+                if (!_storage.ValidatePassword(oldPassword.Password))
+                {
+                    await this.ShowMessageAsync(Localization.MasterPassword, Localization.InvalidPassword,
+                        MessageDialogStyle.Affirmative, new MetroDialogSettings
+                        {
+                            AffirmativeButtonText = Localization.Cancel
+                        });
+                    return;
+                }
+
+                var passwordsAreEqual = false;
+                string password;
+                do
+                {
+                    var firstPasswordInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                        Localization.TypeInNewMasterPassword, new LoginDialogSettings
+                        {
+                            ShouldHideUsername = true,
+                            PasswordWatermark = Localization.Password,
+                            AffirmativeButtonText = Localization.Continue,
+                            NegativeButtonVisibility = Visibility.Visible,
+                            NegativeButtonText = Localization.Cancel
+                        });
+                    if (string.IsNullOrWhiteSpace(firstPasswordInput?.Password)) return;
+
+                    var secondPasswordInput = await this.ShowLoginAsync(Localization.MasterPassword,
+                        Localization.TypeInNewMasterPasswordAgain, new LoginDialogSettings
+                        {
+                            ShouldHideUsername = true,
+                            PasswordWatermark = Localization.Password,
+                            AffirmativeButtonText = Localization.Continue,
+                            NegativeButtonVisibility = Visibility.Visible,
+                            NegativeButtonText = Localization.Cancel
+                        });
+                    if (string.IsNullOrWhiteSpace(secondPasswordInput?.Password)) return;
+
+                    if (firstPasswordInput.Password.Equals(secondPasswordInput.Password))
+                        passwordsAreEqual = true;
+                    else if (await this.ShowMessageAsync(Localization.MasterPassword, Localization.PasswordsAreNotEqual,
+                                 MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+                                 {
+                                     AffirmativeButtonText = Localization.Retry,
+                                     NegativeButtonText = Localization.Cancel
+                                 }) == MessageDialogResult.Negative)
+                        return;
+                    password = firstPasswordInput.Password;
+
+                } while (!passwordsAreEqual);
+
+                var controller = await this.ShowProgressAsync(Localization.PleaseWait, Localization.ChangingMasterPassword);
+                controller.SetProgress(0);
+                controller.Maximum = _storage.Entries.Count;
+
+                var progress = new Progress<int>(x => controller.SetProgress(x));
+
+                await _storage.ChangeMasterPassword(password, progress);
+                try
+                {
+                    await _storage.SaveAsync();
+                }
+                catch (Exception)
+                {
+                    await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+                }
+
+                await controller.CloseAsync();
+            });
         }
 
         public ObservableCollection<StorageEntry> DisplayedEntries
@@ -265,6 +348,7 @@ namespace LCrypt.Password_Manager
         public ICommand DeleteEntryCommand { get; }
 
         public ICommand EditStorageNameCommand { get; }
+        public ICommand EditMasterPasswordCommand { get; set; }
 
         private void ListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
