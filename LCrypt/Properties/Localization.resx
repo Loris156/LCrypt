@@ -495,4 +495,7 @@
   <data name="ReallyDeleteEntry" xml:space="preserve">
     <value>Do you really want to delete "{0}"?</value>
   </data>
+  <data name="PasswordManagerNewName" xml:space="preserve">
+    <value>Please enter a new name for this password storage.</value>
+  </data>
 </root>

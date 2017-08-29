@@ -495,4 +495,7 @@
   <data name="ReallyDeleteEntry" xml:space="preserve">
     <value>Möchten Sie den Eintrag "{0}" wirklich löschen?</value>
   </data>
+  <data name="PasswordManagerNewName" xml:space="preserve">
+    <value>Bitte geben Sie einen neuen Namen für Ihren Passwort-Speicher ein.</value>
+  </data>
 </root>

@@ -835,6 +835,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a new name for this password storage..
+        /// </summary>
+        public static string PasswordManagerNewName {
+            get {
+                return ResourceManager.GetString("PasswordManagerNewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passwords are not equal! Please try again..
         /// </summary>
         public static string PasswordsAreNotEqual {

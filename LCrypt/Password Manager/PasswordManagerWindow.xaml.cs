@@ -82,7 +82,7 @@ namespace LCrypt.Password_Manager
                 {
                     var editEntryWindow = new EditEntryWindow(SelectedEntry, Categories)
                     {
-                        PasswordBox = {Password = await _storage.Aes.DecryptStringAsync(SelectedEntry.Password)}
+                        PasswordBox = { Password = await _storage.Aes.DecryptStringAsync(SelectedEntry.Password) }
                     };
                     editEntryWindow.ShowDialog();
 
@@ -131,6 +131,32 @@ namespace LCrypt.Password_Manager
                     }
                 },
                 _ => SelectedEntry != null);
+
+            EditStorageNameCommand = new RelayCommand(async _ =>
+            {
+                var newName = await this.ShowInputAsync(Localization.PasswordManager,
+                    Localization.PasswordManagerNewName,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Localization.Save,
+                        NegativeButtonText = Localization.Cancel,
+                        DefaultText = _storage.Name
+                    });
+                if (string.IsNullOrWhiteSpace(newName)) return;
+
+                _storage.Name = newName;
+                Categories[0].Name = _storage.Name;
+                Categories = new ObservableCollection<StorageCategory>(Categories);
+
+                try
+                {
+                    await _storage.SaveAsync();
+                }
+                catch (Exception)
+                {
+                    await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+                }
+            });
         }
 
         public ObservableCollection<StorageEntry> DisplayedEntries
@@ -237,6 +263,8 @@ namespace LCrypt.Password_Manager
         public ICommand AddEntryCommand { get; }
         public ICommand EditEntryCommand { get; }
         public ICommand DeleteEntryCommand { get; }
+
+        public ICommand EditStorageNameCommand { get; }
 
         private void ListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
