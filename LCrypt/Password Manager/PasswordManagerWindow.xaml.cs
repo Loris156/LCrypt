@@ -1,25 +1,19 @@
-﻿using System;
+﻿using LCrypt.Enumerations;
+using LCrypt.Utility;
+using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using LCrypt.Enumerations;
-using LCrypt.Password_Manager;
-using LCrypt.Properties;
-using LCrypt.Utility;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using Localization = LCrypt.Properties.Localization;
 
 namespace LCrypt.Password_Manager
 {
-
     public partial class PasswordManagerWindow : INotifyPropertyChanged
     {
         private PasswordStorage _storage;
@@ -39,7 +33,6 @@ namespace LCrypt.Password_Manager
         public PasswordManagerWindow(PasswordStorage storage)
         {
             InitializeComponent();
-
             DataContext = this;
 
             _storage = storage;
@@ -64,6 +57,80 @@ namespace LCrypt.Password_Manager
             _storage.Categories.ForEach(c => Categories.Add(c));
 
             SearchScope = SearchScope.Everything;
+
+            AddEntryCommand = new RelayCommand(async _ =>
+            {
+                var addEntryWindow = new EditEntryWindow(null, Categories);
+                addEntryWindow.ShowDialog();
+
+                if (!addEntryWindow.Save) return;
+                addEntryWindow.Entry.Password = await _storage.Aes.EncryptStringAsync(addEntryWindow.Password);
+                _storage.Entries.Add(addEntryWindow.Entry);
+                SelectedCategory = SelectedCategory;
+
+                try
+                {
+                    await _storage.SaveAsync();
+                }
+                catch (Exception)
+                {
+                    await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+                }
+            });
+
+            EditEntryCommand = new RelayCommand(async _ =>
+                {
+                    var editEntryWindow = new EditEntryWindow(SelectedEntry, Categories)
+                    {
+                        PasswordBox = {Password = await _storage.Aes.DecryptStringAsync(SelectedEntry.Password)}
+                    };
+                    editEntryWindow.ShowDialog();
+
+                    if (!editEntryWindow.Save) return;
+
+                    var newEntry = editEntryWindow.Entry;
+                    newEntry.Password = await _storage.Aes.EncryptStringAsync(editEntryWindow.Password);
+
+                    var index = _storage.Entries.FindIndex(e => e.Equals(newEntry));
+                    if (index == -1) return;
+                    _storage.Entries[index] = newEntry;
+
+                    SelectedCategory = SelectedCategory;
+                    SelectedEntry = newEntry;
+
+                    try
+                    {
+                        await _storage.SaveAsync();
+                    }
+                    catch (Exception)
+                    {
+                        await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+                    }
+                },
+                _ => SelectedEntry != null);
+
+            DeleteEntryCommand = new RelayCommand(async _ =>
+                {
+                    if (await this.ShowMessageAsync(Localization.PasswordManager,
+                            string.Format(Localization.ReallyDeleteEntry, SelectedEntry.Name),
+                            MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+                            {
+                                AffirmativeButtonText = Localization.Yes,
+                                NegativeButtonText = Localization.No
+                            }) != MessageDialogResult.Affirmative) return;
+                    _storage.Entries.Remove(SelectedEntry);
+                    SelectedCategory = SelectedCategory;
+                    OnPropertyChanged(nameof(SelectedEntry));
+                    try
+                    {
+                        await _storage.SaveAsync();
+                    }
+                    catch (Exception)
+                    {
+                        await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+                    }
+                },
+                _ => SelectedEntry != null);
         }
 
         public ObservableCollection<StorageEntry> DisplayedEntries
@@ -167,6 +234,10 @@ namespace LCrypt.Password_Manager
             }
         }
 
+        public ICommand AddEntryCommand { get; }
+        public ICommand EditEntryCommand { get; }
+        public ICommand DeleteEntryCommand { get; }
+
         private void ListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             SelectedEntry = null;
@@ -180,22 +251,31 @@ namespace LCrypt.Password_Manager
                 var entry = DisplayedEntries.Single(x => x.Guid.Equals(entryGuid));
                 Util.CopyFor(await _storage.Aes.DecryptStringAsync(entry.Password), TimeSpan.FromSeconds(10));
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                // ignored
             }
         }
 
-        private void StarUnstarSelectedEntry_OnClick(object sender, RoutedEventArgs e)
+        private async void StarUnstarSelectedEntry_OnClick(object sender, RoutedEventArgs e)
         {
             SelectedEntry.IsFavorite = !SelectedEntry.IsFavorite;
 
-            var originalEntry = _storage.Entries.Single(s => s.Equals(SelectedEntry));
-            originalEntry = SelectedEntry;
+            var index = _storage.Entries.FindIndex(x => x.Equals(SelectedEntry));
+            if (index == -1) return;
+            _storage.Entries[index] = SelectedEntry;
 
             OnPropertyChanged(nameof(SelectedEntry));
             SelectedCategory = SelectedCategory; // Update category items
+
+            try
+            {
+                await _storage.SaveAsync();
+            }
+            catch (Exception)
+            {
+                await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -241,10 +321,9 @@ namespace LCrypt.Password_Manager
 
                 Clipboard.SetText(toCopy);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                // ignored
             }
         }
 
@@ -257,7 +336,7 @@ namespace LCrypt.Password_Manager
                 DisplayedEntries = new ObservableCollection<StorageEntry>(_storage.Entries);
                 return;
             }
-                
+
             var search = SearchQuery.ToUpper();
             IEnumerable<StorageEntry> entries;
 

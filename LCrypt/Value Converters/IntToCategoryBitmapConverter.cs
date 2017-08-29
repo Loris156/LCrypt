@@ -3,21 +3,21 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace LCrypt.Password_Manager
+namespace LCrypt.Value_Converters
 {
-    public class IntToEntryBitmapConverter : IValueConverter
+    public class IntToCategoryBitmapConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
                 return new BitmapImage(new Uri(
-                    $"pack://application:,,/Resources/Password Manager Icons/Entry/{value}.png"));
+                    $"pack://application:,,/Resources/Password Manager Icons/Category/{value}.png"));
             }
             catch (Exception)
             {
                 return new BitmapImage(new Uri(
-                    "pack://application:,,/Resources/Password Manager Icons/Entry/0.png"));
+                    "pack://application:,,/Resources/Password Manager Icons/Category/0.png"));
             }
         }
 

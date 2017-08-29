@@ -1,5 +1,6 @@
 ﻿using LCrypt.Algorithms;
 using LCrypt.Enumerations;
+using LCrypt.Password_Manager;
 using LCrypt.Utility;
 using MahApps.Metro;
 using MahApps.Metro.Controls.Dialogs;
@@ -11,9 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Media;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,7 +24,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml;
-using LCrypt.Password_Manager;
 using Encoding = LCrypt.Enumerations.Encoding;
 using HashAlgorithm = LCrypt.Enumerations.HashAlgorithm;
 using Localization = LCrypt.Properties.Localization;
@@ -76,7 +74,7 @@ namespace LCrypt
         }
 
         public ICommand OpenPasswordManagerCommand { get; }
-
+        
         private async void PasswordManagerOnClick(object sender, RoutedEventArgs e)
         {
             if (_passwordManagerWindow != null)
@@ -282,8 +280,6 @@ namespace LCrypt
                             storage.Salt = salt;
                             storage.Aes = aes;
                             storage.Path = path;
-
-
                             _passwordManagerWindow = new PasswordManagerWindow(storage);
                             _passwordManagerWindow.Closed += (o, e) => _passwordManagerWindow = null;
                             _passwordManagerWindow.Show();

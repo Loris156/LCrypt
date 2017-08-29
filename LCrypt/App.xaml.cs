@@ -1,11 +1,11 @@
-﻿using System;
+﻿using LCrypt.Properties;
+using MahApps.Metro;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Markup;
-using LCrypt.Properties;
-using MahApps.Metro;
 
 namespace LCrypt
 {

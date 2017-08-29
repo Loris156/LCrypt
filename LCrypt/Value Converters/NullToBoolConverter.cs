@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace LCrypt.Password_Manager
+namespace LCrypt.Value_Converters
 {
     public class NullToBoolConverter : IValueConverter
     {

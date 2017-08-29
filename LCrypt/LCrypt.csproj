@@ -36,6 +36,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
@@ -67,10 +68,13 @@
     <Compile Include="Enumerations\Encoding.cs" />
     <Compile Include="Enumerations\PasswordStrength.cs" />
     <Compile Include="Enumerations\SearchScope.cs" />
+    <Compile Include="Password Manager\EditEntryWindow.xaml.cs">
+      <DependentUpon>EditEntryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Password Manager\SearchScopeConverter.cs" />
-    <Compile Include="Password Manager\IntToCategoryBitmapConverter.cs" />
-    <Compile Include="Password Manager\IntToEntryBitmapConverter.cs" />
-    <Compile Include="Password Manager\NullToBoolConverter.cs" />
+    <Compile Include="Value Converters\IntToCategoryBitmapConverter.cs" />
+    <Compile Include="Value Converters\IntToEntryBitmapConverter.cs" />
+    <Compile Include="Value Converters\NullToBoolConverter.cs" />
     <Compile Include="Password Manager\StorageCategory.cs" />
     <Compile Include="Password Manager\StorageEntry.cs" />
     <Compile Include="Password Manager\PasswordManagerWindow.xaml.cs">
@@ -87,6 +91,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\Util.cs" />
+    <Compile Include="Value Converters\StringToBoolConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +104,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Password Manager\EditEntryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Password Manager\PasswordManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -547,6 +556,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\showPassword.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

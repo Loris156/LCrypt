@@ -474,4 +474,25 @@
   <data name="RemoveFromFavorites" xml:space="preserve">
     <value>Von Favoriten entfernen</value>
   </data>
+  <data name="NewEntry" xml:space="preserve">
+    <value>Neuer Eintrag</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="CancelEditing" xml:space="preserve">
+    <value>Möchten Sie die Bearbeitung wirklich abbrechen?</value>
+  </data>
+  <data name="CouldNotSaveStorage" xml:space="preserve">
+    <value>Ein Fehler ist während dem Speichern der Passwort-Datei aufgetreten!</value>
+  </data>
+  <data name="ReallyDeleteEntry" xml:space="preserve">
+    <value>Möchten Sie den Eintrag "{0}" wirklich löschen?</value>
+  </data>
 </root>

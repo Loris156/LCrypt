@@ -169,6 +169,24 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you really want to cancel editing?.
+        /// </summary>
+        public static string CancelEditing {
+            get {
+                return ResourceManager.GetString("CancelEditing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checksum.
         /// </summary>
         public static string Checksum {
@@ -273,6 +291,15 @@ namespace LCrypt.Properties {
         public static string CopyPassword {
             get {
                 return ResourceManager.GetString("CopyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password file could not be saved!.
+        /// </summary>
+        public static string CouldNotSaveStorage {
+            get {
+                return ResourceManager.GetString("CouldNotSaveStorage", resourceCulture);
             }
         }
         
@@ -592,6 +619,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icon.
+        /// </summary>
+        public static string Icon {
+            get {
+                return ResourceManager.GetString("Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input.
         /// </summary>
         public static string Input {
@@ -709,6 +745,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New entry.
+        /// </summary>
+        public static string NewEntry {
+            get {
+                return ResourceManager.GetString("NewEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -817,6 +862,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you really want to delete &quot;{0}&quot;?.
+        /// </summary>
+        public static string ReallyDeleteEntry {
+            get {
+                return ResourceManager.GetString("ReallyDeleteEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to restart LCrypt?.
         /// </summary>
         public static string ReallyRestart {
@@ -867,6 +921,15 @@ namespace LCrypt.Properties {
         public static string Retry {
             get {
                 return ResourceManager.GetString("Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
