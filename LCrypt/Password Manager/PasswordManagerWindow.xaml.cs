@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -58,6 +60,16 @@ namespace LCrypt.Password_Manager
 
             SearchScope = SearchScope.Everything;
 
+            OpenSettingsCommand = new RelayCommand(_ =>
+            {
+                // TODO
+            }, new KeyGesture(Key.P, ModifierKeys.Control));
+
+            QuitManagerCommand = new RelayCommand(_ =>
+            {
+                this.Close();
+            }, new KeyGesture(Key.Q, ModifierKeys.Control));
+
             AddEntryCommand = new RelayCommand(async _ =>
             {
                 var addEntryWindow = new EditEntryWindow(null, Categories);
@@ -76,7 +88,7 @@ namespace LCrypt.Password_Manager
                 {
                     await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
                 }
-            });
+            }, new KeyGesture(Key.N, ModifierKeys.Control));
 
             EditEntryCommand = new RelayCommand(async _ =>
                 {
@@ -107,7 +119,8 @@ namespace LCrypt.Password_Manager
                         await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
                     }
                 },
-                _ => SelectedEntry != null);
+                _ => SelectedEntry != null,
+                new KeyGesture(Key.E, ModifierKeys.Control));
 
             DeleteEntryCommand = new RelayCommand(async _ =>
                 {
@@ -130,7 +143,8 @@ namespace LCrypt.Password_Manager
                         await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
                     }
                 },
-                _ => SelectedEntry != null);
+                _ => SelectedEntry != null,
+                new KeyGesture(Key.Delete));
 
             EditStorageNameCommand = new RelayCommand(async _ =>
             {
@@ -240,7 +254,31 @@ namespace LCrypt.Password_Manager
 
                 await controller.CloseAsync();
             });
+
+            DuplicateEntryCommand = new RelayCommand(async _ =>
+                {
+                    _storage.Entries.Add(SelectedEntry.Duplicate());
+                    try
+                    {
+                        await _storage.SaveAsync();
+                    }
+                    catch (Exception)
+                    {
+                        await this.ShowMessageAsync(Localization.PasswordManager, Localization.CouldNotSaveStorage);
+                    }
+                    SelectedCategory = SelectedCategory;
+                },
+            _ => SelectedEntry != null,
+            new KeyGesture(Key.D, ModifierKeys.Control));
+
+            OpenWikiCommand = new RelayCommand(_ =>
+            {
+                Process.Start(PasswordManagerWikiUrl);
+
+            }, new KeyGesture(Key.F1));
         }
+
+        public static string PasswordManagerWikiUrl { get; } = "https://www.github.com/Loris156/LCrypt/wiki/Password-Manager/";  
 
         public ObservableCollection<StorageEntry> DisplayedEntries
         {
@@ -343,12 +381,18 @@ namespace LCrypt.Password_Manager
             }
         }
 
+        public ICommand OpenSettingsCommand { get; }
+        public ICommand QuitManagerCommand { get; }
+
         public ICommand AddEntryCommand { get; }
         public ICommand EditEntryCommand { get; }
         public ICommand DeleteEntryCommand { get; }
+        public ICommand DuplicateEntryCommand { get; }
 
         public ICommand EditStorageNameCommand { get; }
-        public ICommand EditMasterPasswordCommand { get; set; }
+        public ICommand EditMasterPasswordCommand { get; }
+
+        public ICommand OpenWikiCommand { get; }
 
         private void ListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {

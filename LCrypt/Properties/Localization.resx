@@ -516,4 +516,52 @@
   <data name="ChangingMasterPassword" xml:space="preserve">
     <value>Changing Master Password...</value>
   </data>
+  <data name="Entries" xml:space="preserve">
+    <value>Entries</value>
+  </data>
+  <data name="PasswordManagerHelp" xml:space="preserve">
+    <value>Online Help</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AddEntry" xml:space="preserve">
+    <value>Add entry</value>
+  </data>
+  <data name="DeleteEntry" xml:space="preserve">
+    <value>Delete entry</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="LaunchUrl" xml:space="preserve">
+    <value>Launch URL</value>
+  </data>
 </root>

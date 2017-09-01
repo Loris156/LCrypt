@@ -462,9 +462,6 @@
     <Resource Include="Resources\Password Manager Icons\Entry\277.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\edit.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\star.png" />
     <Resource Include="Resources\unstar.png" />
   </ItemGroup>
@@ -558,7 +555,39 @@
     <Resource Include="Resources\showPassword.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\questionmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\delete.png" />
+    <Resource Include="Resources\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\duplicate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\export.png" />
+    <Resource Include="Resources\import.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\share.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\binaryFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\www.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

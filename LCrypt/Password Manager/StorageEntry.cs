@@ -86,5 +86,23 @@ namespace LCrypt.Password_Manager
                 LastModified = this.LastModified
             };
         }
+
+        public StorageEntry Duplicate()
+        {
+            return new StorageEntry
+            {
+                Guid = Guid.NewGuid(),
+                IconId = this.IconId,
+                Name = string.Copy(this.Name),
+                IsFavorite = this.IsFavorite,
+                Username = string.Copy(this.Username),
+                Email = string.Copy(this.Email),
+                Password = (byte[])this.Password.Clone(),
+                Category = this.Category,
+                Comment = string.Copy(this.Comment),
+                Created = DateTime.Now,
+                LastModified = DateTime.Now
+            };
+        }
     }
 }

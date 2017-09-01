@@ -88,6 +88,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add entry.
+        /// </summary>
+        public static string AddEntry {
+            get {
+                return ResourceManager.GetString("AddEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to favorites.
         /// </summary>
         public static string AddToFavorites {
@@ -129,6 +138,15 @@ namespace LCrypt.Properties {
         public static string ApplyChanges {
             get {
                 return ResourceManager.GetString("ApplyChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup.
+        /// </summary>
+        public static string Backup {
+            get {
+                return ResourceManager.GetString("Backup", resourceCulture);
             }
         }
         
@@ -232,6 +250,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comment {
@@ -322,6 +349,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created.
         /// </summary>
         public static string Created {
@@ -354,6 +390,15 @@ namespace LCrypt.Properties {
         public static string Decrypt {
             get {
                 return ResourceManager.GetString("Decrypt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete entry.
+        /// </summary>
+        public static string DeleteEntry {
+            get {
+                return ResourceManager.GetString("DeleteEntry", resourceCulture);
             }
         }
         
@@ -399,6 +444,24 @@ namespace LCrypt.Properties {
         public static string DragAndDropSingleFile {
             get {
                 return ResourceManager.GetString("DragAndDropSingleFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string Duplicate {
+            get {
+                return ResourceManager.GetString("Duplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
         
@@ -480,6 +543,15 @@ namespace LCrypt.Properties {
         public static string EnterAStorageName {
             get {
                 return ResourceManager.GetString("EnterAStorageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries.
+        /// </summary>
+        public static string Entries {
+            get {
+                return ResourceManager.GetString("Entries", resourceCulture);
             }
         }
         
@@ -601,6 +673,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hexadecimal.
         /// </summary>
         public static string Hexadecimal {
@@ -637,6 +718,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input.
         /// </summary>
         public static string Input {
@@ -664,6 +754,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item.
+        /// </summary>
+        public static string Item {
+            get {
+                return ResourceManager.GetString("Item", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string Language {
@@ -678,6 +777,15 @@ namespace LCrypt.Properties {
         public static string LastModified {
             get {
                 return ResourceManager.GetString("LastModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch URL.
+        /// </summary>
+        public static string LaunchUrl {
+            get {
+                return ResourceManager.GetString("LaunchUrl", resourceCulture);
             }
         }
         
@@ -853,6 +961,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Online Help.
+        /// </summary>
+        public static string PasswordManagerHelp {
+            get {
+                return ResourceManager.GetString("PasswordManagerHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a new name for this password storage..
         /// </summary>
         public static string PasswordManagerNewName {
@@ -934,6 +1051,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string Restore {
+            get {
+                return ResourceManager.GetString("Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Result.
         /// </summary>
         public static string Result {
@@ -984,6 +1110,15 @@ namespace LCrypt.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share.
+        /// </summary>
+        public static string Share {
+            get {
+                return ResourceManager.GetString("Share", resourceCulture);
             }
         }
         
@@ -1146,6 +1281,15 @@ namespace LCrypt.Properties {
         public static string UpperCase {
             get {
                 return ResourceManager.GetString("UpperCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL.
+        /// </summary>
+        public static string Url {
+            get {
+                return ResourceManager.GetString("Url", resourceCulture);
             }
         }
         
