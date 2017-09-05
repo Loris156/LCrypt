@@ -64,6 +64,7 @@
     <Compile Include="Algorithms\DpApi.cs" />
     <Compile Include="Algorithms\Encryption.cs" />
     <Compile Include="Enumerations\Algorithm.cs" />
+    <Compile Include="Enumerations\BackupTime.cs" />
     <Compile Include="Enumerations\HashAlgorithm.cs" />
     <Compile Include="Enumerations\Encoding.cs" />
     <Compile Include="Enumerations\PasswordStrength.cs" />
@@ -588,6 +589,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\www.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\changeName.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -564,4 +564,37 @@
   <data name="LaunchUrl" xml:space="preserve">
     <value>URL öffnen</value>
   </data>
+  <data name="ChangeStorageName" xml:space="preserve">
+    <value>Passwortspeichername ändern</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Masterpasswort ändern</value>
+  </data>
+  <data name="LockAfterInactivity" xml:space="preserve">
+    <value>Sperren nach Inaktivität</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 Sekunden</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>Eine Minute</value>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>Fünf Minuten</value>
+  </data>
+  <data name="TenMinutes" xml:space="preserve">
+    <value>Zehn Minuten</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Nie</value>
+  </data>
+  <data name="Manual" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Täglich</value>
+  </data>
+  <data name="OnChange" xml:space="preserve">
+    <value>Bei jeder Änderung</value>
+  </data>
 </root>

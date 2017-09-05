@@ -32,6 +32,8 @@ namespace LCrypt.Password_Manager
         private string _searchQuery;
         private SearchScope _searchScope;
 
+        private bool _isSettingsOpen;
+
         public PasswordManagerWindow(PasswordStorage storage)
         {
             InitializeComponent();
@@ -62,7 +64,7 @@ namespace LCrypt.Password_Manager
 
             OpenSettingsCommand = new RelayCommand(_ =>
             {
-                // TODO
+                IsSettingsOpen = !IsSettingsOpen;
             }, new KeyGesture(Key.P, ModifierKeys.Control));
 
             QuitManagerCommand = new RelayCommand(_ =>
@@ -102,7 +104,7 @@ namespace LCrypt.Password_Manager
 
                     var newEntry = editEntryWindow.Entry;
                     newEntry.Password = await _storage.Aes.EncryptStringAsync(editEntryWindow.Password);
-
+    
                     var index = _storage.Entries.FindIndex(e => e.Equals(newEntry));
                     if (index == -1) return;
                     _storage.Entries[index] = newEntry;
@@ -278,7 +280,7 @@ namespace LCrypt.Password_Manager
             }, new KeyGesture(Key.F1));
         }
 
-        public static string PasswordManagerWikiUrl { get; } = "https://www.github.com/Loris156/LCrypt/wiki/Password-Manager/";  
+        public static string PasswordManagerWikiUrl { get; } = "https://www.github.com/Loris156/LCrypt/wiki/Password-Manager/";
 
         public ObservableCollection<StorageEntry> DisplayedEntries
         {
@@ -377,6 +379,16 @@ namespace LCrypt.Password_Manager
             set
             {
                 _searchScope = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsSettingsOpen
+        {
+            get => _isSettingsOpen;
+            set
+            {
+                _isSettingsOpen = value;
                 OnPropertyChanged();
             }
         }

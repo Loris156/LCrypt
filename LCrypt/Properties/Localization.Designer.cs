@@ -205,6 +205,24 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Master Password.
+        /// </summary>
+        public static string ChangeMasterPassword {
+            get {
+                return ResourceManager.GetString("ChangeMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change storage name.
+        /// </summary>
+        public static string ChangeStorageName {
+            get {
+                return ResourceManager.GetString("ChangeStorageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changing Master Password....
         /// </summary>
         public static string ChangingMasterPassword {
@@ -372,6 +390,15 @@ namespace LCrypt.Properties {
         public static string CryptographicException {
             get {
                 return ResourceManager.GetString("CryptographicException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Daily.
+        /// </summary>
+        public static string Daily {
+            get {
+                return ResourceManager.GetString("Daily", resourceCulture);
             }
         }
         
@@ -646,6 +673,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 5 minutes.
+        /// </summary>
+        public static string FiveMinutes {
+            get {
+                return ResourceManager.GetString("FiveMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string General {
@@ -826,11 +862,29 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lock after inactivity.
+        /// </summary>
+        public static string LockAfterInactivity {
+            get {
+                return ResourceManager.GetString("LockAfterInactivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lowercase.
         /// </summary>
         public static string LowerCase {
             get {
                 return ResourceManager.GetString("LowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        public static string Manual {
+            get {
+                return ResourceManager.GetString("Manual", resourceCulture);
             }
         }
         
@@ -871,6 +925,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string Never {
+            get {
+                return ResourceManager.GetString("Never", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New entry.
         /// </summary>
         public static string NewEntry {
@@ -903,6 +966,24 @@ namespace LCrypt.Properties {
         public static string Numbers {
             get {
                 return ResourceManager.GetString("Numbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On every change.
+        /// </summary>
+        public static string OnChange {
+            get {
+                return ResourceManager.GetString("OnChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 minute.
+        /// </summary>
+        public static string OneMinute {
+            get {
+                return ResourceManager.GetString("OneMinute", resourceCulture);
             }
         }
         
@@ -1186,6 +1267,15 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 10 minutes.
+        /// </summary>
+        public static string TenMinutes {
+            get {
+                return ResourceManager.GetString("TenMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text.
         /// </summary>
         public static string Text {
@@ -1200,6 +1290,15 @@ namespace LCrypt.Properties {
         public static string Theme {
             get {
                 return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30 seconds.
+        /// </summary>
+        public static string ThirtySeconds {
+            get {
+                return ResourceManager.GetString("ThirtySeconds", resourceCulture);
             }
         }
         
