@@ -23,5 +23,10 @@ namespace LCrypt
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(App.LocalizationDictionary["Welcome"].ToString());
+        }
     }
 }

@@ -8,11 +8,13 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        Title="LCrypt" Height="350" Width="525"
         Background="{DynamicResource MaterialDesignPaper}"
+        GlowBrush="{DynamicResource AccentColorBrush}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.WPF;component/Resources/Roboto/#Roboto">
     <Grid>
+        <Button Content="{DynamicResource Welcome}" Click="Button_Click"></Button>
     </Grid>
 </metro:MetroWindow>
