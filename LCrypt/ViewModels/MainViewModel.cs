@@ -14,7 +14,7 @@ using MaterialDesignThemes.Wpf;
 
 namespace LCrypt.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : NotifyPropertyChanged
     {
         private List<LCryptFunction> _functions;
         private ICollectionView _functionView;
