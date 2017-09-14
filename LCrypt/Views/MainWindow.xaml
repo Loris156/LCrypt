@@ -1,0 +1,68 @@
+﻿<metro:MetroWindow x:Class="LCrypt.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:LCrypt.Properties"
+        xmlns:local="clr-namespace:LCrypt"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        Title="LCrypt" Height="550" Width="825"
+        Background="{DynamicResource MaterialDesignPaper}"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.WPF;component/Resources/Roboto/#Roboto"
+        dialogs:DialogParticipation.Register="{Binding}" d:DataContext="{d:DesignData MainViewModel}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <material:DialogHost Identifier="RootDialog">
+        <material:DrawerHost IsLeftDrawerOpen="{Binding LeftDrawerOpen}">
+            <material:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="250">
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="16, 16, 16, 0"
+                                  IsChecked="{Binding LeftDrawerOpen}"/>
+                    <Grid DockPanel.Dock="Top"  Margin="10, 5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <material:PackIcon Kind="Magnify" VerticalAlignment="Bottom" Margin="0, 4"/>
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" material:HintAssist.Hint="{DynamicResource Search}"
+                                 material:HintAssist.IsFloating="True" Margin="5, 0"/>
+                    </Grid>
+
+                    <ListBox ItemsSource="{Binding Functions}" IsSynchronizedWithCurrentItem="True">
+                    </ListBox>
+                </DockPanel>
+            </material:DrawerHost.LeftDrawerContent>
+            <DockPanel LastChildFill="True">
+                <material:ColorZone DockPanel.Dock="Top" Padding="16" Mode="PrimaryMid"
+                                    material:ShadowAssist.ShadowDepth="Depth3">
+                    <DockPanel>
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                      DockPanel.Dock="Left" IsChecked="{Binding LeftDrawerOpen}" />
+                        <material:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges"
+                                           StaysOpen="False">
+                            <StackPanel>
+                            </StackPanel>
+                        </material:PopupBox>
+                        <TextBlock Text="{Binding Functions/Name}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22"/>
+                    </DockPanel>
+                </material:ColorZone>
+                <ScrollViewer>
+                    <ContentControl></ContentControl>
+                </ScrollViewer>
+            </DockPanel></material:DrawerHost>
+    </material:DialogHost>
+</metro:MetroWindow>

@@ -15,13 +15,14 @@ using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 
-namespace LCrypt
+namespace LCrypt.Views
 {
     public sealed partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
