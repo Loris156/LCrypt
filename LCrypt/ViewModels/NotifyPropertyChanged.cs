@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace LCrypt.ViewModels
 {
-    public class NotifyPropertyChanged : INotifyPropertyChanged
+    public class NotifyPropertyChanged : DependencyObject, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

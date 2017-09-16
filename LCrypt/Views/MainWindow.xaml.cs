@@ -21,13 +21,7 @@ namespace LCrypt.Views
     {
         public MainWindow()
         {
-            InitializeComponent();
-            
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(App.LocalizationDictionary["Welcome"].ToString());
+            InitializeComponent();         
         }
     }
 }

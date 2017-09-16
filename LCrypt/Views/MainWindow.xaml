@@ -8,6 +8,7 @@
         xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        xmlns:valueConverters="clr-namespace:LCrypt.Value_Converters"
         mc:Ignorable="d"
         Title="LCrypt" Height="550" Width="825"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -23,6 +24,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <valueConverters:StringToLanguageConverter x:Key="StringToLanguageConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -38,11 +41,20 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <material:PackIcon Kind="Magnify" VerticalAlignment="Bottom" Margin="0, 4"/>
-                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" material:HintAssist.Hint="{DynamicResource Search}"
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" material:HintAssist.Hint="{StaticResource Search}"
                                  material:HintAssist.IsFloating="True" Margin="5, 0"/>
                     </Grid>
 
-                    <ListBox ItemsSource="{Binding Functions}" IsSynchronizedWithCurrentItem="True">
+                    <ListBox ItemsSource="{Binding Functions}" SelectedItem="{Binding SelectedFunction, Mode=TwoWay}" ScrollViewer.CanContentScroll="False" 
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type local:LCryptFunction}">
+                                <StackPanel Orientation="Horizontal">
+                                    <material:PackIcon Kind="{Binding PackIconKind}" Height="20" Width="20"/>
+                                    <TextBlock Text="{Binding LocalizedName}" VerticalAlignment="Center" Margin="10, 0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </DockPanel>
             </material:DrawerHost.LeftDrawerContent>
@@ -55,13 +67,39 @@
                         <material:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges"
                                            StaysOpen="False">
                             <StackPanel>
+                                <Button >Change language</Button>
                             </StackPanel>
                         </material:PopupBox>
-                        <TextBlock Text="{Binding Functions/Name}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22"/>
+                        <TextBlock Text="{Binding DisplayedFunction.LocalizedName}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22"
+                                   TextTrimming="CharacterEllipsis">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Style.Triggers>
+                                        <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </DockPanel>
                 </material:ColorZone>
                 <ScrollViewer>
-                    <ContentControl></ContentControl>
+                    <ContentControl>
+                        <ContentControl.Content>
+                            <Binding Path="DisplayedFunction.Content">
+                                <Binding.FallbackValue>
+                                    <Grid>
+                                    </Grid>
+                                </Binding.FallbackValue>
+                            </Binding>
+                        </ContentControl.Content>
+                    </ContentControl>
                 </ScrollViewer>
             </DockPanel></material:DrawerHost>
     </material:DialogHost>

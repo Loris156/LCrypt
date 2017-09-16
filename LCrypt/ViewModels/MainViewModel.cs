@@ -1,34 +1,34 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
-using LCrypt.Utility;
-using MahApps.Metro.Controls.Dialogs;
-using MaterialDesignThemes.Wpf;
 
 namespace LCrypt.ViewModels
 {
     public class MainViewModel : NotifyPropertyChanged
     {
-        private List<LCryptFunction> _functions;
         private ICollectionView _functionView;
 
         public MainViewModel()
         {
-            _functions = new List<LCryptFunction>()
+            IEnumerable<LCryptFunction> functions = new List<LCryptFunction>()
             {
-                new LCryptFunction("Home", null),
+                new LCryptFunction("Home", null)
+                {
+                    PackIconKind = PackIconKind.Home
+                },
                 new LCryptFunction("Settings", null)
+                {
+                    PackIconKind = PackIconKind.Settings
+                },
+                new LCryptFunction("About", null)
+                {
+                    PackIconKind = PackIconKind.Information
+                }
             };
 
-            _functionView = CollectionViewSource.GetDefaultView(_functions);
-            _functionView.CurrentChanged += CloseLeftDrawer;
+            Functions = CollectionViewSource.GetDefaultView(functions);
+            SelectedFunction = DisplayedFunction = (LCryptFunction)Functions.CurrentItem;
         }
 
 
@@ -45,40 +45,52 @@ namespace LCrypt.ViewModels
             set => SetAndNotify(ref _functionView, value);
         }
 
+        private LCryptFunction _selectedFunction;
+        public LCryptFunction SelectedFunction
+        {
+            get => _selectedFunction;
+            set
+            {
+                SetAndNotify(ref _selectedFunction, value);
+                if (SelectedFunction != null)
+                    DisplayedFunction = SelectedFunction;
+            }
+        }
+
+        private LCryptFunction _displayedFunction;
+        public LCryptFunction DisplayedFunction
+        {
+            get => _displayedFunction;
+            set
+            {
+                SetAndNotify(ref _displayedFunction, value);
+                LeftDrawerOpen = false;
+            }
+        }
+
         private string _searchText;
         public string SearchText
         {
             get => _searchText;
             set
             {
-                _searchText = value.ToLowerInvariant();
+                _searchText = value?.ToLowerInvariant();
                 OnPropertyChanged();
-                ApplySearchFilter();
+
+                if (string.IsNullOrWhiteSpace(SearchText))
+                {
+                    Functions.Filter = null;
+                    return;
+                }
+
+                Functions.Filter = func =>
+                {
+                    var function = (LCryptFunction)func;
+
+                    return function.Name?.ToLowerInvariant().Contains(SearchText) == true ||
+                           function.LocalizedName?.ToLowerInvariant().Contains(SearchText) == true;
+                };
             }
-        }
-
-        private void ApplySearchFilter()
-        {
-            _functionView.CurrentChanged -= CloseLeftDrawer;
-            if (string.IsNullOrWhiteSpace(SearchText))
-            {
-                Functions.Filter = null;
-                _functionView.CurrentChanged += CloseLeftDrawer;
-                return;
-            }
-
-            Functions.Filter = (func) =>
-            {
-                var function = (LCryptFunction)func;
-                return function.Name.ToLowerInvariant().Contains(SearchText) ||
-                       function.LocalizedName.ToLowerInvariant().Contains(SearchText);
-            };
-            _functionView.CurrentChanged += CloseLeftDrawer;
-        }
-
-        private void CloseLeftDrawer(object sender, EventArgs args)
-        {
-            LeftDrawerOpen = false;
         }
     }
 }

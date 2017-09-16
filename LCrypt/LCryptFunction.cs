@@ -5,7 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using LCrypt.ViewModels;
+using MaterialDesignThemes.Wpf;
 
 namespace LCrypt
 {
@@ -14,8 +16,12 @@ namespace LCrypt
         public LCryptFunction(string name, object content)
         {
             Name = name;
-            LocalizedName = Name; // TODO
+            LocalizedName = (string)App.LocalizationDictionary[name];
             Content = content;
+            _packIcon = new PackIcon
+            {
+                Kind = PackIconKind.Account
+            };
         }
 
         private string _name;
@@ -32,6 +38,17 @@ namespace LCrypt
             set => SetAndNotify(ref _localizedName, value);
         }
 
+        private readonly PackIcon _packIcon;
+        public PackIconKind PackIconKind
+        {
+            get => _packIcon.Kind;
+            set
+            {
+                _packIcon.Kind = value;
+                OnPropertyChanged();
+            }
+        }
+
         private object _content;
         public object Content
         {
@@ -41,7 +58,7 @@ namespace LCrypt
 
         public override string ToString()
         {
-            return Name;
+            return LocalizedName;
         }
     }
 }
