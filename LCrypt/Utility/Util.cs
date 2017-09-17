@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace LCrypt.Utility
 {
@@ -55,6 +60,22 @@ namespace LCrypt.Utility
                 var array = new byte[byteCount];
                 rng.GetBytes(array);
                 return array;
+            }
+        }
+
+        public static ImageSource ExtractFileIcon(string path)
+        {
+            try
+            {
+                using (var icon = Icon.ExtractAssociatedIcon(path))
+                {
+                    return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
+                }
+            }
+            catch (Exception)
+            {
+                return null; //TODO: Show general icon
             }
         }
     }

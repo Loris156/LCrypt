@@ -21,6 +21,13 @@ namespace LCrypt.ViewModels
                 {
                     PackIconKind = PackIconKind.Home
                 },
+                new LCryptFunction("FileEncryption", new FileEncryptionView
+                {
+                    DataContext = new FileEncryptionViewModel()
+                })
+                {
+                    PackIconKind = PackIconKind.File
+                },
                 new LCryptFunction("Settings", null)
                 {
                     PackIconKind = PackIconKind.Settings
