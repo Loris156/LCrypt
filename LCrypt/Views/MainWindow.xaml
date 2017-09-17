@@ -10,7 +10,7 @@
         xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
         xmlns:valueConverters="clr-namespace:LCrypt.Value_Converters"
         mc:Ignorable="d"
-        Title="LCrypt" Height="550" Width="825"
+        Title="LCrypt" Height="450" Width="700"
         Background="{DynamicResource MaterialDesignPaper}"
         GlowBrush="{DynamicResource AccentColorBrush}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -89,18 +89,8 @@
                         </TextBlock>
                     </DockPanel>
                 </material:ColorZone>
-                <ScrollViewer>
-                    <ContentControl>
-                        <ContentControl.Content>
-                            <Binding Path="DisplayedFunction.Content">
-                                <Binding.FallbackValue>
-                                    <Grid>
-                                    </Grid>
-                                </Binding.FallbackValue>
-                            </Binding>
-                        </ContentControl.Content>
-                    </ContentControl>
-                </ScrollViewer>
-            </DockPanel></material:DrawerHost>
+                <metro:TransitioningContentControl Content="{Binding DisplayedFunction.Content}" Transition="Right" RestartTransitionOnContentChange="True"/>
+            </DockPanel>
+        </material:DrawerHost>
     </material:DialogHost>
 </metro:MetroWindow>

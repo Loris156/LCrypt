@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using LCrypt.Views;
+using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -13,7 +14,10 @@ namespace LCrypt.ViewModels
         {
             IEnumerable<LCryptFunction> functions = new List<LCryptFunction>()
             {
-                new LCryptFunction("Home", null)
+                new LCryptFunction("Home", new HomeView
+                {
+                    DataContext = new HomeViewModel()
+                })
                 {
                     PackIconKind = PackIconKind.Home
                 },

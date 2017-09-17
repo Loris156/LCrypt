@@ -3,6 +3,9 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     
     <sys:String x:Key="Welcome">Welcome</sys:String>
+    <sys:String x:Key="WelcomeToLCrypt">Welcome to LCrypt!</sys:String>
+    <sys:String x:Key="OpenFunctions">OPEN FUNCTIONS</sys:String>
+
     <sys:String x:Key="Search">Search</sys:String>
     <sys:String x:Key="Home">Home</sys:String>
     <sys:String x:Key="Settings">Settings</sys:String>
