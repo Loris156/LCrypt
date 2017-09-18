@@ -7,6 +7,7 @@
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:LCrypt.ViewModels"
              xmlns:models="clr-namespace:LCrypt.Models"
+             xmlns:controls="clr-namespace:LCrypt.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:FileEncryptionViewModel}">
     <UserControl.Resources>
@@ -14,6 +15,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PasswordBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ComboBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -23,7 +27,9 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox ItemsSource="{Binding EncryptionTasks}" ScrollViewer.CanContentScroll="False">
+        <ListBox ItemsSource="{Binding EncryptionTasks}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" 
+                 ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
+                 PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:FileEncryptionTask}">
                     <DataTemplate.Resources>
@@ -36,10 +42,15 @@
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.8*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="90"/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
                         <Image Source="{Binding FileIcon}" Width="32" Height="32" Margin="5" RenderOptions.BitmapScalingMode="HighQuality"/>
 
@@ -53,31 +64,79 @@
                             <TextBlock Text="{Binding FileDirectory}" Grid.Row="1" Foreground="Gray"/>
                         </Grid>
 
-                        <Grid Grid.Column="2">
+                        <Grid Grid.Column="2" Margin="10, 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <ComboBox IsEditable="False" Width="200" >
-                                <ComboBoxItem>AES-256</ComboBoxItem>
-                            </ComboBox>
+                            <controls:BindablePasswordBox SecurePassword="{Binding Password}" Grid.Column="0" Margin="5, 0" VerticalAlignment="Center" 
+                                                          material:HintAssist.Hint="Password"/>
+                            <ComboBox Grid.Column="1" Margin="5, 0" material:HintAssist.Hint="Algorithm" Padding="6.5"/>
 
-                            <PasswordBox Grid.Column="0" Grid.Row="1" material:HintAssist.Hint="Password" material:HintAssist.IsFloating="True"/>
+                            <DockPanel Grid.Row="1" Grid.ColumnSpan="2">
+                                <Button DockPanel.Dock="Right" Margin="5" 
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.SetDestinationPathCommand}"
+                                        CommandParameter="{Binding}">
+                                    <material:PackIcon Kind="FileExport"/>
+                                </Button>
+                                <TextBox Text="{Binding DestinationPath}" Margin="5, 0" VerticalAlignment="Center"/>
+                            </DockPanel>
                         </Grid>
+
+                        <Grid Grid.Column="3">
+
+                            <Grid.Resources>
+                                <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>   
+                                    <Setter Property="Margin" Value="10, 0"/>
+                                </Style>
+                            </Grid.Resources>
+                            
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <RadioButton IsChecked="True">
+                                <TextBlock Text="{StaticResource Encrypt}"/>
+                            </RadioButton>
+                            <RadioButton Grid.Row="1">
+                                <TextBlock Text="{StaticResource Decrypt}"/>
+                            </RadioButton>
+                        </Grid>
+
+                        <Button Grid.Column="4" Margin="5" Padding="5">
+                            <StackPanel Orientation="Horizontal">
+                                <material:PackIcon Kind="Play" Foreground="Green" Height="20" Width="20"/>
+                                <TextBlock Text="Starten" Margin="2, 0" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock Text="{Binding FileSizeString}" Grid.Row="1"/>
+                        <ProgressBar Value="{Binding Progress}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Height="10"></ProgressBar>
+                        
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-                
-        <Button Grid.Column="1" VerticalAlignment="Bottom" Margin="8" Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding AddTaskCommand}"
-                ToolTip="{StaticResource AddEncryptionDecryptionTask}">
-            <material:PackIcon Kind="Plus" Height="24" Width="24" />
-        </Button>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Bottom" Margin="8">
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0, 5" Command="{Binding DeleteSelectedTaskCommand}"
+                    ToolTip="{StaticResource DeleteEncryptionDecryptionTask}">
+                <material:PackIcon Kind="Delete" Height="24" Width="24"/>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0, 5" Command="{Binding AddTaskCommand}"
+                    ToolTip="{StaticResource AddEncryptionDecryptionTask}">
+                <material:PackIcon Kind="Plus" Height="24" Width="24"/>
+            </Button>
+        </StackPanel>
+        
+
     </Grid>
 </UserControl>
+

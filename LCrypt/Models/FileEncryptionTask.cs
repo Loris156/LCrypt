@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -68,6 +69,27 @@ namespace LCrypt.Models
         {
             get => _fileIcon;
             set => SetAndNotify(ref _fileIcon, value);
+        }
+
+        private string _destinationPath;
+        public string DestinationPath
+        {
+            get => _destinationPath;
+            set => SetAndNotify(ref _destinationPath, value);
+        }
+
+        private int _progress;
+        public int Progress
+        {
+            get => _progress;
+            set => SetAndNotify(ref _progress, value);
+        }
+
+        private SecureString _password;
+        public SecureString Password
+        {
+            get => _password;
+            set => SetAndNotify(ref _password, value);
         }
 
         public override string ToString()
