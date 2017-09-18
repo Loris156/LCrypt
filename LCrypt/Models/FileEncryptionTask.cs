@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using LCrypt.Utility;
+﻿using LCrypt.Utility;
 using LCrypt.ViewModels;
+using System;
+using System.IO;
+using System.Security;
+using System.Security.Cryptography;
+using System.Windows.Media;
+using LCrypt.EncryptionAlgorithms;
 
 namespace LCrypt.Models
 {
@@ -22,6 +19,12 @@ namespace LCrypt.Models
             _guid = Guid.NewGuid();
             _fileInfo = new FileInfo(path);
             _fileIcon = Util.ExtractFileIcon(FilePath);
+        }
+
+        public FileInfo FileInfo
+        {
+            get => _fileInfo;
+            set => SetAndNotify(ref _fileInfo, value);
         }
 
         public string FilePath => _fileInfo.FullName;
@@ -78,8 +81,8 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _destinationPath, value);
         }
 
-        private int _progress;
-        public int Progress
+        private double _progress;
+        public double Progress
         {
             get => _progress;
             set => SetAndNotify(ref _progress, value);
@@ -90,6 +93,13 @@ namespace LCrypt.Models
         {
             get => _password;
             set => SetAndNotify(ref _password, value);
+        }
+
+        private IEncryptionAlgorithm _algorithm;
+        public IEncryptionAlgorithm Algorithm
+        {
+            get => _algorithm; 
+            set => SetAndNotify(ref _algorithm, value);
         }
 
         public override string ToString()
