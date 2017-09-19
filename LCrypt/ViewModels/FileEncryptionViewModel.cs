@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows.Input;
+﻿using LCrypt.EncryptionAlgorithms;
 using LCrypt.Models;
 using LCrypt.Utility;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
-using System.Threading.Tasks;
-using LCrypt.EncryptionAlgorithms;
-using MahApps.Metro.Controls.Dialogs;
+using System.Windows.Input;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
@@ -109,22 +108,87 @@ namespace LCrypt.ViewModels
                     var task = (FileEncryptionTask)t;
                     Debug.Assert(task.Algorithm != null);
 
-                    var fileEncryption = new FileEncryption();
-                    var progress = new Progress<long>(p => task.Progress = p);
-                    try
+                    if (!task.IsRunning)
                     {
-                        if (task.Encrypt)
-                            await fileEncryption.EncryptFile(task, progress, task.CancellationToken);
-                        else
-                            await fileEncryption.DecryptFile(task, progress, task.CancellationToken);
-                    }
-                    catch (Exception e)
-                    {
-                        //TODO: Catch specified exceptions
-                        Console.WriteLine(e);
-                        throw;
-                    }
+                        task.CancellationTokenSource = new CancellationTokenSource();
 
+                        var fileEncryption = new FileEncryption();
+                        var progress = new Progress<long>(p => task.Progress = p);
+
+                        task.IsFinished = false;
+                        task.IsRunning = true;
+                        try
+                        {
+                            if (task.Encrypt)
+                                await fileEncryption.EncryptFileAsync(task, progress, task.CancellationToken);
+                            else
+                                await fileEncryption.DecryptFileAsync(task, progress, task.CancellationToken);
+
+                            task.IsFinished = true;
+                        }
+                        catch (IOException ex)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(this,
+                                (string)App.LocalizationDictionary["Error"],
+                                string.Format((string)App.LocalizationDictionary["IoException"],
+                                    ex.Message), MessageDialogStyle.Affirmative, new MetroDialogSettings
+                                    {
+                                        AffirmativeButtonText = (string)App.LocalizationDictionary["Continue"],
+                                        CustomResourceDictionary = App.DialogDictionary,
+                                        SuppressDefaultResources = true
+                                    });
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            // ignored
+                        }
+                        catch (CryptographicException ex)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(this,
+                                (string)App.LocalizationDictionary["Error"],
+                                string.Format((string)App.LocalizationDictionary["CryptographicException"],
+                                    ex.Message), MessageDialogStyle.Affirmative, new MetroDialogSettings
+                                    {
+                                        AffirmativeButtonText = (string)App.LocalizationDictionary["Continue"],
+                                        CustomResourceDictionary = App.DialogDictionary,
+                                        SuppressDefaultResources = true
+                                    });
+                        }
+                        catch (Exception ex)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(this,
+                                (string)App.LocalizationDictionary["Error"],
+                                string.Format((string)App.LocalizationDictionary["UnknownException"],
+                                    ex.Message), MessageDialogStyle.Affirmative, new MetroDialogSettings
+                                {
+                                    AffirmativeButtonText = (string)App.LocalizationDictionary["Continue"],
+                                    CustomResourceDictionary = App.DialogDictionary,
+                                    SuppressDefaultResources = true
+                                });
+                        }
+                        finally
+                        {
+                            task.IsRunning = false;
+                            task.Progress = 0;
+                        }
+                    }
+                    else
+                    {
+                        var dialogResult = await DialogCoordinator.Instance.ShowMessageAsync(this, (string)App.LocalizationDictionary["EncryptionTask"],
+                            string.Format((string)App.LocalizationDictionary["DoYouReallyWantToCancelEncryptionTask"],
+                                task.FileName), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+                                {
+                                    AffirmativeButtonText = (string)App.LocalizationDictionary["Yes"],
+                                    NegativeButtonText = (string)App.LocalizationDictionary["No"],
+                                    CustomResourceDictionary = App.DialogDictionary,
+                                    SuppressDefaultResources = true
+                                });
+
+                        if (dialogResult != MessageDialogResult.Affirmative) return;
+                        task.CancellationTokenSource.Cancel();
+                        task.IsRunning = false;
+                        task.Progress = 0;
+                    }
                 },
                 t =>
                 {

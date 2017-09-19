@@ -19,7 +19,6 @@ namespace LCrypt.Models
         public FileEncryptionTask(string path)
         {
             _guid = Guid.NewGuid();
-            CancellationTokenSource = new CancellationTokenSource();
             _fileInfo = new FileInfo(path);
             _fileIcon = Util.ExtractFileIcon(FilePath);
         }
@@ -36,7 +35,7 @@ namespace LCrypt.Models
 
         public string FileName => _fileInfo.Name;
 
-        private long FileSize => _fileInfo.Length;
+        public long FileSize => _fileInfo.Length;
 
         public string FileSizeString
         {
@@ -84,11 +83,11 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _destinationPath, value);
         }
 
-        private bool _isRunning;
+        private bool _running;
         public bool IsRunning
         {
-            get => _isRunning;
-            set => SetAndNotify(ref _isRunning, value);
+            get => _running;
+            set => SetAndNotify(ref _running, value);
         }
 
         private long _progress;
@@ -133,6 +132,13 @@ namespace LCrypt.Models
         {
             get => _task;
             set => SetAndNotify(ref _task, value);
+        }
+
+        private bool _finished;
+        public bool IsFinished
+        {
+            get => _finished;
+            set => SetAndNotify(ref _finished, value);
         }
 
         public override string ToString()

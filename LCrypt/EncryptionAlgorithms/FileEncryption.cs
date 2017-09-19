@@ -14,16 +14,16 @@ namespace LCrypt.EncryptionAlgorithms
 {
     public class FileEncryption
     {
-        public const int EncryptionSaltLength = 32;
-        public const int DeriveBytesIterations = 50000;
+        private const int FileBufferSize = 131072; // 128 KiB
+        private const int EncryptionSaltLength = 32;
+        private const int DeriveBytesIterations = 50000;
 
-        public async Task EncryptFile(FileEncryptionTask task, IProgress<long> progress, CancellationToken cancellationToken)
+        public async Task EncryptFileAsync(FileEncryptionTask task, IProgress<long> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            using (var source = new FileStream(task.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 131072, useAsync: true))
+            using (var source = new FileStream(task.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: FileBufferSize, useAsync: true))
             {
-                progress.Report(0);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 using (var destination = new FileStream(task.DestinationPath, FileMode.Create, FileAccess.Write,
@@ -36,13 +36,16 @@ namespace LCrypt.EncryptionAlgorithms
                         cancellationToken.ThrowIfCancellationRequested();
                         var salt = Util.GenerateStrongRandomBytes(EncryptionSaltLength);
                         algorithm.IV = Util.GenerateStrongRandomBytes(algorithm.BlockSize / 8);
-                        algorithm.Key = task.Password.DeriveKey(salt, DeriveBytesIterations, algorithm.KeySize / 8);
+                        algorithm.Key = await task.Password.DeriveKeyAsync(salt, DeriveBytesIterations, algorithm.KeySize / 8, cancellationToken);
+
+                        await destination.WriteAsync(salt, 0, EncryptionSaltLength, cancellationToken);
+                        await destination.WriteAsync(algorithm.IV, 0, algorithm.BlockSize / 8, cancellationToken);
 
                         using (var transform = algorithm.CreateEncryptor())
                         {
                             using (var cryptoStream = new CryptoStream(destination, transform, CryptoStreamMode.Write))
                             {
-
+                                await source.CopyToAsync(cryptoStream, progress, cancellationToken);
                             }
                         }
                     }
@@ -50,9 +53,42 @@ namespace LCrypt.EncryptionAlgorithms
             }
         }
 
-        public async Task DecryptFile(FileEncryptionTask task, IProgress<long> progress, CancellationToken cancellationToken)
+        public async Task DecryptFileAsync(FileEncryptionTask task, IProgress<long> progress, CancellationToken cancellationToken)
         {
-            
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using (var source = new FileStream(task.FilePath, FileMode.Open, FileAccess.Read, FileShare.None,
+                bufferSize: FileBufferSize, useAsync: true))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                using (var destination = new FileStream(task.DestinationPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: FileBufferSize, useAsync: true))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var salt = new byte[EncryptionSaltLength];
+                    await source.ReadAsync(salt, 0, EncryptionSaltLength, cancellationToken);
+
+                    using (var algorithm = task.Algorithm.Create())
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        var iv = new byte[algorithm.BlockSize / 8];
+                        await source.ReadAsync(iv, 0, algorithm.BlockSize / 8, cancellationToken);
+                        algorithm.IV = iv;
+
+                        algorithm.Key = await task.Password.DeriveKeyAsync(salt, DeriveBytesIterations, algorithm.KeySize / 8, cancellationToken);
+
+                        using (var transform = algorithm.CreateDecryptor())
+                        {
+                            using (var cryptoStream = new CryptoStream(destination, transform, CryptoStreamMode.Write))
+                            {
+                                await source.CopyToAsync(cryptoStream, progress, cancellationToken);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

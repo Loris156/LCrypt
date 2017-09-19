@@ -2,13 +2,15 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LCrypt.Utility.Extensions
 {
     public static class SecureStringExtensions
     {
-        public static byte[] DeriveKey(this SecureString secureString, byte[] salt, int iterations,
-            int keyLengthInBytes)
+        public static async Task<byte[]> DeriveKeyAsync(this SecureString secureString, byte[] salt, int iterations,
+            int keyLengthInBytes, CancellationToken cancellationToken)
         {
             if (secureString == null)
                 throw new ArgumentNullException(nameof(secureString));
@@ -21,9 +23,11 @@ namespace LCrypt.Utility.Extensions
             if (keyLengthInBytes < 1)
                 throw new ArgumentException("The specified key size is smaller than 1 byte.", nameof(keyLengthInBytes));
 
-            var ptr = Marshal.SecureStringToBSTR(secureString);
-            try
+            return await Task.Run(() =>
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var ptr = Marshal.SecureStringToBSTR(secureString);
                 var length = Marshal.ReadInt32(ptr, -4);
                 var passwordByteArray = new byte[length];
                 var gcHandle = GCHandle.Alloc(passwordByteArray, GCHandleType.Pinned);
@@ -31,7 +35,10 @@ namespace LCrypt.Utility.Extensions
                 try
                 {
                     for (var index = 0; index < length; ++index)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
                         passwordByteArray[index] = Marshal.ReadByte(ptr, index);
+                    }
 
                     using (var rfc = new Rfc2898DeriveBytes(passwordByteArray, salt, iterations))
                         return rfc.GetBytes(keyLengthInBytes);
@@ -40,12 +47,9 @@ namespace LCrypt.Utility.Extensions
                 {
                     Array.Clear(passwordByteArray, 0, length);
                     gcHandle.Free();
+                    Marshal.ZeroFreeBSTR(ptr);
                 }
-            }
-            finally
-            {
-                Marshal.ZeroFreeBSTR(ptr);
-            }
+            }, cancellationToken);
         }
     }
 }
