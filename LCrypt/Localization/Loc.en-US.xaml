@@ -16,5 +16,10 @@
     <sys:String x:Key="DeleteEncryptionDecryptionTask">Delete selected encryption/decryption task</sys:String>
     <sys:String x:Key="Encrypt">Encrypt</sys:String>
     <sys:String x:Key="Decrypt">Decrypt</sys:String>
-     
+    <sys:String x:Key="Algorithm">Algorithm</sys:String>
+    <sys:String x:Key="Password">Password</sys:String>
+    <sys:String x:Key="DestinationPath">Destination Path</sys:String>
+    <sys:String x:Key="Start">Start</sys:String>
+    <sys:String x:Key="Cancel">Cancel</sys:String>
+    
 </ResourceDictionary>

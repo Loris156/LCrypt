@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Security;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using LCrypt.EncryptionAlgorithms;
 
@@ -17,6 +19,7 @@ namespace LCrypt.Models
         public FileEncryptionTask(string path)
         {
             _guid = Guid.NewGuid();
+            CancellationTokenSource = new CancellationTokenSource();
             _fileInfo = new FileInfo(path);
             _fileIcon = Util.ExtractFileIcon(FilePath);
         }
@@ -81,8 +84,15 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _destinationPath, value);
         }
 
-        private double _progress;
-        public double Progress
+        private bool _isRunning;
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetAndNotify(ref _isRunning, value);
+        }
+
+        private long _progress;
+        public long Progress
         {
             get => _progress;
             set => SetAndNotify(ref _progress, value);
@@ -95,11 +105,34 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _password, value);
         }
 
+        private bool _encrypt = true;
+        public bool Encrypt
+        {
+            get => _encrypt;
+            set => SetAndNotify(ref _encrypt, value);
+        }
+
         private IEncryptionAlgorithm _algorithm;
         public IEncryptionAlgorithm Algorithm
         {
             get => _algorithm; 
             set => SetAndNotify(ref _algorithm, value);
+        }
+
+        private CancellationTokenSource _cancellationTokenSource;
+        public CancellationTokenSource CancellationTokenSource
+        {
+            get => _cancellationTokenSource;
+            set => SetAndNotify(ref _cancellationTokenSource, value);
+        }
+
+        public CancellationToken CancellationToken => CancellationTokenSource.Token;
+
+        private Task _task;
+        public Task Task
+        {
+            get => _task;
+            set => SetAndNotify(ref _task, value);
         }
 
         public override string ToString()

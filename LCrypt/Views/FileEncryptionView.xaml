@@ -8,8 +8,11 @@
              xmlns:viewModels="clr-namespace:LCrypt.ViewModels"
              xmlns:models="clr-namespace:LCrypt.Models"
              xmlns:controls="clr-namespace:LCrypt.Controls"
+             xmlns:valueConverters="clr-namespace:LCrypt.Value_Converters"
+             xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:FileEncryptionViewModel}">
+             d:DesignHeight="350" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:FileEncryptionViewModel}"
+             dialogs:DialogParticipation.Register="{Binding}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,6 +22,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <valueConverters:BoolInverter x:Key="BoolInverter"/>
+            
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -59,7 +65,6 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-
                             <TextBlock Text="{Binding FileName}" FontWeight="SemiBold"/>
                             <TextBlock Text="{Binding FileDirectory}" Grid.Row="1" Foreground="Gray"/>
                         </Grid>
@@ -75,25 +80,29 @@
                             </Grid.RowDefinitions>
 
                             <controls:BindablePasswordBox SecurePassword="{Binding Password}" Grid.Column="0" Margin="5, 0" VerticalAlignment="Bottom" 
-                                                          material:HintAssist.Hint="Password"/>
+                                                          material:HintAssist.Hint="{StaticResource Password}" 
+                                                          IsEnabled="{Binding IsRunning, Converter={StaticResource BoolInverter}}"/>
                             <ComboBox ItemsSource="{Binding DataContext.EncryptionAlgorithms, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" SelectedItem="{Binding Algorithm}" 
-                                      Grid.Column="1" Grid.Row="0" Margin="5, 0" material:HintAssist.Hint="Algorithm"/>
+                                      SelectedIndex="0" Grid.Column="1" Grid.Row="0" Margin="5, 0" material:HintAssist.Hint="{StaticResource Algorithm}"
+                                      IsEnabled="{Binding IsRunning, Converter={StaticResource BoolInverter}}"/>
 
                             <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                                 <Button DockPanel.Dock="Right" Margin="5" 
                                         Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.SetDestinationPathCommand}"
-                                        CommandParameter="{Binding}">
+                                        CommandParameter="{Binding}" IsEnabled="{Binding IsRunning, Converter={StaticResource BoolInverter}}">
                                     <material:PackIcon Kind="FileExport"/>
                                 </Button>
-                                <TextBox Text="{Binding DestinationPath, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding DestinationPath, UpdateSourceTrigger=PropertyChanged}" material:HintAssist.Hint="{StaticResource DestinationPath}"
+                                         Margin="5, 0" VerticalAlignment="Center" IsEnabled="{Binding IsRunning, Converter={StaticResource BoolInverter}}"/>
                             </DockPanel>
                         </Grid>
 
                         <Grid Grid.Column="3" Grid.Row="0">
                             <Grid.Resources>
-                                <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Margin" Value="10, 0"/>
+                                    <Setter Property="Margin" Value="10, 5"/>
+                                    <Setter Property="IsEnabled" Value="{Binding IsRunning, Converter={StaticResource BoolInverter}}"/>
                                 </Style>
                             </Grid.Resources>
 
@@ -102,7 +111,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <RadioButton IsChecked="True">
+                            <RadioButton IsChecked="{Binding Encrypt}">
                                 <TextBlock Text="{StaticResource Encrypt}"/>
                             </RadioButton>
                             <RadioButton Grid.Row="1">
@@ -113,14 +122,37 @@
                         <Button Grid.Column="4" Grid.Row="0" Margin="5" Padding="5"
                                 Command="{Binding Path=DataContext.StartStopEncryptionTask, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                 CommandParameter="{Binding}">
-                            <StackPanel Orientation="Horizontal">
-                                <material:PackIcon Kind="Play" Foreground="Green" Height="20" Width="20"/>
-                                <TextBlock Text="Starten" Margin="2, 0" TextTrimming="CharacterEllipsis"/>
-                            </StackPanel>
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <material:PackIcon Kind="Stop" Foreground="Red" Height="20" Width="20"/>
+                                                        <TextBlock Text="{StaticResource Cancel}" Margin="2, 0" TextTrimming="CharacterEllipsis"/>
+                                                    </StackPanel>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsRunning}" Value="False">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <material:PackIcon Kind="Play" Foreground="Green" Height="20" Width="20"/>
+                                                        <TextBlock Text="{StaticResource Start}" Margin="2, 0" TextTrimming="CharacterEllipsis"/>
+                                                    </StackPanel>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
                         </Button>
 
                         <TextBlock Text="{Binding FileSizeString}" Grid.Row="1" Grid.Column="0"/>
-                        <ProgressBar Value="{Binding Progress}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Height="10"/>
+                        <ProgressBar Value="{Binding Progress}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Height="10" Maximum="100">
+                        </ProgressBar>
 
                     </Grid>
                 </DataTemplate>

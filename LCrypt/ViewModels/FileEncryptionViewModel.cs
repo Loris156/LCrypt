@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
@@ -6,8 +7,11 @@ using LCrypt.Models;
 using LCrypt.Utility;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using LCrypt.EncryptionAlgorithms;
+using MahApps.Metro.Controls.Dialogs;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
@@ -74,10 +78,7 @@ namespace LCrypt.ViewModels
                 return new RelayCommand(_ =>
                 {
                     EncryptionTasks.Remove(SelectedTask);
-                }, _ =>
-                {
-                    return SelectedTask != null;
-                });
+                }, _ => SelectedTask != null && !SelectedTask.IsRunning);
             }
         }
 
@@ -102,11 +103,27 @@ namespace LCrypt.ViewModels
         {
             get
             {
-                return new RelayCommand(t =>
+                return new RelayCommand(async t =>
                 {
                     Debug.Assert(t != null);
                     var task = (FileEncryptionTask)t;
+                    Debug.Assert(task.Algorithm != null);
 
+                    var fileEncryption = new FileEncryption();
+                    var progress = new Progress<long>(p => task.Progress = p);
+                    try
+                    {
+                        if (task.Encrypt)
+                            await fileEncryption.EncryptFile(task, progress, task.CancellationToken);
+                        else
+                            await fileEncryption.DecryptFile(task, progress, task.CancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        //TODO: Catch specified exceptions
+                        Console.WriteLine(e);
+                        throw;
+                    }
 
                 },
                 t =>

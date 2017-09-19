@@ -102,6 +102,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="EncryptionAlgorithms\AlgorithmConcretes.cs" />
+    <Compile Include="EncryptionAlgorithms\FileEncryption.cs" />
     <Compile Include="EncryptionAlgorithms\IEncryptionAlgorithm.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -113,7 +114,10 @@
     <Compile Include="LCryptFunction.cs" />
     <Compile Include="Models\FileEncryptionTask.cs" />
     <Compile Include="Utility\RelayCommand.cs" />
+    <Compile Include="Utility\Extensions\SecureStringExtensions.cs" />
+    <Compile Include="Utility\Extensions\StreamExtensions.cs" />
     <Compile Include="Utility\Util.cs" />
+    <Compile Include="Value Converters\BoolInverter.cs" />
     <Compile Include="Value Converters\StringToLanguageConverter.cs" />
     <Compile Include="ViewModels\FileEncryptionViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
