@@ -101,7 +101,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="EncryptionAlgorithms\AlgorithmConcretes.cs" />
+    <Compile Include="EncryptionAlgorithms\EncryptionAlgorithmConcretes.cs" />
     <Compile Include="EncryptionAlgorithms\FileEncryption.cs" />
     <Compile Include="EncryptionAlgorithms\IEncryptionAlgorithm.cs" />
     <Compile Include="App.xaml.cs">
@@ -111,6 +111,10 @@
     <Compile Include="Controls\BindablePasswordBox.xaml.cs">
       <DependentUpon>BindablePasswordBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HashAlgorithms\Crc32Managed.cs" />
+    <Compile Include="HashAlgorithms\HashAlgorithmConcretes.cs" />
+    <Compile Include="HashAlgorithms\IHashAlgorithm.cs" />
+    <Compile Include="HashAlgorithms\WhirlpoolManaged.cs" />
     <Compile Include="LCryptFunction.cs" />
     <Compile Include="Models\FileEncryptionTask.cs" />
     <Compile Include="Utility\Extensions\HashAlgorithmExtensions.cs" />
