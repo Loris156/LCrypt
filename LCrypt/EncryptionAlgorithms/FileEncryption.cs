@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using LCrypt.Models;
+﻿using LCrypt.Models;
 using LCrypt.Utility;
 using LCrypt.Utility.Extensions;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LCrypt.EncryptionAlgorithms
 {

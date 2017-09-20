@@ -89,7 +89,19 @@ namespace LCrypt.ViewModels
                 {
                     Debug.Assert(t != null);
                     var task = (FileEncryptionTask)t;
-                    var dialog = new SaveFileDialog {DefaultExt = Path.GetExtension(task.FilePath)};
+
+                    Debug.Assert(task.FilePath != null);
+                    Debug.Assert(task.FileName != null);
+
+                    var dialog = new SaveFileDialog
+                    {
+                        Filter = (string)App.LocalizationDictionary["AllFiles"] + "|*.*",
+                        OverwritePrompt = true,
+                        ValidateNames = true,
+                        AddExtension = true,
+                        DefaultExt = Path.GetExtension(task.FileName)
+                    };
+
                     if (dialog.ShowDialog().GetValueOrDefault())
                     {
                         task.DestinationPath = dialog.FileName;
@@ -160,11 +172,11 @@ namespace LCrypt.ViewModels
                                 (string)App.LocalizationDictionary["Error"],
                                 string.Format((string)App.LocalizationDictionary["UnknownException"],
                                     ex.Message), MessageDialogStyle.Affirmative, new MetroDialogSettings
-                                {
-                                    AffirmativeButtonText = (string)App.LocalizationDictionary["Continue"],
-                                    CustomResourceDictionary = App.DialogDictionary,
-                                    SuppressDefaultResources = true
-                                });
+                                    {
+                                        AffirmativeButtonText = (string)App.LocalizationDictionary["Continue"],
+                                        CustomResourceDictionary = App.DialogDictionary,
+                                        SuppressDefaultResources = true
+                                    });
                         }
                         finally
                         {
