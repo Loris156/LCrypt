@@ -89,7 +89,7 @@ namespace LCrypt.ViewModels
                 {
                     Debug.Assert(t != null);
                     var task = (FileEncryptionTask)t;
-                    var dialog = new SaveFileDialog();
+                    var dialog = new SaveFileDialog {DefaultExt = Path.GetExtension(task.FilePath)};
                     if (dialog.ShowDialog().GetValueOrDefault())
                     {
                         task.DestinationPath = dialog.FileName;
