@@ -33,4 +33,8 @@
     <sys:String x:Key="CryptographicException">A cryptographic exception occurred! Verify that your password, algorithm or operation are correct and try again. Error: {0}</sys:String>
     <sys:String x:Key="IoException">An IO exception occurred. Verify that your paths are correct and try again. Error: {0}</sys:String>
     <sys:String x:Key="UnknownException">An unknown exception occurred. Please try again. Error: {0}</sys:String>
+
+    <sys:String x:Key="FileChecksum">File checksum</sys:String>
+    <sys:String x:Key="Verification">Verification</sys:String>
+    <sys:String x:Key="NotYetComputed">Not yet computed</sys:String>
 </ResourceDictionary>

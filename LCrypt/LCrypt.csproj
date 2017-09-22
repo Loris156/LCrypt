@@ -41,6 +41,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="Dragablz, Version=0.0.3.197, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.197\lib\net45\Dragablz.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -56,6 +59,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -89,6 +93,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\FileChecksumView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FileEncryptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +124,7 @@
     <Compile Include="HashAlgorithms\IHashAlgorithm.cs" />
     <Compile Include="HashAlgorithms\WhirlpoolManaged.cs" />
     <Compile Include="LCryptFunction.cs" />
+    <Compile Include="Models\FileChecksumTask.cs" />
     <Compile Include="Models\FileEncryptionTask.cs" />
     <Compile Include="Utility\Extensions\HashAlgorithmExtensions.cs" />
     <Compile Include="Utility\RelayCommand.cs" />
@@ -124,10 +133,14 @@
     <Compile Include="Utility\Util.cs" />
     <Compile Include="Value Converters\BoolInverter.cs" />
     <Compile Include="Value Converters\StringToLanguageConverter.cs" />
+    <Compile Include="ViewModels\FileChecksumViewModel.cs" />
     <Compile Include="ViewModels\FileEncryptionViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
+    <Compile Include="Views\FileChecksumView.xaml.cs">
+      <DependentUpon>FileChecksumView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FileEncryptionView.xaml.cs">
       <DependentUpon>FileEncryptionView.xaml</DependentUpon>
     </Compile>

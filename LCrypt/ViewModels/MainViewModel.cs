@@ -28,6 +28,13 @@ namespace LCrypt.ViewModels
                 {
                     PackIconKind = PackIconKind.File
                 },
+                new LCryptFunction("FileChecksum", new FileChecksumView
+                {
+                    DataContext = new FileChecksumViewModel()
+                })
+                {
+                    PackIconKind = PackIconKind.FileCheck
+                },
                 new LCryptFunction("Settings", null)
                 {
                     PackIconKind = PackIconKind.Settings
