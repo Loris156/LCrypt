@@ -12,8 +12,6 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Input;
 
-// ReSharper disable MemberCanBeMadeStatic.Global
-
 namespace LCrypt.ViewModels
 {
     public class FileEncryptionViewModel : NotifyPropertyChanged

@@ -128,6 +128,7 @@
     <Compile Include="Models\FileEncryptionTask.cs" />
     <Compile Include="Utility\Extensions\ByteExtensions.cs" />
     <Compile Include="Utility\Extensions\HashAlgorithmExtensions.cs" />
+    <Compile Include="Utility\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Utility\Extensions\StringExtensions.cs" />
     <Compile Include="Utility\RelayCommand.cs" />
     <Compile Include="Utility\Extensions\SecureStringExtensions.cs" />

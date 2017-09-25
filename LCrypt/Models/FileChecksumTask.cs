@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Windows.Media;
 using LCrypt.Utility;
 using LCrypt.ViewModels;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using LCrypt.HashAlgorithms;
 
 namespace LCrypt.Models
 {
     public class AlgorithmTask : NotifyPropertyChanged
     {
-        private string _result;
         private bool _isRunning;
+        private string _result;
         public CancellationTokenSource CancellationTokenSource { get; set; }
 
         public string Result
@@ -30,20 +27,16 @@ namespace LCrypt.Models
         }
     }
 
-
-    public class FileChecksumTask : NotifyPropertyChanged, IEquatable<FileChecksumTask>
+    public class FileChecksumTask : NotifyPropertyChanged
     {
-        private readonly Guid _guid;
-
-        private FileInfo _fileInfo;
         private ImageSource _fileIcon;
+        private FileInfo _fileInfo;
 
         private string _verification;
         private bool _verified;
 
         public FileChecksumTask()
         {
-            _guid = Guid.NewGuid();
             Tasks = new Dictionary<string, AlgorithmTask>(7)
             {
                 {"MD5", new AlgorithmTask()},
@@ -63,7 +56,8 @@ namespace LCrypt.Models
             {
                 SetAndNotify(ref _fileInfo, value);
 
-                FileIcon = Util.ExtractFileIcon(FileInfo.FullName);
+                if (FileInfo != null)
+                    FileIcon = Util.ExtractFileIcon(FileInfo.FullName);
 
                 OnPropertyChanged(nameof(FileName));
                 OnPropertyChanged(nameof(FilePath));
@@ -78,9 +72,9 @@ namespace LCrypt.Models
 
         public string FilePath => _fileInfo?.FullName;
 
-        public string FileDirectory => _fileInfo.DirectoryName;
+        public string FileDirectory => _fileInfo?.DirectoryName;
 
-        public long? FileSize => _fileInfo?.Length;
+        private long? FileSize => _fileInfo?.Length;
 
         public string FileSizeString
         {
@@ -153,24 +147,6 @@ namespace LCrypt.Models
         public override string ToString()
         {
             return FileName;
-        }
-
-        public bool Equals(FileChecksumTask other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            return ReferenceEquals(this, other) || _guid.Equals(other._guid);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((FileChecksumTask)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return _guid.GetHashCode();
         }
     }
 }

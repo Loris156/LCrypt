@@ -8,6 +8,7 @@
 
     <sys:String x:Key="Yes">Yes</sys:String>
     <sys:String x:Key="No">No</sys:String>
+    <sys:String x:Key="Ok">Ok</sys:String>
     <sys:String x:Key="Continue">Continue</sys:String>
     <sys:String x:Key="AllFiles">All Files</sys:String>
     
@@ -38,4 +39,6 @@
     <sys:String x:Key="Verification">Verification</sys:String>
     <sys:String x:Key="NotYetComputed">Not yet computed</sys:String>
     <sys:String x:Key="NoFileSelected">No file selected</sys:String>
+    <sys:String x:Key="InvalidOperation">Invalid operation</sys:String>
+    <sys:String x:Key="ThereAreStillTasksRunning">There are still tasks running. Please wait until they are finished or cancel them.</sys:String>
 </ResourceDictionary>
