@@ -37,4 +37,5 @@
     <sys:String x:Key="FileChecksum">File checksum</sys:String>
     <sys:String x:Key="Verification">Verification</sys:String>
     <sys:String x:Key="NotYetComputed">Not yet computed</sys:String>
+    <sys:String x:Key="NoFileSelected">No file selected</sys:String>
 </ResourceDictionary>

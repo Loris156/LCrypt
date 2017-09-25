@@ -1,12 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media;
 using LCrypt.Utility;
 using LCrypt.ViewModels;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using LCrypt.HashAlgorithms;
 
 namespace LCrypt.Models
 {
+    public class AlgorithmTask : NotifyPropertyChanged
+    {
+        private string _result;
+        private bool _isRunning;
+        public CancellationTokenSource CancellationTokenSource { get; set; }
+
+        public string Result
+        {
+            get => _result;
+            set => SetAndNotify(ref _result, value);
+        }
+
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetAndNotify(ref _isRunning, value);
+        }
+    }
+
+
     public class FileChecksumTask : NotifyPropertyChanged, IEquatable<FileChecksumTask>
     {
         private readonly Guid _guid;
@@ -14,18 +38,24 @@ namespace LCrypt.Models
         private FileInfo _fileInfo;
         private ImageSource _fileIcon;
 
-        private string _md5Result, _crc32Result, _sha1Result, _sha256Result, _sha384Result, _sha512Result, _whirlpoolResult;
         private string _verification;
         private bool _verified;
 
         public FileChecksumTask()
         {
             _guid = Guid.NewGuid();
-            FileInfo = new FileInfo(@"C:\users\lole\desktop\contacts.xml");
-            Verified = true;
+            Tasks = new Dictionary<string, AlgorithmTask>(7)
+            {
+                {"MD5", new AlgorithmTask()},
+                {"CRC32", new AlgorithmTask()},
+                {"SHA-1", new AlgorithmTask()},
+                {"SHA-256", new AlgorithmTask()},
+                {"SHA-384", new AlgorithmTask()},
+                {"SHA-512", new AlgorithmTask()},
+                {"Whirlpool", new AlgorithmTask()}
+            };
         }
 
-        
         public FileInfo FileInfo
         {
             get => _fileInfo;
@@ -92,52 +122,26 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _fileIcon, value);
         }
 
-        public string Md5Result
-        {
-            get => _md5Result;
-            set => SetAndNotify(ref _md5Result, value);
-        }
-
-        public string Crc32Result
-        {
-            get => _crc32Result;
-            set => SetAndNotify(ref _crc32Result, value);
-        }
-
-        public string Sha1Result
-        {
-            get => _sha1Result;
-            set => SetAndNotify(ref _sha1Result, value);
-        }
-
-        public string Sha256Result
-        {
-            get => _sha256Result;
-            set => SetAndNotify(ref _sha256Result, value);
-        }
-
-        public string Sha384Result
-        {
-            get => _sha384Result;
-            set => SetAndNotify(ref _sha384Result, value);
-        }
-
-        public string Sha512Result
-        {
-            get => _sha512Result;
-            set => SetAndNotify(ref _sha512Result, value);
-        }
-
-        public string WhirlpoolResult
-        {
-            get => _whirlpoolResult;
-            set => SetAndNotify(ref _whirlpoolResult, value);
-        }
+        public Dictionary<string, AlgorithmTask> Tasks { get; set; }
 
         public string Verification
         {
             get => _verification;
-            set => SetAndNotify(ref _verification, value); // TODO
+            set
+            {
+                SetAndNotify(ref _verification, value);
+
+                foreach (var task in Tasks)
+                {
+                    if (task.Value.Result == null) continue;
+                    if (task.Value.Result.ToLowerInvariant().Equals(Verification.ToLowerInvariant()))
+                    {
+                        Verified = true;
+                        return;
+                    }
+                    Verified = false;
+                }
+            }
         }
 
         public bool Verified
@@ -161,7 +165,7 @@ namespace LCrypt.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((FileChecksumTask) obj);
+            return obj.GetType() == GetType() && Equals((FileChecksumTask)obj);
         }
 
         public override int GetHashCode()

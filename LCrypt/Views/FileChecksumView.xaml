@@ -10,8 +10,11 @@
              xmlns:models="clr-namespace:LCrypt.Models"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             xmlns:hashAlgorithms="clr-namespace:LCrypt.HashAlgorithms"
              mc:Ignorable="d" 
-             d:DesignHeight="420" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:FileChecksumViewModel }">
+             d:DesignHeight="420" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:FileChecksumViewModel}"
+             dialogs:DialogParticipation.Register="{Binding}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,16 +23,19 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ComboBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <dragablz:TabablzControl ItemsSource="{Binding ChecksumTasks}" NewItemFactory="{Binding NewItemFactory}" ShowDefaultAddButton="True" 
+    <dragablz:TabablzControl ItemsSource="{Binding ChecksumTasks}" SelectedItem="{Binding SelectedTask}" NewItemFactory="{Binding NewItemFactory}" ShowDefaultAddButton="True" 
                              ShowDefaultCloseButton="True">
         <dragablz:TabablzControl.HeaderItemTemplate>
             <DataTemplate DataType="{x:Type models:FileChecksumTask}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding FileIcon}" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    <TextBlock Text="{Binding FileName}" Margin="10, 0"/>
+                    <TextBlock Text="{Binding FileName, FallbackValue={StaticResource NoFileSelected}}" Margin="10, 0"/>
                 </StackPanel>
             </DataTemplate>
         </dragablz:TabablzControl.HeaderItemTemplate>
@@ -60,13 +66,14 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" />
-                            <TextBlock Text="{Binding FileDirectory}" Grid.Row="1" Foreground="Gray" />
+                            <TextBlock Text="{Binding FileName, FallbackValue={StaticResource NoFileSelected}}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding FileDirectory, FallbackValue={StaticResource NoFileSelected}}" Grid.Row="1" Foreground="Gray" />
                         </Grid>
 
                         <DockPanel Grid.Column="2">
-                            <Button DockPanel.Dock="Right" Margin="5">
-                                <material:PackIcon Kind="FileExport" />
+                            <Button DockPanel.Dock="Right" Margin="5"
+                                    Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType={x:Type dragablz:TabablzControl}}}">
+                                <material:PackIcon Kind="FileImport" />
                             </Button>
                             <TextBox Text="{Binding FilePath, Mode=OneTime}" IsReadOnly="True"
                                          VerticalAlignment="Center" Margin="5, 0" />
@@ -92,6 +99,15 @@
                                         <Setter Property="Margin" Value="0, 0, 10, 0"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>
                                     </Style>
+                                    <Style x:Key="CopyButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                        <Setter Property="Command" Value="{Binding DataContext.CopyHashCommand, RelativeSource={RelativeSource AncestorType={x:Type dragablz:TabablzControl}}}"/>
+                                    </Style>
+
+                                    <Style x:Key="StartComputationButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                        <Setter Property="Command" Value="{Binding DataContext.StartComputationCommand, 
+                                            RelativeSource={RelativeSource AncestorType={x:Type dragablz:TabablzControl}}}"/>
+                                    </Style>
+
                                 </Grid.Resources>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -118,25 +134,213 @@
                                 <TextBlock Text="Whirlpool" Grid.Column="0" Grid.Row="6"/>
                                 <TextBlock Text="{StaticResource Verification}" Grid.Column="0" Grid.Row="7"/>
 
-                                <TextBox Text="{Binding Md5Result}" Grid.Column="1" Grid.Row="0" Style="{StaticResource HashTextBoxStyle}"/>
-                                <TextBox Text="{Binding Crc32Result}" Grid.Column="1" Grid.Row="1" Style="{StaticResource HashTextBoxStyle}"/>
-                                <TextBox Text="{Binding Sha1Result}" Grid.Column="1" Grid.Row="2" Style="{StaticResource HashTextBoxStyle}"/>
-                                <TextBox Text="{Binding Sha256Result}" Grid.Column="1" Grid.Row="3" Style="{StaticResource HashTextBoxStyle}"/>
-                                <TextBox Text="{Binding Sha384Result}" Grid.Column="1" Grid.Row="4" Style="{StaticResource HashTextBoxStyle}"/>
-                                <TextBox Text="{Binding Sha512Result}" Grid.Column="1" Grid.Row="5" Style="{StaticResource HashTextBoxStyle}"/>
-                                <TextBox Text="{Binding WhirlpoolResult}" Grid.Column="1" Grid.Row="6" Style="{StaticResource HashTextBoxStyle}"/>
-                           
-                                <TextBox Text="{Binding Verification, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="7" Margin="5" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding Tasks[MD5].Result}" Grid.Column="1" Grid.Row="0" Style="{StaticResource HashTextBoxStyle}"/>
+                                <TextBox Text="{Binding Tasks[CRC32].Result}" Grid.Column="1" Grid.Row="1" Style="{StaticResource HashTextBoxStyle}"/>
+                                <TextBox Text="{Binding Tasks[SHA-1].Result}" Grid.Column="1" Grid.Row="2" Style="{StaticResource HashTextBoxStyle}"/>
+                                <TextBox Text="{Binding Tasks[SHA-256].Result}" Grid.Column="1" Grid.Row="3" Style="{StaticResource HashTextBoxStyle}"/>
+                                <TextBox Text="{Binding Tasks[SHA-384].Result}" Grid.Column="1" Grid.Row="4" Style="{StaticResource HashTextBoxStyle}"/>
+                                <TextBox Text="{Binding Tasks[SHA-512].Result}" Grid.Column="1" Grid.Row="5" Style="{StaticResource HashTextBoxStyle}"/>
+                                <TextBox Text="{Binding Tasks[Whirlpool].Result}" Grid.Column="1" Grid.Row="6" Style="{StaticResource HashTextBoxStyle}"/>
+
+                                <TextBox Text="{Binding Verification, UpdateSourceTrigger=PropertyChanged}" 
+                                         Grid.Column="1" Grid.Row="7" Margin="5" VerticalAlignment="Center" GotFocus="VerificationTextBox_OnGotFocus"/>
 
                                 <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
-                                    <Button Margin="5, 0">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="MD5">
                                         <material:PackIcon Kind="ContentCopy"/>
                                     </Button>
-                                    <Button Margin="5, 0">
-                                        <material:PackIcon Kind="Play"/>
+                                    <Button Margin="5, 0" CommandParameter="MD5">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[MD5].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[MD5].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
                                 </StackPanel>
-                                
+
+                                <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="CRC32">
+                                        <material:PackIcon Kind="ContentCopy"/>
+                                    </Button>
+                                    <Button Margin="5, 0" CommandParameter="CRC32">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[CRC32].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[CRC32].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="SHA-1">
+                                        <material:PackIcon Kind="ContentCopy"/>
+                                    </Button>
+                                    <Button Margin="5, 0" CommandParameter="SHA-1">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[SHA-1].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[SHA-1].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="SHA-256">
+                                        <material:PackIcon Kind="ContentCopy"/>
+                                    </Button>
+                                    <Button Margin="5, 0" CommandParameter="SHA-256">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[SHA-256].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[SHA-256].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Grid.Row="4" Orientation="Horizontal">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="SHA-384">
+                                        <material:PackIcon Kind="ContentCopy"/>
+                                    </Button>
+                                    <Button Margin="5, 0" CommandParameter="SHA-384">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[SHA-384].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[SHA-384].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Grid.Row="5" Orientation="Horizontal">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="SHA-512">
+                                        <material:PackIcon Kind="ContentCopy"/>
+                                    </Button>
+                                    <Button Margin="5, 0" CommandParameter="SHA-512">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[SHA-512].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[SHA-512].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Grid.Row="6" Orientation="Horizontal">
+                                    <Button Margin="5, 0" Style="{StaticResource CopyButtonStyle}" CommandParameter="Whirlpool">
+                                        <material:PackIcon Kind="ContentCopy"/>
+                                    </Button>
+                                    <Button Margin="5, 0" CommandParameter="Whirlpool">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource StartComputationButtonStyle}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Play" Foreground="Green"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Tasks[Whirlpool].IsRunning}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <material:PackIcon Kind="Stop" Foreground="Red"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <metro:ProgressRing Visibility="{Binding Tasks[Whirlpool].IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        Width="20" Height="20"/>
+                                </StackPanel>
+
                                 <material:PackIcon Grid.Row="7" Grid.Column="2" Height="32" Width="32" 
                                                    VerticalAlignment="Center" Margin="5">
                                     <material:PackIcon.Style>
@@ -152,7 +356,7 @@
                                         </Style>
                                     </material:PackIcon.Style>
                                 </material:PackIcon>
-                                
+
                             </Grid>
                         </ScrollViewer>
 
@@ -161,9 +365,6 @@
                         </Button>
 
                     </Grid>
-
-
-
 
                 </DockPanel>
             </DataTemplate>

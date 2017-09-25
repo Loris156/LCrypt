@@ -24,7 +24,7 @@ namespace LCrypt.EncryptionAlgorithms
                 cancellationToken.ThrowIfCancellationRequested();
 
                 using (var destination = new FileStream(task.DestinationPath, FileMode.Create, FileAccess.Write,
-                    FileShare.None, bufferSize: 131072, useAsync: true))
+                    FileShare.None, bufferSize: FileBufferSize, useAsync: true))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
