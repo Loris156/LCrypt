@@ -8,6 +8,7 @@ namespace LCrypt.Utility.Extensions
         {
             if (bytes == null)
                 throw new ArgumentNullException(nameof(bytes));
+            if (bytes.Length < 1) return string.Empty;
 
             var hex = BitConverter.ToString(bytes);
             if (!upperCase)

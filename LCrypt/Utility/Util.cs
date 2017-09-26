@@ -13,6 +13,9 @@ namespace LCrypt.Utility
     {
         public static byte[] GenerateStrongRandomBytes(int byteCount)
         {
+            if (byteCount < 1)
+                throw new ArgumentException("Array size must be greater than 0.", nameof(byteCount));
+
             using (var rng = new RNGCryptoServiceProvider())
             {
                 var array = new byte[byteCount];
