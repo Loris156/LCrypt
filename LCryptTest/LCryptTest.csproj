@@ -50,10 +50,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\BoolInverterTest.cs" />
     <Compile Include="Utility\ExtensionTests\StringExtensionTest.cs" />
     <Compile Include="Utility\ExtensionTests\ByteExtensionTest.cs" />
     <Compile Include="Utility\ExtensionTests\EnumerableExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\ExtensionTests\HashAlgorithmExtensionTest.cs" />
     <Compile Include="Utility\UtilTest.cs" />
   </ItemGroup>
   <ItemGroup>

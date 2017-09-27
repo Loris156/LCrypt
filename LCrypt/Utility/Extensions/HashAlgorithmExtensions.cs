@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,6 +38,22 @@ namespace LCrypt.Utility.Extensions
 
             hashAlgorithm.TransformFinalBlock(buffer, 0, 0);
             return hashAlgorithm.Hash;
+        }
+
+        public static byte[] ComputeHash(this HashAlgorithm hashAlgorithm, string inputString,
+            Encoding encoding)
+        {
+            if (hashAlgorithm == null)
+                throw new ArgumentNullException(nameof(hashAlgorithm));
+            if (inputString == null)
+                return null;
+            if (encoding == null)
+                throw new ArgumentNullException(nameof(encoding));
+
+            hashAlgorithm.Initialize();
+
+            var stringBytes = encoding.GetBytes(inputString);
+            return hashAlgorithm.ComputeHash(stringBytes);
         }
     }
 }

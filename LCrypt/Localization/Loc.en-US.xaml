@@ -41,4 +41,8 @@
     <sys:String x:Key="NoFileSelected">No file selected</sys:String>
     <sys:String x:Key="InvalidOperation">Invalid operation</sys:String>
     <sys:String x:Key="ThereAreStillTasksRunning">There are still tasks running. Please wait until they are finished or cancel them.</sys:String>
+    
+    <sys:String x:Key="TextHashing">Text hashing</sys:String>
+    <sys:String x:Key="Encoding">Encoding</sys:String>
+    <sys:String x:Key="NoInput">No input</sys:String>
 </ResourceDictionary>
