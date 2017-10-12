@@ -10,7 +10,8 @@
         xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
         xmlns:valueConverters="clr-namespace:LCrypt.Value_Converters"
         mc:Ignorable="d"
-        Title="LCrypt" Height="450" Width="700"
+        Title="LCrypt" Height="600" Width="900"
+        MinHeight="450"
         Background="{DynamicResource MaterialDesignPaper}"
         GlowBrush="{DynamicResource AccentColorBrush}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -24,12 +25,12 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <valueConverters:StringToLanguageConverter x:Key="StringToLanguageConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
-    <material:DialogHost Identifier="RootDialog">
+    <material:DialogHost>
         <material:DrawerHost IsLeftDrawerOpen="{Binding LeftDrawerOpen}">
             <material:DrawerHost.LeftDrawerContent>
                 <DockPanel MinWidth="250">

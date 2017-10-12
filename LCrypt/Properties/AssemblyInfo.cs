@@ -55,4 +55,6 @@ using System.Windows;
 [assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: Guid("86B7273B-63EE-4751-9616-5F8652A42311")]
+[assembly: InternalsVisibleTo("LCrypt.Tests")]
+[assembly: InternalsVisibleTo("LCrypt.Explorables")]
 

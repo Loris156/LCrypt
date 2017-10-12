@@ -1,8 +1,11 @@
-﻿using LCrypt.Views;
+﻿using System;
+using LCrypt.Views;
 using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
+using LCrypt.Models;
 
 namespace LCrypt.ViewModels
 {
@@ -12,7 +15,18 @@ namespace LCrypt.ViewModels
 
         public MainViewModel()
         {
-            IEnumerable<LCryptFunction> functions = new List<LCryptFunction>()
+            var passwordManagerLoginViewModel = new PasswordManagerLoginViewModel();
+            passwordManagerLoginViewModel.LoggedInSuccessfully += PasswordManager_OnSuccessfullLogin;
+
+            var passwordManagerFunction = new LCryptFunction("PasswordManager", new PasswordManagerLoginView
+            {
+                DataContext = passwordManagerLoginViewModel
+            })
+            {
+                PackIconKind = PackIconKind.Key
+            };
+
+            IEnumerable<LCryptFunction> functions = new List<LCryptFunction>
             {
                 new LCryptFunction("Home", new HomeView
                 {
@@ -21,12 +35,13 @@ namespace LCrypt.ViewModels
                 {
                     PackIconKind = PackIconKind.Home
                 },
+                passwordManagerFunction,
                 new LCryptFunction("FileEncryption", new FileEncryptionView
                 {
                     DataContext = new FileEncryptionViewModel()
                 })
                 {
-                    PackIconKind = PackIconKind.File
+                    PackIconKind = PackIconKind.FileLock
                 },
                 new LCryptFunction("FileChecksum", new FileChecksumView
                 {
@@ -52,10 +67,10 @@ namespace LCrypt.ViewModels
                 }
             };
 
+
             Functions = CollectionViewSource.GetDefaultView(functions);
             SelectedFunction = DisplayedFunction = (LCryptFunction)Functions.CurrentItem;
         }
-
 
         private bool _leftDrawerOpen;
         public bool LeftDrawerOpen
@@ -116,6 +131,42 @@ namespace LCrypt.ViewModels
                            function.LocalizedName?.ToLowerInvariant().Contains(SearchText) == true;
                 };
             }
+        }
+
+        private void PasswordManager_OnSuccessfullLogin(object sender, PasswordStorage e)
+        {
+            var loginViewModel = (PasswordManagerLoginViewModel)sender;
+            loginViewModel.LoggedInSuccessfully -= PasswordManager_OnSuccessfullLogin;
+
+            var function = Functions.OfType<LCryptFunction>().Single(f => f.Name == "PasswordManager");
+
+            var passwordManagerViewModel = new PasswordManagerViewModel(e);
+            passwordManagerViewModel.Logout += PasswordManager_OnLogout;
+
+            function.Content = new PasswordManagerView
+            {
+                DataContext = passwordManagerViewModel
+            };
+        }
+
+        private void PasswordManager_OnLogout(object sender, EventArgs e)
+        {
+            var passwordManagerViewModel = (PasswordManagerViewModel)sender;
+            passwordManagerViewModel.Logout -= PasswordManager_OnLogout;
+
+            var function = Functions.OfType<LCryptFunction>().Single(f => f.Name == "PasswordManager");
+
+            var passwordManagerLoginViewModel = new PasswordManagerLoginViewModel();
+            passwordManagerLoginViewModel.LoggedInSuccessfully += PasswordManager_OnSuccessfullLogin;
+
+            function.Content = new PasswordManagerLoginView
+            {
+                DataContext = passwordManagerLoginViewModel
+            };
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 }

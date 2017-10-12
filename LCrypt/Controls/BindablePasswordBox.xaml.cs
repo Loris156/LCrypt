@@ -6,7 +6,7 @@ namespace LCrypt.Controls
 {
     public partial class BindablePasswordBox
     {
-        public static DependencyProperty SecurePasswordProperty;
+        public static readonly DependencyProperty SecurePasswordProperty;
 
         static BindablePasswordBox()
         {

@@ -59,6 +59,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -81,14 +82,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\PeekPasswordBox.xaml.cs">
+      <DependentUpon>PeekPasswordBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PasswordCategory.cs" />
+    <Compile Include="Models\PasswordEntry.cs" />
+    <Compile Include="Models\PasswordStorage.cs" />
     <Compile Include="Models\TextHashingTask.cs" />
     <Compile Include="TextEncodings\ITextEncoding.cs" />
     <Compile Include="TextEncodings\TextEncodingConcretes.cs" />
+    <Compile Include="Utility\Extensions\SymmetricAlgorithmExtensions.cs" />
+    <Compile Include="Utility\ListBoxHelper.cs" />
+    <Compile Include="Value Converters\IntToPasswordEntryIconConverter.cs" />
+    <Compile Include="Value Converters\IntToPasswordCategoryIconConverter.cs" />
+    <Compile Include="ViewModels\EditPasswordEntryViewModel.cs" />
+    <Compile Include="ViewModels\PasswordManagerLoginViewModel.cs" />
+    <Compile Include="ViewModels\PasswordManagerViewModel.cs" />
     <Compile Include="ViewModels\TextHashingViewModel.cs" />
+    <Compile Include="Views\EditPasswordEntryView.xaml.cs">
+      <DependentUpon>EditPasswordEntryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasswordManagerLoginView.xaml.cs">
+      <DependentUpon>PasswordManagerLoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasswordManagerView.xaml.cs">
+      <DependentUpon>PasswordManagerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TextHashingView.xaml.cs">
       <DependentUpon>TextHashingView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\BindablePasswordBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PeekPasswordBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -97,6 +124,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Localization\Loc.de-DE.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditPasswordEntryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,6 +192,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PasswordManagerLoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PasswordManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TextHashingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -197,6 +236,370 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enumerations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PasswordManagerIcons\Category\0.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\1.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\10.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\11.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\12.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\13.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\14.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\15.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\16.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\17.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\18.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\19.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\2.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\20.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\21.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\22.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\23.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\24.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\25.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\26.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\27.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\28.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\29.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\3.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\30.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\31.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\32.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\33.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\34.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\35.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\36.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\37.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\38.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\39.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\4.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\40.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\41.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\42.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\43.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\44.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\45.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\46.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\47.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\48.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\49.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\5.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\50.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\51.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\52.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\53.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\54.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\55.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\56.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\57.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\58.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\59.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\6.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\60.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\61.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\62.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\63.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\64.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\65.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\66.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\67.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\68.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\69.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\7.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\70.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\71.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\72.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\73.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\74.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\75.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\76.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\77.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\78.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\79.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\8.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\80.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\81.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Category\9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PasswordManagerIcons\Entry\0.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\1.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\10.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\100.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\101.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\102.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\103.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\104.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\105.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\106.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\107.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\108.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\109.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\11.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\110.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\111.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\112.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\113.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\114.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\115.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\116.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\117.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\118.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\119.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\12.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\120.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\121.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\122.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\123.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\124.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\125.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\126.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\127.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\128.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\129.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\13.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\130.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\131.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\132.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\133.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\134.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\135.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\136.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\137.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\138.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\139.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\14.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\140.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\141.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\142.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\143.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\144.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\145.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\146.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\147.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\148.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\149.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\15.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\150.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\151.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\152.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\153.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\154.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\155.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\156.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\157.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\158.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\159.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\16.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\160.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\161.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\162.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\163.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\164.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\165.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\166.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\167.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\168.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\169.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\17.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\170.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\171.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\172.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\173.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\174.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\175.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\176.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\177.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\178.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\179.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\18.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\180.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\181.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\182.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\183.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\184.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\185.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\186.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\187.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\188.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\189.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\19.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\190.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\191.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\192.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\193.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\194.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\195.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\196.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\197.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\198.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\199.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\2.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\20.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\200.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\201.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\202.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\203.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\204.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\205.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\206.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\207.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\208.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\209.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\21.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\210.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\211.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\212.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\213.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\214.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\215.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\216.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\217.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\218.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\219.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\22.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\220.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\221.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\222.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\223.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\224.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\225.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\226.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\227.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\228.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\229.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\23.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\230.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\231.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\232.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\233.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\234.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\235.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\236.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\237.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\238.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\239.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\24.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\240.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\241.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\242.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\243.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\244.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\245.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\246.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\247.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\248.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\249.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\25.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\250.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\251.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\252.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\253.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\254.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\255.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\256.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\257.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\258.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\259.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\26.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\260.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\261.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\262.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\263.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\264.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\265.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\266.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\267.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\268.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\269.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\27.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\270.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\271.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\272.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\273.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\274.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\275.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\276.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\277.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\28.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\29.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\3.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\30.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\31.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\32.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\33.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\34.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\35.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\36.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\37.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\38.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\39.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\4.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\40.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\41.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\42.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\43.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\44.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\45.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\46.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\47.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\48.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\49.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\5.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\50.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\51.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\52.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\53.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\54.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\55.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\56.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\57.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\58.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\59.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\6.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\60.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\61.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\62.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\63.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\64.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\65.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\66.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\67.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\68.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\69.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\7.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\70.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\71.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\72.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\73.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\74.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\75.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\76.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\77.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\78.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\79.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\8.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\80.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\81.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\82.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\83.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\84.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\85.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\86.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\87.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\88.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\89.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\9.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\90.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\91.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\92.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\93.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\94.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\95.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\96.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\97.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\98.png" />
+    <Resource Include="Resources\PasswordManagerIcons\Entry\99.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
