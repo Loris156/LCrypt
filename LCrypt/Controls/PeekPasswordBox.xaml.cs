@@ -1,10 +1,10 @@
-﻿using LCrypt.Utility.Extensions;
-using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Security;
 using System.Windows;
 using System.Windows.Input;
+using LCrypt.Utility.Extensions;
+using MaterialDesignThemes.Wpf;
 
 namespace LCrypt.Controls
 {
@@ -20,22 +20,6 @@ namespace LCrypt.Controls
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SecureStringProperty_OnPropertyChanged));
         }
 
-        private static void SecureStringProperty_OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Debug.Assert(d is PeekPasswordBox);
-            var passwordBox = (PeekPasswordBox)d;
-            passwordBox.PasswordBox.PasswordChanged -= passwordBox.PasswordBox_PasswordChanged;
-
-            if (e.NewValue == null)
-            {
-                passwordBox.PasswordBox.Clear();
-                passwordBox.ShowPasswordButton.IsEnabled = false;
-                passwordBox.PasswordBox.PasswordChanged += passwordBox.PasswordBox_PasswordChanged;
-            }
-            else
-                throw new InvalidOperationException("Cannot set new SecureString.");           
-        }
-
         public PeekPasswordBox()
         {
             InitializeComponent();
@@ -43,8 +27,23 @@ namespace LCrypt.Controls
 
         public SecureString SecurePassword
         {
-            get => (SecureString)GetValue(SecurePasswordProperty);
+            get => (SecureString) GetValue(SecurePasswordProperty);
             set => SetValue(SecurePasswordProperty, value);
+        }
+
+        private static void SecureStringProperty_OnPropertyChanged(DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            Debug.Assert(d is PeekPasswordBox);
+            var passwordBox = (PeekPasswordBox) d;
+            passwordBox.PasswordBox.PasswordChanged -= passwordBox.PasswordBox_PasswordChanged;
+
+            if (e.NewValue == null)
+            {
+                passwordBox.PasswordBox.Clear();
+                passwordBox.ShowPasswordButton.IsEnabled = false;
+            }
+            passwordBox.PasswordBox.PasswordChanged += passwordBox.PasswordBox_PasswordChanged;
         }
 
         private void ShowPasswordButton_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
