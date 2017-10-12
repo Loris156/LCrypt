@@ -187,7 +187,7 @@ namespace LCrypt.ViewModels
             {
                 return new RelayCommand(async _ =>
                 {
-                    var s = SelectedEntries;
+                    // TODO
 
                 });
             }
@@ -202,13 +202,13 @@ namespace LCrypt.ViewModels
                     if (SelectedEntries.Count == 1)
                     {
                         if (await DialogCoordinator.Instance.ShowMessageAsync(this,
-                                (string) App.LocalizationDictionary["Warning"],
-                                string.Format((string) App.LocalizationDictionary["ReallyDeleteEntry"],
+                                (string)App.LocalizationDictionary["Warning"],
+                                string.Format((string)App.LocalizationDictionary["ReallyDeleteEntry"],
                                     SelectedEntries[0]),
                                 MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
                                 {
-                                    AffirmativeButtonText = (string) App.LocalizationDictionary["Yes"],
-                                    NegativeButtonText = (string) App.LocalizationDictionary["No"],
+                                    AffirmativeButtonText = (string)App.LocalizationDictionary["Yes"],
+                                    NegativeButtonText = (string)App.LocalizationDictionary["No"],
                                     CustomResourceDictionary = App.DialogDictionary,
                                     SuppressDefaultResources = true
                                 }) == MessageDialogResult.Affirmative)
@@ -217,13 +217,13 @@ namespace LCrypt.ViewModels
                     else
                     {
                         if (await DialogCoordinator.Instance.ShowMessageAsync(this,
-                                (string) App.LocalizationDictionary["Warning"],
-                                string.Format((string) App.LocalizationDictionary["ReallyDeleteEntries"],
+                                (string)App.LocalizationDictionary["Warning"],
+                                string.Format((string)App.LocalizationDictionary["ReallyDeleteEntries"],
                                     SelectedEntries.Count),
                                 MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
                                 {
-                                    AffirmativeButtonText = (string) App.LocalizationDictionary["Yes"],
-                                    NegativeButtonText = (string) App.LocalizationDictionary["No"],
+                                    AffirmativeButtonText = (string)App.LocalizationDictionary["Yes"],
+                                    NegativeButtonText = (string)App.LocalizationDictionary["No"],
                                     CustomResourceDictionary = App.DialogDictionary,
                                     SuppressDefaultResources = true
                                 }) == MessageDialogResult.Affirmative)
@@ -269,40 +269,52 @@ namespace LCrypt.ViewModels
                 return new RelayCommand(async target =>
                 {
                     Debug.Assert(target != null);
-                    Debug.Assert(target is string);
-
                     string copyValue;
 
                     switch (target)
                     {
-                        case "Username":
-                            copyValue = SelectedEntry.Username;
+                        case string _:
+                            switch (target)
+                            {
+                                case "Username":
+                                    copyValue = SelectedEntry.Username;
+                                    break;
+                                case "Email":
+                                    copyValue = SelectedEntry.Email;
+                                    break;
+                                case "Password":
+                                    copyValue = await _passwordStorage.Aes.DecryptStringAsync(SelectedEntry.Password);
+                                    break;
+                                case "Url":
+                                    copyValue = SelectedEntry.Url;
+                                    break;
+                                case "Comment":
+                                    copyValue = SelectedEntry.Comment;
+                                    break;
+                                default:
+                                    throw new ArgumentException("Name does not match any property.", nameof(target));
+                            }
                             break;
-                        case "Email":
-                            copyValue = SelectedEntry.Email;
-                            break;
-                        case "Password":
-                            copyValue = await _passwordStorage.Aes.DecryptStringAsync(SelectedEntry.Password);
-                            break;
-                        case "Url":
-                            copyValue = SelectedEntry.Url;
-                            break;
-                        case "Comment":
-                            copyValue = SelectedEntry.Comment;
+                        case PasswordEntry e:
+                            copyValue = await _passwordStorage.Aes.DecryptStringAsync(e.Password);
                             break;
                         default:
-                            throw new ArgumentException("Name does not match any property.", nameof(target));
+                            throw new ArgumentException("Target was neither a string nor a PasswordEntry.", nameof(target));
                     }
 
                     Debug.Assert(copyValue != null);
                     Clipboard.SetText(copyValue, TextDataFormat.UnicodeText);
+
                     SnackbarMessageQueue.Enqueue(
-                        $"{(string)App.LocalizationDictionary[target]} {(string)App.LocalizationDictionary["Copied"]}!",
-                        (string)App.LocalizationDictionary["Undo"],
+                        target is PasswordEntry
+                            ? $"{(string) App.LocalizationDictionary["Password"]} {(string) App.LocalizationDictionary["Copied"]}!"
+                            : $"{(string) App.LocalizationDictionary[target]} {(string) App.LocalizationDictionary["Copied"]}!",
+                        (string) App.LocalizationDictionary["Undo"],
                         Clipboard.Clear);
                 },
                 target =>
                 {
+                    if (target is PasswordEntry) return true; // ListBox button should always work.
                     if (SelectedEntry == null) return false;
 
                     Debug.Assert(target != null);
@@ -352,7 +364,14 @@ namespace LCrypt.ViewModels
                     }
                     catch (Exception)
                     {
-                        // ignored
+                        try
+                        {
+                            Process.Start("www." + SelectedEntry.Url);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
                     }
                 }, e =>
                 {
