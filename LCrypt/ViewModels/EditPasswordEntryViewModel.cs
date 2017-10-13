@@ -24,7 +24,8 @@ namespace LCrypt.ViewModels
         private string _dialogTitle;
 
         private PasswordEntry _entry;
-        private SecureString _password;
+        private string _password;
+        private SecureString _securePassword;
 
         private List<string> _icons;
 
@@ -51,10 +52,16 @@ namespace LCrypt.ViewModels
             set => SetAndNotify(ref _entry, value);
         }
 
-        public SecureString Password
+        public string Password // The only use of this is to set initial password when editing an entry
         {
             get => _password;
             set => SetAndNotify(ref _password, value);
+        }
+
+        public SecureString SecurePassword
+        {
+            get => _securePassword;
+            set => SetAndNotify(ref _securePassword, value);
         }
 
         public List<string> Icons
@@ -83,7 +90,7 @@ namespace LCrypt.ViewModels
                     Debug.Assert(e is PasswordEntry);
 
                     var entry = (PasswordEntry)e;
-                    return !string.IsNullOrWhiteSpace(entry.Name) && Password?.Length > 0;
+                    return !string.IsNullOrWhiteSpace(entry.Name) && SecurePassword?.Length > 0;
                 });
             }
         }
@@ -104,6 +111,7 @@ namespace LCrypt.ViewModels
         {
             Entry = null;
             Password = null;
+            SecurePassword = null;
         }
     }
 }

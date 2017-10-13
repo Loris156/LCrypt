@@ -149,7 +149,7 @@ namespace LCrypt.ViewModels
                     if (_editPasswordEntryViewModel == null)
                     {
                         _editPasswordEntryViewModel = new EditPasswordEntryViewModel();
-                        _editPasswordEntryView = new EditPasswordEntryView()
+                        _editPasswordEntryView = new EditPasswordEntryView
                         {
                             DataContext = _editPasswordEntryViewModel
                         };
@@ -169,7 +169,7 @@ namespace LCrypt.ViewModels
                     Debug.Assert(newItem is PasswordEntry);
                     var newEntry = (PasswordEntry)newItem;
                     newEntry.Password =
-                        await _passwordStorage.Aes.EncryptStringAsync(_editPasswordEntryViewModel.Password
+                        await _passwordStorage.Aes.EncryptStringAsync(_editPasswordEntryViewModel.SecurePassword
                             .ToInsecureString());
                     Entries.AddNewItem(newEntry);
                     Entries.CommitNew();
@@ -187,9 +187,47 @@ namespace LCrypt.ViewModels
             {
                 return new RelayCommand(async _ =>
                 {
-                    // TODO
+                    if (_editPasswordEntryViewModel == null)
+                    {
+                        _editPasswordEntryViewModel = new EditPasswordEntryViewModel();
+                        _editPasswordEntryView = new EditPasswordEntryView
+                        {
+                            DataContext = _editPasswordEntryViewModel
+                        };
+                    }
 
-                });
+                    var editEntry = SelectedEntries[0];
+                    Entries.EditItem(editEntry);
+                    DisplayedPassword = "•••••";
+
+                    _editPasswordEntryViewModel.DialogTitle = (string)App.LocalizationDictionary["EditEntry"];
+                    _editPasswordEntryViewModel.Entry = editEntry;
+                    _editPasswordEntryViewModel.Categories = _passwordStorage.Categories;
+
+                    _editPasswordEntryViewModel.Password =
+                        await _passwordStorage.Aes.DecryptStringAsync(editEntry.Password);
+
+                    var editResult = await DialogHost.Show(_editPasswordEntryView);
+                    if (editResult == null)
+                    {
+                        Entries.CancelEdit();
+                        _editPasswordEntryViewModel.Reset();
+                        return;
+                    }
+
+                    Debug.Assert(editResult != null);
+                    Debug.Assert(editResult is PasswordEntry);
+                    editEntry.Password =
+                        await _passwordStorage.Aes.EncryptStringAsync(_editPasswordEntryViewModel.SecurePassword
+                            .ToInsecureString());
+
+                    editEntry.LastModified = DateTime.Now;
+                    Entries.CommitEdit();
+                    await SaveStorageAsync();
+
+                    _editPasswordEntryViewModel.Reset();
+
+                }, _ => SelectedEntries.Count == 1);
             }
         }
 
@@ -307,9 +345,9 @@ namespace LCrypt.ViewModels
 
                     SnackbarMessageQueue.Enqueue(
                         target is PasswordEntry
-                            ? $"{(string) App.LocalizationDictionary["Password"]} {(string) App.LocalizationDictionary["Copied"]}!"
-                            : $"{(string) App.LocalizationDictionary[target]} {(string) App.LocalizationDictionary["Copied"]}!",
-                        (string) App.LocalizationDictionary["Undo"],
+                            ? $"{(string)App.LocalizationDictionary["Password"]} {(string)App.LocalizationDictionary["Copied"]}!"
+                            : $"{(string)App.LocalizationDictionary[target]} {(string)App.LocalizationDictionary["Copied"]}!",
+                        (string)App.LocalizationDictionary["Undo"],
                         Clipboard.Clear);
                 },
                 target =>

@@ -95,6 +95,7 @@
     <sys:String x:Key="Created">Created</sys:String>
     <sys:String x:Key="LastModified">Last modified</sys:String>
     <sys:String x:Key="Copied">copied</sys:String>
+    <sys:String x:Key="CopyPassword">Copy password</sys:String>
 
     <sys:String x:Key="Toolbar">Toolbar</sys:String>
     <sys:String x:Key="Item">Item</sys:String>

@@ -10,10 +10,14 @@ namespace LCrypt.Controls
 {
     public partial class PeekPasswordBox
     {
+        public static readonly DependencyProperty PasswordProperty;
         public static readonly DependencyProperty SecurePasswordProperty;
 
         static PeekPasswordBox()
         {
+            PasswordProperty = DependencyProperty.Register("Password", typeof(string), typeof(PeekPasswordBox),
+                new FrameworkPropertyMetadata(default(string),
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PasswordProperty_OnPropertyChanged));
             SecurePasswordProperty = DependencyProperty.Register("SecurePassword", typeof(SecureString),
                 typeof(PeekPasswordBox),
                 new FrameworkPropertyMetadata(default(SecureString),
@@ -25,10 +29,25 @@ namespace LCrypt.Controls
             InitializeComponent();
         }
 
+        public string Password
+        {
+            set => SetValue(PasswordProperty, value);
+        }
+
         public SecureString SecurePassword
         {
             get => (SecureString) GetValue(SecurePasswordProperty);
             set => SetValue(SecurePasswordProperty, value);
+        }
+
+        private static void PasswordProperty_OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Debug.Assert(d is PeekPasswordBox);
+            if (e.NewValue is string s)
+            {
+                var passwordBox = (PeekPasswordBox)d;
+                passwordBox.PasswordBox.Password = s;
+            }
         }
 
         private static void SecureStringProperty_OnPropertyChanged(DependencyObject d,

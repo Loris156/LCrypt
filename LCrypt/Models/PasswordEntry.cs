@@ -1,12 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using LCrypt.ViewModels;
 
 namespace LCrypt.Models
 {
     [DataContract(Name = "PasswordEntry", Namespace = "https://github.com/Loris156/LCrypt")]
-    public class PasswordEntry : NotifyPropertyChanged, IEquatable<PasswordEntry>, ICloneable
+    public class PasswordEntry : NotifyPropertyChanged, IEquatable<PasswordEntry>, ICloneable, IEditableObject
     {
+        private PasswordEntry _copy;
+
         private PasswordCategory _category;
 
         private DateTime _created, _lastModified;
@@ -124,7 +127,7 @@ namespace LCrypt.Models
                 Url = Url != null ? string.Copy(Url) : null,
                 Comment = Comment != null ? string.Copy(Comment) : null,
                 Category = Category,
-                Password = (byte[]) Password?.Clone(),
+                Password = (byte[])Password?.Clone(),
                 Created = Created,
                 LastModified = LastModified
             };
@@ -145,13 +148,39 @@ namespace LCrypt.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == typeof(PasswordEntry) && Equals((PasswordEntry) obj);
+            return obj.GetType() == typeof(PasswordEntry) && Equals((PasswordEntry)obj);
         }
 
         public override int GetHashCode()
         {
             // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Guid.GetHashCode();
+        }
+
+        public void BeginEdit()
+        {
+            _copy = (PasswordEntry)Clone();
+        }
+
+        public void EndEdit()
+        {
+            _copy = null;
+        }
+
+        public void CancelEdit()
+        {
+            this.Name = _copy.Name;
+            this.IconId = _copy.IconId;
+            this.IsFavorite = IsFavorite;
+            this.Username = _copy.Username;
+            this.Email = _copy.Email;
+            this.Url = _copy.Email;
+            this.Comment = _copy.Comment;
+            this.Category = _copy.Category;
+            this.Password = _copy.Password;
+            this.Created = _copy.Created;
+            this.LastModified = _copy.LastModified;
+            _copy = null;
         }
     }
 }
