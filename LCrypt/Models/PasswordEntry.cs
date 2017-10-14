@@ -116,9 +116,14 @@ namespace LCrypt.Models
 
         public object Clone()
         {
+            return Clone(newGuid: false);
+        }
+
+        public object Clone(bool newGuid)
+        {
             return new PasswordEntry
             {
-                Guid = Guid,
+                Guid = newGuid ? Guid.NewGuid() : Guid,
                 Name = Name != null ? string.Copy(Name) : null,
                 IconId = IconId,
                 IsFavorite = IsFavorite,

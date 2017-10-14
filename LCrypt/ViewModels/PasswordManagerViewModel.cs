@@ -196,7 +196,7 @@ namespace LCrypt.ViewModels
                         };
                     }
 
-                    var editEntry = SelectedEntries[0];
+                    var editEntry = SelectedEntry;
                     Entries.EditItem(editEntry);
                     DisplayedPassword = "•••••";
 
@@ -227,7 +227,7 @@ namespace LCrypt.ViewModels
 
                     _editPasswordEntryViewModel.Reset();
 
-                }, _ => SelectedEntries.Count == 1);
+                }, _ => SelectedEntry != null);
             }
         }
 
@@ -280,9 +280,13 @@ namespace LCrypt.ViewModels
             {
                 return new RelayCommand(async _ =>
                 {
+                    var duplicated = (PasswordEntry)SelectedEntry.Clone(newGuid: true);
+
+                    Entries.AddNewItem(duplicated);
+                    Entries.CommitNew();
+
                     await SaveStorageAsync();
-                    SnackbarMessageQueue.Enqueue("Storage saved!");
-                });
+                }, _ => SelectedEntry != null);
             }
         }
 
