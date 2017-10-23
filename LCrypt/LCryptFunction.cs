@@ -13,7 +13,7 @@ namespace LCrypt
 {
     public sealed class LCryptFunction : NotifyPropertyChanged
     {
-        public LCryptFunction(string name, object content)
+        public LCryptFunction(string name, FrameworkElement content)
         {
             Name = name;
             LocalizedName = (string)App.LocalizationDictionary[name];
@@ -49,11 +49,21 @@ namespace LCrypt
             }
         }
 
-        private object _content;
-        public object Content
+        private FrameworkElement _content;
+        public FrameworkElement Content
         {
             get => _content;
             set => SetAndNotify(ref _content, value);
+        }
+
+        public ViewModelBase ViewModel
+        {
+            get => (ViewModelBase) Content?.DataContext;
+            set
+            {
+                Content.DataContext = value;
+                OnPropertyChanged();
+            }
         }
 
         public override string ToString()

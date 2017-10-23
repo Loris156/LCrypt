@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Input;
 
 namespace LCrypt.ViewModels
 {
-    public class FileEncryptionViewModel : NotifyPropertyChanged
+    public class FileEncryptionViewModel : ViewModelBase
     {
         private ObservableCollection<FileEncryptionTask> _encryptionTasks;
         private FileEncryptionTask _selectedTask;
@@ -213,5 +214,10 @@ namespace LCrypt.ViewModels
         }
 
         #endregion
+
+        public override bool OnClosing()
+        {
+            return !EncryptionTasks.Any(t => t.IsRunning);
+        }
     }
 }

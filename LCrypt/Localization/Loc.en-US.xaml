@@ -5,6 +5,7 @@
     <sys:String x:Key="Welcome">Welcome</sys:String>
     <sys:String x:Key="WelcomeToLCrypt">Welcome to LCrypt!</sys:String>
     <sys:String x:Key="OpenFunctions">OPEN FUNCTIONS</sys:String>
+    <sys:String x:Key="ThereAreStillTasksRunningInModules">There are still one or more tasks running in following modules:{1}{1}{0}{1}Do you really want to cancel them?</sys:String>
 
     <sys:String x:Key="Yes">Yes</sys:String>
     <sys:String x:Key="No">No</sys:String>

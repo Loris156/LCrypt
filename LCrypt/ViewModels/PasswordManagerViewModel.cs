@@ -24,7 +24,7 @@ using LCrypt.Views;
 
 namespace LCrypt.ViewModels
 {
-    public class PasswordManagerViewModel : NotifyPropertyChanged
+    public class PasswordManagerViewModel : ViewModelBase
     {
         public static string WalletFileName => "wallet.lcrypt";
 
@@ -429,6 +429,41 @@ namespace LCrypt.ViewModels
             SelectedEntry = SelectedEntries.Count == 1 ? SelectedEntries[0] : null;
         }
 
+        private string SaveStorage()
+        {
+            try
+            {
+                using (var fs =
+                    new FileStream(
+                        Path.Combine(App.MyDocuments, "LCrypt", WalletFileName),
+                        FileMode.Create, FileAccess.Write, FileShare.None,
+                        FileBufferSize, useAsync: false))
+                {
+                    fs.Write(_passwordStorage.Salt, 0, SaltLength);
+                    fs.Write(_passwordStorage.Aes.IV, 0, _passwordStorage.Aes.BlockSize / 8);
+
+                    using (var transform = _passwordStorage.Aes.CreateEncryptor())
+                    {
+                        using (var cryptoStream = new CryptoStream(fs, transform, CryptoStreamMode.Write))
+                        {
+                            using (var xmlWriter = XmlDictionaryWriter.CreateBinaryWriter(cryptoStream))
+                            {
+                                var serializer = new DataContractSerializer(typeof(PasswordStorage));
+                                _passwordStorage.LastModified = DateTime.Now;
+                                serializer.WriteObject(xmlWriter, _passwordStorage);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
+            return null;
+        }
+
         private async Task<string> SaveStorageAsync()
         {
             try
@@ -462,6 +497,12 @@ namespace LCrypt.ViewModels
             }
 
             return null;
+        }
+
+        public override bool OnClosing()
+        {
+            SaveStorage();
+            return true;
         }
     }
 }

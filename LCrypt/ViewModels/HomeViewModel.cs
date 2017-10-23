@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LCrypt.ViewModels
 {
-    public class HomeViewModel : NotifyPropertyChanged
+    public class HomeViewModel : ViewModelBase
     {
 
     }

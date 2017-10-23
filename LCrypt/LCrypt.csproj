@@ -99,6 +99,7 @@
     <Compile Include="ViewModels\PasswordManagerLoginViewModel.cs" />
     <Compile Include="ViewModels\PasswordManagerViewModel.cs" />
     <Compile Include="ViewModels\TextHashingViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\EditPasswordEntryView.xaml.cs">
       <DependentUpon>EditPasswordEntryView.xaml</DependentUpon>
     </Compile>
@@ -178,7 +179,7 @@
     <Compile Include="ViewModels\FileEncryptionViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
+    <Compile Include="Utility\NotifyPropertyChanged.cs" />
     <Compile Include="Views\FileChecksumView.xaml.cs">
       <DependentUpon>FileChecksumView.xaml</DependentUpon>
     </Compile>
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enumerations\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\PasswordManagerIcons\Category\0.png" />

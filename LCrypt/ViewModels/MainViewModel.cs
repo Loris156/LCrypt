@@ -4,12 +4,15 @@ using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using LCrypt.Models;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace LCrypt.ViewModels
 {
-    public class MainViewModel : NotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         private ICollectionView _functionView;
 
@@ -167,6 +170,32 @@ namespace LCrypt.ViewModels
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
+        }
+
+        public async Task<bool> CheckClosing()
+        {
+            var messageBuilder = new StringBuilder();
+            var tasksRunning = false;
+
+            foreach (var function in Functions.OfType<LCryptFunction>())
+            {
+                if (function.ViewModel?.OnClosing() != false) continue;
+                messageBuilder.AppendLine(function.LocalizedName);
+                tasksRunning = true;
+            }
+
+            var message = string.Format((string) App.LocalizationDictionary["ThereAreStillTasksRunningInModules"],
+                messageBuilder, Environment.NewLine);
+
+            if (!tasksRunning) return true;
+            return await DialogCoordinator.Instance.ShowMessageAsync(this, (string)App.LocalizationDictionary["Warning"],
+                       message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+                       {
+                           AffirmativeButtonText = (string)App.LocalizationDictionary["Yes"],
+                           NegativeButtonText = (string)App.LocalizationDictionary["No"],
+                           CustomResourceDictionary = App.DialogDictionary,
+                           SuppressDefaultResources = true
+                       }) == MessageDialogResult.Affirmative;
         }
     }
 }

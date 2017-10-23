@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using LCrypt.Models;
+﻿using LCrypt.Models;
 using LCrypt.Utility;
 using MaterialDesignThemes.Wpf;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security;
-using System.Windows;
-using LCrypt.Views;
+using System.Windows.Input;
 
 namespace LCrypt.ViewModels
 {
-    public class EditPasswordEntryViewModel : NotifyPropertyChanged
+    public class EditPasswordEntryViewModel : ViewModelBase
     {
         private string _dialogTitle;
 

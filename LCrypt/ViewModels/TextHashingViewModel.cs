@@ -14,7 +14,7 @@ using LCrypt.Utility.Extensions;
 
 namespace LCrypt.ViewModels
 {
-    public class TextHashingViewModel : NotifyPropertyChanged
+    public class TextHashingViewModel : ViewModelBase
     {
         private IEnumerable<IHashAlgorithm> _hashAlgorithms;
 

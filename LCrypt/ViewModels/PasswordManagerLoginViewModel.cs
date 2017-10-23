@@ -17,7 +17,7 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace LCrypt.ViewModels
 {
-    public class PasswordManagerLoginViewModel : NotifyPropertyChanged
+    public class PasswordManagerLoginViewModel : ViewModelBase
     {
         private bool _isBusy;
         private bool _isLogin, _isRegister;
