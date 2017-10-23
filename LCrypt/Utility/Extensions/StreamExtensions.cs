@@ -7,7 +7,7 @@ namespace LCrypt.Utility.Extensions
 {
     public static class StreamExtensions
     {
-        public static async Task CopyToAsync(this Stream stream, Stream destination, IProgress<long> progress,
+        public static async Task CopyToAsync(this Stream stream, Stream destination, IProgress<double> progress,
             CancellationToken cancellationToken)
         {
             if (stream == null)
@@ -30,7 +30,8 @@ namespace LCrypt.Utility.Extensions
             {
                 await destination.WriteAsync(buffer, 0, bytesRead, cancellationToken).ConfigureAwait(false);
                 totalBytesRead += bytesRead;
-                progress.Report(totalBytesRead);
+                var x = (double)totalBytesRead / stream.Length * 100;
+                progress.Report(x);
             }
         }
     }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using LCrypt.Models;
+using LCrypt.Utility;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace LCrypt.ViewModels
@@ -184,10 +185,11 @@ namespace LCrypt.ViewModels
                 tasksRunning = true;
             }
 
+            if (!tasksRunning) return true;
+
             var message = string.Format((string) App.LocalizationDictionary["ThereAreStillTasksRunningInModules"],
                 messageBuilder, Environment.NewLine);
-
-            if (!tasksRunning) return true;
+            
             return await DialogCoordinator.Instance.ShowMessageAsync(this, (string)App.LocalizationDictionary["Warning"],
                        message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
                        {

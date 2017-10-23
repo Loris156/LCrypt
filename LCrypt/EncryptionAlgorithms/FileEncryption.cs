@@ -15,7 +15,7 @@ namespace LCrypt.EncryptionAlgorithms
         private const int EncryptionSaltLength = 32;
         private const int DeriveBytesIterations = 50000;
 
-        public async Task EncryptFileAsync(FileEncryptionTask task, IProgress<long> progress, CancellationToken cancellationToken)
+        public async Task EncryptFileAsync(FileEncryptionTask task, IProgress<double> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -50,7 +50,7 @@ namespace LCrypt.EncryptionAlgorithms
             }
         }
 
-        public async Task DecryptFileAsync(FileEncryptionTask task, IProgress<long> progress, CancellationToken cancellationToken)
+        public async Task DecryptFileAsync(FileEncryptionTask task, IProgress<double> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

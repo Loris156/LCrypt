@@ -134,11 +134,13 @@ namespace LCrypt.ViewModels
                         task.CancellationTokenSource.Dispose();
                         task.IsRunning = false;
                         task.Result = null;
+                        App.TaskbarProgressManager.Remove(task);
                     }
                     else
                     {
                         task.CancellationTokenSource = new CancellationTokenSource();
                         task.IsRunning = true;
+                        App.TaskbarProgressManager.SetIndeterminate(task);
 
                         try
                         {
@@ -197,6 +199,7 @@ namespace LCrypt.ViewModels
                         {
                             task.CancellationTokenSource.Dispose();
                             task.IsRunning = false;
+                            App.TaskbarProgressManager.Remove(task);
                             CommandManager.InvalidateRequerySuggested();
                         }
                     }

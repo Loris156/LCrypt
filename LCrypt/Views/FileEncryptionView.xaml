@@ -35,7 +35,7 @@
         </Grid.ColumnDefinitions>
 
         <ListBox ItemsSource="{Binding EncryptionTasks}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" 
-                 ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
+                 ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch" material:RippleAssist.IsDisabled="True"
                  PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:FileEncryptionTask}">
@@ -176,9 +176,8 @@
                         </Grid>
 
                         <TextBlock Text="{Binding FileSizeString}" Grid.Row="1" Grid.Column="0"/>
-                        <ProgressBar Value="{Binding Progress}" Maximum="{Binding FileSize}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Height="10">
-                        </ProgressBar>
-
+                        <ProgressBar Value="{Binding Progress}" Maximum="100" 
+                                     Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Height="10"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

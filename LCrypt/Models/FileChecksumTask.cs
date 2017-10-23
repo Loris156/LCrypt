@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Media;
+using LCrypt.Interfaces;
 using LCrypt.Utility;
 using LCrypt.ViewModels;
 
 namespace LCrypt.Models
 {
-    public class AlgorithmTask : NotifyPropertyChanged
+    public class AlgorithmTask : NotifyPropertyChanged, ITask
     {
         private bool _isRunning;
         private string _result;

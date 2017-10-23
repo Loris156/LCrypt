@@ -85,6 +85,8 @@
     <Compile Include="Controls\PeekPasswordBox.xaml.cs">
       <DependentUpon>PeekPasswordBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\ITask.cs" />
+    <Compile Include="Interfaces\ITaskWithProgress.cs" />
     <Compile Include="Models\PasswordCategory.cs" />
     <Compile Include="Models\PasswordEntry.cs" />
     <Compile Include="Models\PasswordStorage.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="TextEncodings\TextEncodingConcretes.cs" />
     <Compile Include="Utility\Extensions\SymmetricAlgorithmExtensions.cs" />
     <Compile Include="Utility\ListBoxHelper.cs" />
+    <Compile Include="Utility\TaskbarProgressManager.cs" />
     <Compile Include="Value Converters\IntToPasswordEntryIconConverter.cs" />
     <Compile Include="Value Converters\IntToPasswordCategoryIconConverter.cs" />
     <Compile Include="ViewModels\EditPasswordEntryViewModel.cs" />
@@ -237,7 +240,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enumerations\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\PasswordManagerIcons\Category\0.png" />

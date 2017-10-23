@@ -8,10 +8,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using LCrypt.EncryptionAlgorithms;
+using LCrypt.Interfaces;
 
 namespace LCrypt.Models
 {
-    public class FileEncryptionTask : NotifyPropertyChanged, IEquatable<FileEncryptionTask>
+    public class FileEncryptionTask : NotifyPropertyChanged, IEquatable<FileEncryptionTask>, ITaskWithProgress
     {
         private readonly Guid _guid;
         private FileInfo _fileInfo;
@@ -90,8 +91,8 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _running, value);
         }
 
-        private long _progress;
-        public long Progress
+        private double _progress;
+        public double Progress
         {
             get => _progress;
             set => SetAndNotify(ref _progress, value);
@@ -140,6 +141,7 @@ namespace LCrypt.Models
             get => _finished;
             set => SetAndNotify(ref _finished, value);
         }
+
 
         public override string ToString()
         {

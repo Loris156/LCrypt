@@ -22,7 +22,7 @@ namespace LCrypt.ViewModels
 
         public FileEncryptionViewModel()
         {
-            EncryptionAlgorithms = new List<IEncryptionAlgorithm>()
+            EncryptionAlgorithms = new List<IEncryptionAlgorithm>
             {
                 new Aes256(),
                 new Des64(),
@@ -124,7 +124,11 @@ namespace LCrypt.ViewModels
                         task.CancellationTokenSource = new CancellationTokenSource();
 
                         var fileEncryption = new FileEncryption();
-                        var progress = new Progress<long>(p => task.Progress = p);
+                        var progress = new Progress<double>(p =>
+                        {
+                            task.Progress = p;
+                            App.TaskbarProgressManager.SetProgress(task, p);
+                        });
 
                         task.IsFinished = false;
                         task.IsRunning = true;
@@ -181,6 +185,7 @@ namespace LCrypt.ViewModels
                         {
                             task.IsRunning = false;
                             task.Progress = 0;
+                            App.TaskbarProgressManager.Remove(task);
                         }
                     }
                     else

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Markup;
+using LCrypt.Utility;
 using Standard;
 
 namespace LCrypt
@@ -21,6 +22,8 @@ namespace LCrypt
         public static ResourceDictionary DialogDictionary { get; private set; }
 
         public static string MyDocuments => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+        public static TaskbarProgressManager TaskbarProgressManager { get; private set; }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -47,6 +50,7 @@ namespace LCrypt
                 DataContext = new MainViewModel()
             };
 
+            TaskbarProgressManager = new TaskbarProgressManager(window.TaskbarItemInfo);
             window.ShowDialog();
         }
     }
