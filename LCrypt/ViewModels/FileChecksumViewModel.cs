@@ -16,7 +16,7 @@ using Microsoft.Win32;
 
 namespace LCrypt.ViewModels
 {
-    public class FileChecksumViewModel : NotifyPropertyChanged
+    public class FileChecksumViewModel : ViewModelBase
     {
         private const int FileBufferSize = 131072; // 128 KiB
 
@@ -216,6 +216,11 @@ namespace LCrypt.ViewModels
                     SelectedTask.Verified = false;
                 }, _ => SelectedTask?.FileInfo != null && SelectedTask.Tasks.All(task => !task.Value.IsRunning));
             }
+        }
+
+        public override bool OnClosing()
+        {
+            return !ChecksumTasks.Any(t => t.Tasks.Any(at => at.Value.IsRunning));
         }
     }
 }

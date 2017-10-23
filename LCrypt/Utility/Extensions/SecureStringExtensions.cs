@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,7 +42,9 @@ namespace LCrypt.Utility.Extensions
                     }
 
                     using (var rfc = new Rfc2898DeriveBytes(passwordByteArray, salt, iterations))
+                    {
                         return rfc.GetBytes(keyLengthInBytes);
+                    }
                 }
                 finally
                 {
@@ -50,6 +53,86 @@ namespace LCrypt.Utility.Extensions
                     Marshal.ZeroFreeBSTR(ptr);
                 }
             }, cancellationToken);
+        }
+
+        public static bool IsEqual(this SecureString secureString, SecureString other)
+        {
+            if (secureString == null)
+                throw new ArgumentNullException(nameof(secureString));
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            if (secureString.Length != other.Length)
+                return false;
+
+            IntPtr bstr1 = IntPtr.Zero, bstr2 = IntPtr.Zero;
+
+            try
+            {
+                bstr1 = Marshal.SecureStringToBSTR(secureString);
+                bstr2 = Marshal.SecureStringToBSTR(other);
+
+                var length1 = Marshal.ReadInt32(bstr1, -4);
+                var length2 = Marshal.ReadInt32(bstr2, -4);
+                if (length1 == length2)
+                    for (var index = 0; index < length1; index++)
+                    {
+                        var b1 = Marshal.ReadByte(bstr1, index);
+                        var b2 = Marshal.ReadByte(bstr2, index);
+                        if (b1 != b2) return false;
+                    }
+                else
+                    return false;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
+                if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
+            }
+        }
+
+        public static string ToInsecureString(this SecureString secureString)
+        {
+            if (secureString == null)
+                throw new ArgumentNullException(nameof(secureString));
+            if (secureString.Length == 0)
+                return string.Empty;
+
+            var intPtr = IntPtr.Zero;
+
+            try
+            {
+                intPtr = Marshal.SecureStringToGlobalAllocUnicode(secureString);
+                return Marshal.PtrToStringUni(intPtr);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(intPtr);
+            }
+        }
+
+        public static byte[] ToBytes(this SecureString secureString)
+        {
+            if (secureString == null)
+                throw new ArgumentNullException(nameof(secureString));
+
+            var unmanagedString = IntPtr.Zero;
+
+            try
+            {
+                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
+                return Encoding.Unicode.GetBytes(Marshal.PtrToStringUni(unmanagedString));
+            }
+            finally
+            {
+                if (unmanagedString != IntPtr.Zero)
+                    Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
         }
     }
 }

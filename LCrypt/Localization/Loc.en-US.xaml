@@ -5,18 +5,28 @@
     <sys:String x:Key="Welcome">Welcome</sys:String>
     <sys:String x:Key="WelcomeToLCrypt">Welcome to LCrypt!</sys:String>
     <sys:String x:Key="OpenFunctions">OPEN FUNCTIONS</sys:String>
+    <sys:String x:Key="ThereAreStillTasksRunningInModules">There are still one or more tasks running in following modules:{1}{1}{0}{1}Do you really want to cancel them?</sys:String>
 
     <sys:String x:Key="Yes">Yes</sys:String>
     <sys:String x:Key="No">No</sys:String>
     <sys:String x:Key="Ok">Ok</sys:String>
     <sys:String x:Key="Continue">Continue</sys:String>
+    <sys:String x:Key="File">File</sys:String>
+    <sys:String x:Key="Edit">Edit</sys:String>
+    <sys:String x:Key="Undo">Undo</sys:String>
+    <sys:String x:Key="View">View</sys:String>
     <sys:String x:Key="AllFiles">All Files</sys:String>
+    <sys:String x:Key="Save">Save</sys:String>
+    <sys:String x:Key="SaveUppercase">SAVE</sys:String>
+    <sys:String x:Key="CancelUppercase">CANCEL</sys:String>
+    <sys:String x:Key="Warning">Warning</sys:String>
     
     <sys:String x:Key="Search">Search</sys:String>
     <sys:String x:Key="Home">Home</sys:String>
     <sys:String x:Key="Settings">Settings</sys:String>
     <sys:String x:Key="About">About</sys:String>
-
+    <sys:String x:Key="Help">Help</sys:String>
+    
     <sys:String x:Key="FileEncryption">File encryption</sys:String>
     <sys:String x:Key="AddEncryptionDecryptionTask">Add encryption/decryption task</sys:String>
     <sys:String x:Key="DeleteEncryptionDecryptionTask">Delete selected encryption/decryption task</sys:String>
@@ -45,4 +55,67 @@
     <sys:String x:Key="TextHashing">Text hashing</sys:String>
     <sys:String x:Key="Encoding">Encoding</sys:String>
     <sys:String x:Key="NoInput">No input</sys:String>
+
+    <sys:String x:Key="PasswordManager">Password Manager</sys:String>
+    <sys:String x:Key="Register">Register</sys:String>
+    <sys:String x:Key="Login">Login</sys:String>
+    <sys:String x:Key="Unlock">Unlock</sys:String>
+    <sys:String x:Key="CreateANewPasswordStorage">Create a new password storage</sys:String>
+    <sys:String x:Key="StorageName">Storage name</sys:String>
+    <sys:String x:Key="RepeatPassword">Repeat password</sys:String>
+    <sys:String x:Key="PasswordsDontMatch">Password and confirmation does not match.</sys:String>
+    <sys:String x:Key="Retry">Retry</sys:String>
+
+    <sys:String x:Key="ExampleEntryName">Example entry</sys:String>
+    <sys:String x:Key="ExampleEntryUsername">LCrypt</sys:String>
+    <sys:String x:Key="ExampleEntryEmail">example@lcrypt.com</sys:String>
+    <sys:String x:Key="ExampleEntryUrl">https://github.com/Loris156/LCrypt</sys:String>
+    <sys:String x:Key="ExampleEntryComment">This is an example password manager entry. Click on the eye above to display the password. You can delete this entry.</sys:String>
+
+    <sys:String x:Key="Logout">Logout</sys:String>
+    <sys:String x:Key="ReallyLogout">Do you really want to close and lock the password manager?</sys:String>
+    <sys:String x:Key="ChangeStorageName">Change storage name</sys:String>
+    <sys:String x:Key="Backup">Backup</sys:String>
+    <sys:String x:Key="CreateBackup">Create backup</sys:String>
+    <sys:String x:Key="RestoreBackup">Restore backup</sys:String>
+    <sys:String x:Key="AddEntry">Add entry</sys:String>
+    <sys:String x:Key="NewEntry">New entry</sys:String>
+    <sys:String x:Key="EditEntry">Edit entry</sys:String>
+    <sys:String x:Key="DeleteEntries">Delete entries</sys:String>
+    <sys:String x:Key="DuplicateEntry">Duplicate entry</sys:String>
+    <sys:String x:Key="AddCategory">Add category</sys:String>
+    <sys:String x:Key="EditCategory">Edit category</sys:String>
+    <sys:String x:Key="DeleteCategory">Delete category</sys:String>
+    <sys:String x:Key="PasswordManagerWiki">Open the password manager wiki on GitHub</sys:String>
+
+    <sys:String x:Key="Name">Name</sys:String>
+    <sys:String x:Key="Username">Username</sys:String>
+    <sys:String x:Key="Email">Email</sys:String>
+    <sys:String x:Key="Url">URL</sys:String>
+    <sys:String x:Key="Comment">Comment</sys:String>
+    <sys:String x:Key="Created">Created</sys:String>
+    <sys:String x:Key="LastModified">Last modified</sys:String>
+    <sys:String x:Key="Copied">copied</sys:String>
+    <sys:String x:Key="CopyPassword">Copy password</sys:String>
+
+    <sys:String x:Key="Toolbar">Toolbar</sys:String>
+    <sys:String x:Key="Item">Item</sys:String>
+    <sys:String x:Key="Favorite">Favorite</sys:String>
+    <sys:String x:Key="Icon">Icon</sys:String>
+    <sys:String x:Key="Category">Category</sys:String>
+
+    <sys:String x:Key="ReallyDeleteEntry">Do you really want to delete "{0}"?</sys:String>
+    <sys:String x:Key="ReallyDeleteEntries">Do you really want to delete {0} entries?</sys:String>
+    
+    <!--Key combinations-->
+    <sys:String x:Key="F1">F1</sys:String>
+    <sys:String x:Key="Ctrl+Q">Ctrl+Q</sys:String>
+    <sys:String x:Key="Ctrl+N">Ctrl+N</sys:String>
+    <sys:String x:Key="Ctrl+D">Ctrl+D</sys:String>
+    <sys:String x:Key="Ctrl+E">Ctrl+E</sys:String>
+    <sys:String x:Key="Ctrl+Comma">Ctrl+,</sys:String>
+    <sys:String x:Key="Del">Del</sys:String>
+    <sys:String x:Key="Ctrl+Shift+N">Ctrl+Shift+N</sys:String>
+    <sys:String x:Key="Ctrl+Shift+E">Ctrl+Shift+E</sys:String>
+    <sys:String x:Key="Ctrl+Shift+Del">Ctrl+Shift+Del</sys:String>
 </ResourceDictionary>

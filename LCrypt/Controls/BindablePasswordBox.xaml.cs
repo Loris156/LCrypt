@@ -6,7 +6,7 @@ namespace LCrypt.Controls
 {
     public partial class BindablePasswordBox
     {
-        public static DependencyProperty SecurePasswordProperty;
+        public static readonly DependencyProperty SecurePasswordProperty;
 
         static BindablePasswordBox()
         {
@@ -23,13 +23,13 @@ namespace LCrypt.Controls
 
         public SecureString SecurePassword
         {
-            get => (SecureString)GetValue(SecurePasswordProperty);
+            get => (SecureString) GetValue(SecurePasswordProperty);
             set => SetValue(SecurePasswordProperty, value);
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            SecurePassword = ((PasswordBox)sender).SecurePassword;
+            SecurePassword = ((PasswordBox) sender).SecurePassword;
         }
 
         private void UserControl_GotFocus(object sender, RoutedEventArgs e)
