@@ -90,6 +90,7 @@
     <Compile Include="Models\PasswordCategory.cs" />
     <Compile Include="Models\PasswordEntry.cs" />
     <Compile Include="Models\PasswordStorage.cs" />
+    <Compile Include="Models\TextEncryptionTask.cs" />
     <Compile Include="Models\TextHashingTask.cs" />
     <Compile Include="TextEncodings\ITextEncoding.cs" />
     <Compile Include="TextEncodings\TextEncodingConcretes.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="ViewModels\EditPasswordEntryViewModel.cs" />
     <Compile Include="ViewModels\PasswordManagerLoginViewModel.cs" />
     <Compile Include="ViewModels\PasswordManagerViewModel.cs" />
+    <Compile Include="ViewModels\TextEncryptionViewModel.cs" />
     <Compile Include="ViewModels\TextHashingViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\EditPasswordEntryView.xaml.cs">
@@ -111,6 +113,9 @@
     </Compile>
     <Compile Include="Views\PasswordManagerView.xaml.cs">
       <DependentUpon>PasswordManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TextEncryptionView.xaml.cs">
+      <DependentUpon>TextEncryptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TextHashingView.xaml.cs">
       <DependentUpon>TextHashingView.xaml</DependentUpon>
@@ -201,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PasswordManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TextEncryptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

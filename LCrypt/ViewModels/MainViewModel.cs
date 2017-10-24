@@ -54,6 +54,13 @@ namespace LCrypt.ViewModels
                 {
                     PackIconKind = PackIconKind.FileCheck
                 },
+                new LCryptFunction("TextEncryption", new TextEncryptionView
+                {
+                    DataContext = new TextEncryptionViewModel()
+                })
+                {
+                    PackIconKind = PackIconKind.TextShadow
+                },
                 new LCryptFunction("TextHashing", new TextHashingView
                 {
                     DataContext = new TextHashingViewModel()
