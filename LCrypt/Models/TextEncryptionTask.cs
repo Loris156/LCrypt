@@ -5,17 +5,21 @@ using LCrypt.TextEncodings;
 using LCrypt.ViewModels;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using LCrypt.Interfaces;
 using LCrypt.Utility.Extensions;
 
 namespace LCrypt.Models
 {
-    public class TextEncryptionTask : NotifyPropertyChanged, IDataErrorInfo
+    public class TextEncryptionTask : NotifyPropertyChanged, IDataErrorInfo, ITask
     {
         private string _input, _output;
         private ITextEncoding _textEncoding;
         private IEncryptionAlgorithm _hashAlgorithm;
         private SecureString _password;
         private bool _encrypt;
+
+        private bool _isRunning;
 
         public TextEncryptionTask()
         {
@@ -62,9 +66,15 @@ namespace LCrypt.Models
             } 
         }
 
-        public Encoding TextEncodingCache { get; set; }
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetAndNotify(ref _isRunning, value);
+        }
 
-        public SymmetricAlgorithm EncryptionAlgorithmCache { get; set; }
+        public CancellationTokenSource CancellationTokenSource { get; set; }
+
+        public CancellationToken CancellationToken => CancellationTokenSource.Token;
 
         public string this[string columnName]
         {

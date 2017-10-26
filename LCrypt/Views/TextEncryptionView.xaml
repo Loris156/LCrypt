@@ -2,14 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:LCrypt.Controls"
              xmlns:models="clr-namespace:LCrypt.Models"
+             xmlns:valueConverters="clr-namespace:LCrypt.Value_Converters"
              xmlns:viewModels="clr-namespace:LCrypt.ViewModels"
              xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:controls="clr-namespace:LCrypt.Controls"
              mc:Ignorable="d"
              d:DesignHeight="420" d:DesignWidth="700"
              d:DataContext="{d:DesignInstance viewModels:TextEncryptionViewModel}"
@@ -24,12 +26,12 @@
                 <ResourceDictionary
                     Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <valueConverters:BoolInverter x:Key="BoolInverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <dragablz:TabablzControl ItemsSource="{Binding EncryptionTasks}" SelectedItem="{Binding SelectedTask}"
                              NewItemFactory="{Binding NewTabFactory}"
-                             ShowDefaultAddButton="True" ShowDefaultCloseButton="True"
-                             ClosingItemCallback="{Binding TabClosingCallback}">
+                             ShowDefaultAddButton="True" ShowDefaultCloseButton="True">
         <dragablz:TabablzControl.HeaderItemTemplate>
             <DataTemplate DataType="{x:Type models:TextEncryptionTask}">
                 <TextBlock Margin="10, 0" TextTrimming="CharacterEllipsis" MaxWidth="150">
@@ -82,7 +84,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" IsEnabled="{Binding IsRunning, Converter={StaticResource BoolInverter}}">
                         <Grid.Resources>
                             <Style TargetType="TextBlock"></Style>
                         </Grid.Resources>
@@ -137,14 +139,48 @@
                         <TextBox Text="{Binding Output}" Margin="10"
                                  VerticalAlignment="Bottom" TextWrapping="Wrap" IsReadOnly="True"
                                  VerticalScrollBarVisibility="Auto" />
-
-                        <Button
-                            Command="{Binding DataContext.CopyOutputCommand, 
+                        
+                        <StackPanel Grid.Column="1">
+                            <Button CommandParameter="{Binding}"
+                                    Command="{Binding DataContext.StartStopEncryptionCommand, 
                                 RelativeSource={RelativeSource AncestorType={x:Type dragablz:TabablzControl}}}"
-                            Grid.Column="1"
-                            Margin="5">
-                            <material:PackIcon Kind="ContentCopy" />
-                        </Button>
+                                    Margin="5">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <material:PackIcon Kind="Stop"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <material:PackIcon Kind="Play"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="Green"/>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <Button
+                                Command="{Binding DataContext.CopyOutputCommand, 
+                                RelativeSource={RelativeSource AncestorType={x:Type dragablz:TabablzControl}}}"
+                                Margin="5">
+                                <material:PackIcon Kind="ContentCopy" />
+                            </Button>
+
+                            <metro:ProgressRing IsActive="{Binding IsRunning}" Margin="5" Height="30" Width="30">
+                                
+                            </metro:ProgressRing>
+                            
+                        </StackPanel>
+                        
+                        
                     </Grid>
 
                 </Grid>

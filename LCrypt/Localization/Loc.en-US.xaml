@@ -52,13 +52,15 @@
     <sys:String x:Key="NoFileSelected">No file selected</sys:String>
     <sys:String x:Key="InvalidOperation">Invalid operation</sys:String>
     <sys:String x:Key="ThereAreStillTasksRunning">There are still tasks running. Please wait until they are finished or cancel them.</sys:String>
+
+    <sys:String x:Key="TextEncryption">Text encryption</sys:String>
+    <sys:String x:Key="InputIsNotHexadecimal">Input is not hexadecimal!</sys:String>
+    <sys:String x:Key="TextEncryptionReallyCancel">Do you really want to cancel this text encryption task?</sys:String>
+    <sys:String x:Key="TextEncryptionError">An error occurred while encrypting/decryption text. Please verify that your input and settings are correct. Error: {0}</sys:String>
     
     <sys:String x:Key="TextHashing">Text hashing</sys:String>
     <sys:String x:Key="Encoding">Encoding</sys:String>
     <sys:String x:Key="NoInput">No input</sys:String>
-
-    <sys:String x:Key="TextEncryption">Text encryption</sys:String>
-    <sys:String x:Key="InputIsNotHexadecimal">Input is not hexadecimal!</sys:String>
 
     <sys:String x:Key="PasswordManager">Password Manager</sys:String>
     <sys:String x:Key="Register">Register</sys:String>

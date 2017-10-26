@@ -59,7 +59,7 @@ namespace LCrypt.ViewModels
                     DataContext = new TextEncryptionViewModel()
                 })
                 {
-                    PackIconKind = PackIconKind.TextShadow
+                    PackIconKind = PackIconKind.KeyboardOff
                 },
                 new LCryptFunction("TextHashing", new TextHashingView
                 {
