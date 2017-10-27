@@ -99,12 +99,16 @@
     <Compile Include="Utility\TaskbarProgressManager.cs" />
     <Compile Include="Value Converters\IntToPasswordEntryIconConverter.cs" />
     <Compile Include="Value Converters\IntToPasswordCategoryIconConverter.cs" />
+    <Compile Include="ViewModels\EditPasswordCategoryViewModel.cs" />
     <Compile Include="ViewModels\EditPasswordEntryViewModel.cs" />
     <Compile Include="ViewModels\PasswordManagerLoginViewModel.cs" />
     <Compile Include="ViewModels\PasswordManagerViewModel.cs" />
     <Compile Include="ViewModels\TextEncryptionViewModel.cs" />
     <Compile Include="ViewModels\TextHashingViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\EditPasswordCategoryView.xaml.cs">
+      <DependentUpon>EditPasswordCategoryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditPasswordEntryView.xaml.cs">
       <DependentUpon>EditPasswordEntryView.xaml</DependentUpon>
     </Compile>
@@ -133,6 +137,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Localization\Loc.de-DE.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditPasswordCategoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

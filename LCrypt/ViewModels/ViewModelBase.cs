@@ -1,5 +1,10 @@
-﻿namespace LCrypt.ViewModels
+﻿using LCrypt.Utility;
+
+namespace LCrypt.ViewModels
 {
+    /// <summary>
+    /// Abstract base class for all LCrypt ViewModels
+    /// </summary>
     public abstract class ViewModelBase : NotifyPropertyChanged
     {
         /// <summary>

@@ -3,6 +3,7 @@ using LCrypt.TextEncodings;
 using LCrypt.ViewModels;
 using System.Security.Cryptography;
 using System.Text;
+using LCrypt.Utility;
 
 namespace LCrypt.Models
 {

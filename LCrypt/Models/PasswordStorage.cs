@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using LCrypt.Utility;
 using LCrypt.ViewModels;
 using LCrypt.Utility.Extensions;
 

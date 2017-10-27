@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using LCrypt.ViewModels;
+using LCrypt.Utility;
 
 namespace LCrypt.Models
 {
+    /// <summary>
+    /// Represents a password entry in the LCrypt Password Manager.
+    /// </summary>
     [DataContract(Name = "PasswordEntry", Namespace = "https://github.com/Loris156/LCrypt")]
     public class PasswordEntry : NotifyPropertyChanged, IEquatable<PasswordEntry>, ICloneable, IEditableObject
     {
@@ -22,15 +25,24 @@ namespace LCrypt.Models
 
         private bool _isSelected;
 
+        /// <summary>
+        /// Creates a new password entry with a new Guid and sets Created and LastModified to now.
+        /// </summary>
         public PasswordEntry()
         {
             Guid = Guid.NewGuid();
             Created = LastModified = DateTime.Now;
         }
 
+        /// <summary>
+        /// Unique identifier of this entry.
+        /// </summary>
         [DataMember]
         public Guid Guid { get; private set; }
 
+        /// <summary>
+        /// Displayed name of this entry.
+        /// </summary>
         [DataMember]
         public string Name
         {
@@ -38,6 +50,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _name, value);
         }
 
+        /// <summary>
+        /// Icon of this entry. Icons are located in /Resources/PasswordManagerIcons/Entry/.
+        /// </summary>
         [DataMember]
         public int IconId
         {
@@ -45,6 +60,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _iconId, value);
         }
 
+        /// <summary>
+        /// True if this entry is in the special favorites category.
+        /// </summary>
         [DataMember]
         public bool IsFavorite
         {
@@ -56,6 +74,9 @@ namespace LCrypt.Models
             }
         }
 
+        /// <summary>
+        /// Username of account.
+        /// </summary>
         [DataMember]
         public string Username
         {
@@ -63,6 +84,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _username, value);
         }
 
+        /// <summary>
+        /// EMail of account.
+        /// </summary>
         [DataMember]
         public string Email
         {
@@ -70,6 +94,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _email, value);
         }
 
+        /// <summary>
+        /// URL of service.
+        /// </summary>
         [DataMember]
         public string Url
         {
@@ -77,6 +104,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _url, value);
         }
 
+        /// <summary>
+        /// User-defined comment for entry.
+        /// </summary>
         [DataMember]
         public string Comment
         {
@@ -84,6 +114,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _comment, value);
         }
 
+        /// <summary>
+        /// Category, that this entry belongs to.
+        /// </summary>
         [DataMember]
         public PasswordCategory Category
         {
@@ -91,9 +124,15 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _category, value);
         }
 
+        /// <summary>
+        /// Encrypted password of entry.
+        /// </summary>
         [DataMember]
         public byte[] Password { get; set; }
 
+        /// <summary>
+        /// Creation date of this entry.
+        /// </summary>
         [DataMember]
         public DateTime Created
         {
@@ -101,6 +140,9 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _created, value);
         }
 
+        /// <summary>
+        /// Last modification of this entry.
+        /// </summary>
         [DataMember]
         public DateTime LastModified
         {
@@ -108,17 +150,21 @@ namespace LCrypt.Models
             set => SetAndNotify(ref _lastModified, value);
         }
 
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set => SetAndNotify(ref _isSelected, value);
-        }
-
+        /// <summary>
+        /// Creates a clone of this instance, but reference types point to a different memory location and changes won't affect original.
+        /// Does not set Guid to a new value.
+        /// </summary>
+        /// <returns>A clone of this PasswordEntry instance.</returns>
         public object Clone()
         {
             return Clone(newGuid: false);
         }
 
+        /// <summary>
+        /// Creates a clone of this instance, but reference types point to a different memory location and changes won't affect original.
+        /// </summary>
+        /// <param name="newGuid">True if Guid should have a new value (for duplication).</param>
+        /// <returns>A clone of this PasswordEntry instance.</returns>
         public object Clone(bool newGuid)
         {
             return new PasswordEntry
@@ -138,6 +184,10 @@ namespace LCrypt.Models
             };
         }
 
+        /// <summary>
+        /// Returns property "Name".
+        /// </summary>
+        /// <returns>Name of this entry.</returns>
         public override string ToString()
         {
             return Name;
@@ -174,17 +224,17 @@ namespace LCrypt.Models
 
         public void CancelEdit()
         {
-            this.Name = _copy.Name;
-            this.IconId = _copy.IconId;
-            this.IsFavorite = IsFavorite;
-            this.Username = _copy.Username;
-            this.Email = _copy.Email;
-            this.Url = _copy.Email;
-            this.Comment = _copy.Comment;
-            this.Category = _copy.Category;
-            this.Password = _copy.Password;
-            this.Created = _copy.Created;
-            this.LastModified = _copy.LastModified;
+            Name = _copy.Name;
+            IconId = _copy.IconId;
+            IsFavorite = IsFavorite;
+            Username = _copy.Username;
+            Email = _copy.Email;
+            Url = _copy.Email;
+            Comment = _copy.Comment;
+            Category = _copy.Category;
+            Password = _copy.Password;
+            Created = _copy.Created;
+            LastModified = _copy.LastModified;
             _copy = null;
         }
     }

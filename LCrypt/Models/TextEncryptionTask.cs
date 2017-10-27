@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using LCrypt.Interfaces;
+using LCrypt.Utility;
 using LCrypt.Utility.Extensions;
 
 namespace LCrypt.Models

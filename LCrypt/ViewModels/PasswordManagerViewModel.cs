@@ -49,6 +49,9 @@ namespace LCrypt.ViewModels
         private EditPasswordEntryView _editPasswordEntryView;
         private EditPasswordEntryViewModel _editPasswordEntryViewModel;
 
+        private EditPasswordCategoryView _editPasswordCategoryView;
+        private EditPasswordCategoryViewModel _editPasswordCategoryViewModel;
+
         public PasswordManagerViewModel(PasswordStorage passwordStorage)
         {
             _passwordStorage = passwordStorage;
@@ -287,6 +290,59 @@ namespace LCrypt.ViewModels
 
                     await SaveStorageAsync();
                 }, _ => SelectedEntry != null);
+            }
+        }
+
+        public ICommand AddCategoryCommand
+        {
+            get
+            {
+                return new RelayCommand(async _ =>
+                {
+                    if (_editPasswordCategoryViewModel == null)
+                    {
+                        _editPasswordCategoryViewModel = new EditPasswordCategoryViewModel();
+                        _editPasswordCategoryView = new EditPasswordCategoryView
+                        {
+                            DataContext = _editPasswordCategoryViewModel
+                        };
+                    }
+
+                    _editPasswordCategoryViewModel.DialogTitle = (string)App.LocalizationDictionary["NewCategory"];
+                    _editPasswordCategoryViewModel.PasswordCategory = new PasswordCategory();
+
+                    var newCategory = await DialogHost.Show(_editPasswordCategoryView);
+                    if (newCategory == null)
+                    {
+                        _editPasswordCategoryViewModel.Reset();
+                        return;
+                    }
+
+                    // TODO: Add new category
+
+                });
+            }
+        }
+
+        public ICommand EditCategoryCommand
+        {
+            get
+            {
+                return new RelayCommand(async _ =>
+                {
+
+                });
+            }
+        }
+
+        public ICommand DeleteCategoryCommand
+        {
+            get
+            {
+                return new RelayCommand(async _ =>
+                {
+
+                });
             }
         }
 

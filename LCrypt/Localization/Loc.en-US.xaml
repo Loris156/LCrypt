@@ -90,6 +90,7 @@
     <sys:String x:Key="DeleteEntries">Delete entries</sys:String>
     <sys:String x:Key="DuplicateEntry">Duplicate entry</sys:String>
     <sys:String x:Key="AddCategory">Add category</sys:String>
+    <sys:String x:Key="NewCategory">New category</sys:String>
     <sys:String x:Key="EditCategory">Edit category</sys:String>
     <sys:String x:Key="DeleteCategory">Delete category</sys:String>
     <sys:String x:Key="PasswordManagerWiki">Open the password manager wiki on GitHub</sys:String>
