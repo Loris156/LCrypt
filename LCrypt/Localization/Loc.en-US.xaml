@@ -56,7 +56,7 @@
     <sys:String x:Key="TextEncryption">Text encryption</sys:String>
     <sys:String x:Key="InputIsNotHexadecimal">Input is not hexadecimal!</sys:String>
     <sys:String x:Key="TextEncryptionReallyCancel">Do you really want to cancel this text encryption task?</sys:String>
-    <sys:String x:Key="TextEncryptionError">An error occurred while encrypting/decryption text. Please verify that your input and settings are correct. Error: {0}</sys:String>
+    <sys:String x:Key="TextEncryptionError">An error occurred while encrypting/decrypting text. Please verify that your input and settings are correct. Error: {0}</sys:String>
     
     <sys:String x:Key="TextHashing">Text hashing</sys:String>
     <sys:String x:Key="Encoding">Encoding</sys:String>
@@ -78,6 +78,14 @@
     <sys:String x:Key="ExampleEntryUrl">https://github.com/Loris156/LCrypt</sys:String>
     <sys:String x:Key="ExampleEntryComment">This is an example password manager entry. Click on the eye above to display the password. You can delete this entry.</sys:String>
 
+    <sys:String x:Key="Accounts">Accounts</sys:String>
+    <sys:String x:Key="Business">Business</sys:String>
+    <sys:String x:Key="Finances">Finances</sys:String>
+    <sys:String x:Key="Licenses">Licenses</sys:String>
+    <sys:String x:Key="Pins">PINs</sys:String>
+    <sys:String x:Key="Notes">Notes</sys:String>
+    <sys:String x:Key="Miscellaneous">Miscellaneous</sys:String>
+    
     <sys:String x:Key="Logout">Logout</sys:String>
     <sys:String x:Key="ReallyLogout">Do you really want to close and lock the password manager?</sys:String>
     <sys:String x:Key="ChangeStorageName">Change storage name</sys:String>
@@ -94,7 +102,8 @@
     <sys:String x:Key="EditCategory">Edit category</sys:String>
     <sys:String x:Key="DeleteCategory">Delete category</sys:String>
     <sys:String x:Key="PasswordManagerWiki">Open the password manager wiki on GitHub</sys:String>
-
+    <sys:String x:Key="Favorites">Favorites</sys:String>
+    
     <sys:String x:Key="Name">Name</sys:String>
     <sys:String x:Key="Username">Username</sys:String>
     <sys:String x:Key="Email">Email</sys:String>
@@ -113,6 +122,7 @@
 
     <sys:String x:Key="ReallyDeleteEntry">Do you really want to delete "{0}"?</sys:String>
     <sys:String x:Key="ReallyDeleteEntries">Do you really want to delete {0} entries?</sys:String>
+    <sys:String x:Key="ReallyDeletePasswordCategory">Do you really want to delete category "{0}"? No entries in this category will be deleted.</sys:String>
     
     <!--Key combinations-->
     <sys:String x:Key="F1">F1</sys:String>

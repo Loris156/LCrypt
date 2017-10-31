@@ -25,8 +25,8 @@ namespace LCrypt.ViewModels
 
         public EditPasswordCategoryViewModel()
         {
-            Icons = new List<string>(79);
-            for (var i = 2; i < 80; i++)
+            Icons = new List<string>(80);
+            for (var i = 0; i < 80; i++)
             {
                 Icons.Add($"pack://application:,,/Resources/PasswordManagerIcons/Category/{i}.png");
             }

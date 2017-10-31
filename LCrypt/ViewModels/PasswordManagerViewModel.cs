@@ -1,26 +1,23 @@
 ﻿using LCrypt.Models;
 using LCrypt.Utility;
+using LCrypt.Utility.Extensions;
+using LCrypt.Views;
 using MahApps.Metro.Controls.Dialogs;
 using MaterialDesignThemes.Wpf;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using System.Xml;
-using LCrypt.Utility.Extensions;
-using LCrypt.Views;
 
 namespace LCrypt.ViewModels
 {
@@ -41,6 +38,9 @@ namespace LCrypt.ViewModels
         private ObservableCollection<PasswordEntry> _selectedEntries;
         private PasswordEntry _selectedEntry;
 
+        private ObservableCollection<PasswordCategory> _categories;
+        private PasswordCategory _selectedCategory;
+
         private string _displayedPassword;
 
         private SnackbarMessageQueue _snackbarMessageQueue;
@@ -59,6 +59,25 @@ namespace LCrypt.ViewModels
             Entries = new ListCollectionView(_passwordStorage.Entries);
             SelectedEntries = new ObservableCollection<PasswordEntry>();
             SelectedEntries.CollectionChanged += SelectedEntries_OnCollectionChanged;
+
+
+            Categories = new ObservableCollection<PasswordCategory>
+            {
+                new PasswordCategory(PasswordCategory.AllEntries)
+                {
+                    Name = _passwordStorage.Name,
+                    IconId = -1
+                },
+                new PasswordCategory(PasswordCategory.Favorites)
+                {
+                    Name = (string)App.LocalizationDictionary["Favorites"],
+                    IconId = -2
+                }
+            };
+
+            foreach (var category in _passwordStorage.Categories)
+                Categories.Add(category);
+            SelectedCategory = Categories.First();
 
             SnackbarMessageQueue = new SnackbarMessageQueue();
         }
@@ -83,6 +102,22 @@ namespace LCrypt.ViewModels
                 SetAndNotify(ref _selectedEntry, value);
                 if (SelectedEntry != null)
                     DisplayedPassword = "•••••";
+            }
+        }
+
+        public ICollection<PasswordCategory> Categories
+        {
+            get => _categories;
+            set => SetAndNotify(ref _categories, (ObservableCollection<PasswordCategory>)value);
+        }
+
+        public PasswordCategory SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                SetAndNotify(ref _selectedCategory, value);
+                ChangeCategory();
             }
         }
 
@@ -311,15 +346,22 @@ namespace LCrypt.ViewModels
                     _editPasswordCategoryViewModel.DialogTitle = (string)App.LocalizationDictionary["NewCategory"];
                     _editPasswordCategoryViewModel.PasswordCategory = new PasswordCategory();
 
-                    var newCategory = await DialogHost.Show(_editPasswordCategoryView);
-                    if (newCategory == null)
+                    var dialogResult = await DialogHost.Show(_editPasswordCategoryView);
+
+                    try
+                    {
+                        if (dialogResult == null) return;
+                        var newCategory = (PasswordCategory)dialogResult;
+
+                        Categories.Add(newCategory);
+                        _passwordStorage.Categories.Add(newCategory);
+
+                        await SaveStorageAsync();
+                    }
+                    finally
                     {
                         _editPasswordCategoryViewModel.Reset();
-                        return;
                     }
-
-                    // TODO: Add new category
-
                 });
             }
         }
@@ -330,8 +372,38 @@ namespace LCrypt.ViewModels
             {
                 return new RelayCommand(async _ =>
                 {
+                    if (_editPasswordCategoryViewModel == null)
+                    {
+                        _editPasswordCategoryViewModel = new EditPasswordCategoryViewModel();
+                        _editPasswordCategoryView = new EditPasswordCategoryView
+                        {
+                            DataContext = _editPasswordCategoryViewModel
+                        };
+                    }
 
-                });
+                    var editEntry = SelectedCategory;
+                    _editPasswordCategoryViewModel.DialogTitle = (string)App.LocalizationDictionary["EditCategory"];
+                    _editPasswordCategoryViewModel.PasswordCategory = editEntry;
+
+                    try
+                    {
+                        editEntry.BeginEdit();
+
+                        var dialogResult = await DialogHost.Show(_editPasswordCategoryView);
+                        if (dialogResult == null)
+                        {
+                            editEntry.CancelEdit();
+                            return;
+                        }
+
+                        editEntry.EndEdit();
+                        await SaveStorageAsync();
+                    }
+                    finally
+                    {
+                        _editPasswordCategoryViewModel.Reset();
+                    }
+                }, _ => SelectedCategory.Guid != PasswordCategory.AllEntries && SelectedCategory.Guid != PasswordCategory.Favorites);
             }
         }
 
@@ -341,8 +413,26 @@ namespace LCrypt.ViewModels
             {
                 return new RelayCommand(async _ =>
                 {
-
-                });
+                    if (await DialogCoordinator.Instance.ShowMessageAsync(this,
+                            (string)App.LocalizationDictionary["Warning"],
+                            string.Format((string)App.LocalizationDictionary["ReallyDeletePasswordCategory"], SelectedCategory.Name),
+                            MessageDialogStyle.AffirmativeAndNegative,
+                            new MetroDialogSettings
+                            {
+                                AffirmativeButtonText = (string)App.LocalizationDictionary["Yes"],
+                                NegativeButtonText = (string)App.LocalizationDictionary["No"],
+                                CustomResourceDictionary = App.DialogDictionary,
+                                SuppressDefaultResources = true
+                            }) == MessageDialogResult.Affirmative)
+                    {
+                        _passwordStorage.Entries.Where(e => e.Category == SelectedCategory)
+                            .ForEach(e => e.Category = null);
+                        _passwordStorage.Categories.Remove(SelectedCategory);
+                        Categories.Remove(SelectedCategory);
+                        SelectedCategory = Categories.First();
+                        await SaveStorageAsync();
+                    }
+                }, _ => SelectedCategory.Guid != PasswordCategory.AllEntries && SelectedCategory.Guid != PasswordCategory.Favorites);
             }
         }
 
@@ -483,6 +573,25 @@ namespace LCrypt.ViewModels
         private void SelectedEntries_OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             SelectedEntry = SelectedEntries.Count == 1 ? SelectedEntries[0] : null;
+        }
+
+        private void ChangeCategory()
+        {
+            if (SelectedCategory == null) return;
+            if (SelectedCategory.Guid == PasswordCategory.AllEntries)
+                Entries.Filter = null;
+            else if (SelectedCategory.Guid == PasswordCategory.Favorites)
+                Entries.Filter = obj =>
+                {
+                    var entry = (PasswordEntry)obj;
+                    return entry.IsFavorite;
+                };
+            else
+                Entries.Filter = obj =>
+                {
+                    var entry = (PasswordEntry)obj;
+                    return entry.Category == SelectedCategory;
+                };
         }
 
         private string SaveStorage()

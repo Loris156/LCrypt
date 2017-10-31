@@ -74,25 +74,47 @@ namespace LCrypt.Models
                 Comment = (string)App.LocalizationDictionary["ExampleEntryComment"],
                 Password = await aes.EncryptStringAsync("LCrypt Password Manager")
             });
-            storage.Entries.Add(new PasswordEntry
+
+            storage.Categories.Add(new PasswordCategory
             {
-                Name = (string)App.LocalizationDictionary["ExampleEntryName"],
-                Username = (string)App.LocalizationDictionary["ExampleEntryUsername"],
-                Email = (string)App.LocalizationDictionary["ExampleEntryEmail"],
-                Url = (string)App.LocalizationDictionary["ExampleEntryUrl"],
-                Comment = (string)App.LocalizationDictionary["ExampleEntryComment"],
-                Password = await aes.EncryptStringAsync("LCrypt Password Manager")
+                IconId = 66,
+                Name = (string)App.LocalizationDictionary["Accounts"]
             });
 
             storage.Categories.Add(new PasswordCategory
             {
-                IconId = 2,
-                Name = "Netzwerk"
+                IconId = 4,
+                Name = (string)App.LocalizationDictionary["Business"]
             });
+
+            storage.Categories.Add(new PasswordCategory
+            {
+                IconId = 38,
+                Name = (string)App.LocalizationDictionary["Finances"]
+            });
+
             storage.Categories.Add(new PasswordCategory
             {
                 IconId = 5,
-                Name = "Tresore"
+                Name = (string)App.LocalizationDictionary["Licenses"]
+            });
+
+            storage.Categories.Add(new PasswordCategory
+            {
+                IconId = 55,
+                Name = (string)App.LocalizationDictionary["Pins"]
+            });
+
+            storage.Categories.Add(new PasswordCategory
+            {
+                IconId = 74,
+                Name = (string)App.LocalizationDictionary["Notes"]
+            });
+
+            storage.Categories.Add(new PasswordCategory
+            {
+                IconId = 10,
+                Name = (string)App.LocalizationDictionary["Miscellaneous"]
             });
 
             return storage;

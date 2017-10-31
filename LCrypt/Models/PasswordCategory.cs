@@ -13,8 +13,15 @@ namespace LCrypt.Models
     {
         private PasswordCategory _copy;
 
-        public readonly Guid AllEntries = new Guid("DC12558F-00D8-4180-BE1F-E072EC04C2FA");
-        public readonly Guid Favorites = new Guid("776D9BD0-C41B-4710-885F-68E19075AFCE");
+        /// <summary>
+        /// Guid uses for category "All entries". Always on top in the category ListBox.
+        /// </summary>
+        public static Guid AllEntries => new Guid("DC12558F-00D8-4180-BE1F-E072EC04C2FA");
+
+        /// <summary>
+        /// Guid uses for category "Favorites". Always second in the category ListBox.
+        /// </summary>
+        public static Guid Favorites => new Guid("776D9BD0-C41B-4710-885F-68E19075AFCE");
 
         private string _name;
         private int _iconId;
@@ -97,7 +104,7 @@ namespace LCrypt.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == typeof(PasswordCategory) && Equals((PasswordCategory) obj);
+            return obj.GetType() == typeof(PasswordCategory) && Equals((PasswordCategory)obj);
         }
 
         public override int GetHashCode()
@@ -106,16 +113,19 @@ namespace LCrypt.Models
             return Guid.GetHashCode();
         }
 
+        /// <inheritdoc />
         public void BeginEdit()
         {
-            _copy = (PasswordCategory) Clone();
+            _copy = (PasswordCategory)Clone();
         }
 
+        /// <inheritdoc />
         public void EndEdit()
         {
             _copy = null;
         }
 
+        /// <inheritdoc />
         public void CancelEdit()
         {
             this.Name = string.Copy(_copy.Name);

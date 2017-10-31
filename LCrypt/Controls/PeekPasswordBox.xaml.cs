@@ -43,25 +43,24 @@ namespace LCrypt.Controls
         private static void PasswordProperty_OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Debug.Assert(d is PeekPasswordBox);
-            if (e.NewValue is string s)
-            {
-                var passwordBox = (PeekPasswordBox)d;
-                passwordBox.PasswordBox.Password = s;
-            }
+            if (!(e.NewValue is string s)) return;
+
+            var passwordBox = (PeekPasswordBox)d;
+            passwordBox.PasswordBox.PasswordChanged -= passwordBox.PasswordBox_PasswordChanged;             
+            passwordBox.PasswordBox.Password = s;
+            passwordBox.PasswordBox.PasswordChanged += passwordBox.PasswordBox_PasswordChanged;
         }
 
         private static void SecureStringProperty_OnPropertyChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
             Debug.Assert(d is PeekPasswordBox);
-            var passwordBox = (PeekPasswordBox) d;
-            passwordBox.PasswordBox.PasswordChanged -= passwordBox.PasswordBox_PasswordChanged;
+            if (e.NewValue != null) return;
 
-            if (e.NewValue == null)
-            {
-                passwordBox.PasswordBox.Clear();
-                passwordBox.ShowPasswordButton.IsEnabled = false;
-            }
+            var passwordBox = (PeekPasswordBox)d;
+            passwordBox.PasswordBox.PasswordChanged -= passwordBox.PasswordBox_PasswordChanged;
+            passwordBox.PasswordBox.Clear();
+            passwordBox.ShowPasswordButton.IsEnabled = false;
             passwordBox.PasswordBox.PasswordChanged += passwordBox.PasswordBox_PasswordChanged;
         }
 

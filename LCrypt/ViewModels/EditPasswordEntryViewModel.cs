@@ -101,6 +101,7 @@ namespace LCrypt.ViewModels
             Entry = null;
             Password = null;
             SecurePassword = null;
+            Categories = null;
         }
     }
 }

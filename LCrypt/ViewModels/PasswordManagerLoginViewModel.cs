@@ -181,6 +181,7 @@ namespace LCrypt.ViewModels
                             aes.IV = Util.GenerateStrongRandomBytes(aes.BlockSize / 8);
 
                             var storage = await PasswordStorage.CreateDefaultStorageAsync(aes);
+                            storage.Name = StorageName;
 
                             using (var fs =
                                 new FileStream(

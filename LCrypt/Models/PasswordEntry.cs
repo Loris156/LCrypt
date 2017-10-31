@@ -23,8 +23,6 @@ namespace LCrypt.Models
 
         private string _username, _email, _url, _comment;
 
-        private bool _isSelected;
-
         /// <summary>
         /// Creates a new password entry with a new Guid and sets Created and LastModified to now.
         /// </summary>
@@ -85,7 +83,7 @@ namespace LCrypt.Models
         }
 
         /// <summary>
-        /// EMail of account.
+        /// Email of account.
         /// </summary>
         [DataMember]
         public string Email
@@ -193,12 +191,14 @@ namespace LCrypt.Models
             return Name;
         }
 
+        /// <inheritdoc />
         public bool Equals(PasswordEntry other)
         {
             if (ReferenceEquals(null, other)) return false;
             return ReferenceEquals(this, other) || Guid.Equals(other.Guid);
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -206,22 +206,26 @@ namespace LCrypt.Models
             return obj.GetType() == typeof(PasswordEntry) && Equals((PasswordEntry)obj);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Guid.GetHashCode();
         }
 
+        /// <inheritdoc />
         public void BeginEdit()
         {
             _copy = (PasswordEntry)Clone();
         }
 
+        /// <inheritdoc />
         public void EndEdit()
         {
             _copy = null;
         }
 
+        /// <inheritdoc />
         public void CancelEdit()
         {
             Name = _copy.Name;
