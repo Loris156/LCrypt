@@ -9,29 +9,34 @@ namespace LCrypt.Algorithms
 {
     public class Encryption
     {
+        private const int Pbkdf2Iterations = 120000;
+
+        private double _mibPerSec;
+        private long _totalBytes;
+
+        private readonly Stopwatch _stopwatch;
+        private readonly Timer _timer = new Timer(500);
+
         public MainWindow MainWindow { get; set; }
 
         public SymmetricAlgorithm Algorithm { get; set; }
 
         public FileInfo Source { get; set; }
+
         public string Destination { get; set; }
+
         public string Password { get; set; }
 
-        private readonly Stopwatch _stopwatch;
-        private readonly Timer _timer = new Timer(500);
-
         public string LengthInMiB { get; set; }
-        private double _mibPerSec;
-        private long _totalBytes;
 
         public Encryption()
         {
-            _timer.Elapsed += _timer_Elapsed;
+            _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
             _stopwatch = Stopwatch.StartNew();
         }
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             MainWindow.TblSpeed.Dispatcher.InvokeAsync(delegate
             {
@@ -58,7 +63,7 @@ namespace LCrypt.Algorithms
                 rng.GetBytes(salt);
             }
 
-            using (var password = new Rfc2898DeriveBytes(Password, salt))
+            using (var password = new Rfc2898DeriveBytes(Password, salt, Pbkdf2Iterations))
             {
                 Algorithm.Key = password.GetBytes(Algorithm.KeySize / 8);
                 Algorithm.GenerateIV();
