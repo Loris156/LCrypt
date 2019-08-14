@@ -7,11 +7,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LCrypt")]
-[assembly: AssemblyDescription("Easy-to-use encryption software.")]
+[assembly: AssemblyDescription("LCrypt is the all-in-one solution for file and text encryption")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Loris Leitner")]
 [assembly: AssemblyProduct("LCrypt")]
-[assembly: AssemblyCopyright("Copyright © Loris Leitner 2017. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2017-2019 Loris Leitner. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -50,7 +50,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.1.0")]
-[assembly: AssemblyFileVersion("1.2.1.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguage("")]
+[assembly: Guid("142e38e3-97d1-471e-838f-0155ec860045")]
 
