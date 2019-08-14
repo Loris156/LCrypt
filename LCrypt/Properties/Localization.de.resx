@@ -289,7 +289,7 @@
     <value>Leeren</value>
   </data>
   <data name="PasswordsStay10SecondsInClipboard" xml:space="preserve">
-    <value>Passwörter verbleiben nur zehn Sek. in der Zwischenablage gespeichert!</value>
+    <value>Passwörter verbleiben nur zehn Sek. in der Zwischenablage!</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>Generieren</value>

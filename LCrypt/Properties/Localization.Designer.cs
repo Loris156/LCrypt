@@ -115,7 +115,7 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Begin ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start ähnelt.
         /// </summary>
         public static string Begin {
             get {
@@ -385,7 +385,7 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hover here to display. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hover here to display ähnelt.
         /// </summary>
         public static string HoverHereToDisplay {
             get {
@@ -529,7 +529,7 @@ namespace LCrypt.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwords will stay only 10 seconds in clipboard! ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Passwords are removed from clipboard after 10 seconds. ähnelt.
         /// </summary>
         public static string PasswordsStay10SecondsInClipboard {
             get {

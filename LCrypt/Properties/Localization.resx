@@ -289,7 +289,7 @@
     <value>Clear</value>
   </data>
   <data name="PasswordsStay10SecondsInClipboard" xml:space="preserve">
-    <value>Passwords will stay only 10 seconds in clipboard!</value>
+    <value>Passwords are removed from clipboard after 10 seconds.</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
