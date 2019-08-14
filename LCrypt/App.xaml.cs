@@ -31,6 +31,12 @@ namespace LCrypt
 
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            if (Settings.UpgradeRequired)
+            {
+                Settings.Upgrade();
+                Settings.UpgradeRequired = false;
+            }
+
             if (!string.IsNullOrWhiteSpace(Settings.Language))
             {
                 CultureInfo.CurrentCulture = new CultureInfo(Settings.Language);
