@@ -3,8 +3,8 @@ using MahApps.Metro;
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace LCrypt
 {
@@ -31,21 +31,6 @@ namespace LCrypt
 
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
-
-            if (e.Args.Length == 1)
-            {
-                if (File.Exists(e.Args[0]))
-                {
-                    //Open encryption window
-                }
-            }
-            if (e.Args.Length > 1)
-            {
-                MessageBox.Show("LCrypt wurde mit zu vielen Argumenten aufgerufen", "LCrypt", MessageBoxButton.OK,
-                    MessageBoxImage.Exclamation, MessageBoxResult.OK);
-                Shutdown(0);
-            }
-
             if (!string.IsNullOrWhiteSpace(Settings.Language))
             {
                 CultureInfo.CurrentCulture = new CultureInfo(Settings.Language);
@@ -53,6 +38,10 @@ namespace LCrypt
                 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(Settings.Language);
                 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(Settings.Language);
             }
+
+            // Use current culture in XAML
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
             if (string.IsNullOrWhiteSpace(Settings.Accent))
                 Settings.Accent = "Blue";
