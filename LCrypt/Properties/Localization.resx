@@ -193,7 +193,7 @@
     <value>All files</value>
   </data>
   <data name="Begin" xml:space="preserve">
-    <value>Begin</value>
+    <value>Start</value>
   </data>
   <data name="DragAndDropSingleFile" xml:space="preserve">
     <value>Only one file can be encrypted or decrypted at the same time.</value>
@@ -322,7 +322,7 @@
     <value>Your password consists of common word or a variation.</value>
   </data>
   <data name="HoverHereToDisplay" xml:space="preserve">
-    <value>Hover here to display.</value>
+    <value>Hover here to display</value>
   </data>
   <data name="AccessPermission" xml:space="preserve">
     <value>Access permission</value>

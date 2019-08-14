@@ -136,7 +136,7 @@
     <value>Englisch (Vereinigte Staaten)</value>
   </data>
   <data name="RestartToApplyChanges" xml:space="preserve">
-    <value>Neustarten, um Änderungen zu übernehmen</value>
+    <value>Neustart, um Änderungen zu übernehmen</value>
   </data>
   <data name="Light" xml:space="preserve">
     <value>Hell</value>
@@ -214,7 +214,7 @@
     <value>Prüfsumme</value>
   </data>
   <data name="Encoding" xml:space="preserve">
-    <value>Kodierung</value>
+    <value>Codierung</value>
   </data>
   <data name="Hexadecimal" xml:space="preserve">
     <value>Hexadezimal</value>
@@ -250,7 +250,7 @@
     <value>Hash Informationen wurden erfolgreich exportiert.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Passwort Generator</value>
+    <value>Passwortgenerator</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Länge</value>
@@ -289,7 +289,7 @@
     <value>Leeren</value>
   </data>
   <data name="PasswordsStay10SecondsInClipboard" xml:space="preserve">
-    <value>Passwörter bleiben nur zehn Sek. in der Zwischenablage gespeichert!</value>
+    <value>Passwörter verbleiben nur zehn Sek. in der Zwischenablage gespeichert!</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>Generieren</value>
@@ -322,7 +322,7 @@
     <value>Ihr Password ist ein häufig genutztes Wort.</value>
   </data>
   <data name="HoverHereToDisplay" xml:space="preserve">
-    <value>Hier hovern zum Anzeigen.</value>
+    <value>Hier hovern zum Anzeigen</value>
   </data>
   <data name="AccessPermission" xml:space="preserve">
     <value>Zugriffsberechtigung</value>
