@@ -154,33 +154,34 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
                             <RadioButton x:Name="RbEncrypt" Grid.Column="0" Grid.Row="0" Margin="5" IsChecked="True">
                                 <TextBlock Text="{x:Static p:Localization.Encrypt}" FontSize="14"></TextBlock>
                             </RadioButton>
                             <RadioButton x:Name="RbDecrypt" Grid.Column="1" Grid.Row="0" Margin="5">
                                 <TextBlock Text="{x:Static p:Localization.Decrypt}" FontSize="14"></TextBlock>
                             </RadioButton>
-                            <TextBlock Text="{x:Static p:Localization.Algorithm}" Grid.Column="0" Grid.Row="1" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
-                            <ComboBox x:Name="CoBAlgorithm"  Grid.Column="1" Grid.Row="1" Margin="5" FontSize="14" IsReadOnly="True" SelectionChanged="CoBAlgorithm_SelectionChanged">
-                                <ComboBoxItem Content="Advanced Encryption Standard (AES-256)"/>
-                                <ComboBoxItem Content="Data Encryption Standard (DES-64)"/>
-                                <ComboBoxItem Content="Triple Data Encryption Algorithm (TDEA-192)"/>
-                                <ComboBoxItem Content="Rivest Cipher 2 (RC2-128)"/>
-                                <ComboBoxItem Content="Windows Data Protection (DPAPI)"/>
-                            </ComboBox>
                         </Grid>
                         <Grid x:Name="GrFileEncryptionPassword">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                            <TextBlock Text="{x:Static p:Localization.Password}" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
-                            <PasswordBox x:Name="PbPassword" Grid.Column="1" Margin="5" MaxLength="256" PasswordChanged="PbPassword_PasswordChanged"></PasswordBox>
+                            <TextBlock Text="{x:Static p:Localization.Algorithm}" FontSize="14" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
+                            <ComboBox x:Name="CoBAlgorithm" Grid.Column="1" Margin="5" FontSize="14" IsReadOnly="True" SelectionChanged="CoBAlgorithm_SelectionChanged">
+                                <ComboBoxItem Content="Advanced Encryption Standard (AES-256)"/>
+                                <ComboBoxItem Content="Data Encryption Standard (DES-64)"/>
+                                <ComboBoxItem Content="Triple Data Encryption Algorithm (TDEA-192)"/>
+                                <ComboBoxItem Content="Rivest Cipher 2 (RC2-128)"/>
+                                <ComboBoxItem Content="Windows Data Protection (DPAPI)"/>
+                            </ComboBox>
+                            
+                            <TextBlock Text="{x:Static p:Localization.Password}" FontSize="14" Grid.Row="1" VerticalAlignment="Center" Margin="10, 5, 5, 5">:</TextBlock>
+                            <PasswordBox x:Name="PbPassword" Grid.Column="1" Grid.Row="1" Margin="5" MaxLength="256" PasswordChanged="PbPassword_PasswordChanged"></PasswordBox>
                         </Grid>
                         <StackPanel x:Name="SpDpApiSettings" Visibility="Collapsed">
                             <Grid>

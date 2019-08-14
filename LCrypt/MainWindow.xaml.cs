@@ -297,7 +297,6 @@ namespace LCrypt
             if (_selectedFile == null || _selectedFileInfo == null || CoBAlgorithm.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(TbFileDestination.Text)) return;
 
-
             BtChooseFile.IsEnabled = false;
             BtChecksumChooseFile.AllowDrop = false;
             RbEncrypt.IsEnabled = false;
