@@ -163,7 +163,7 @@
                         </Grid>
                         <Grid x:Name="GrFileEncryptionPassword">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -281,7 +281,7 @@
                             </RadioButton>
                         </StackPanel>
 
-                        <TextBox x:Name="TbTextEncryptOutput" Margin="10, 0, 10, 10" Height="110" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
+                        <TextBox x:Name="TbTextEncryptOutput" IsReadOnly="True" Margin="10, 0, 10, 10" Height="110" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
 
                     </StackPanel>
                 </TabItem>
@@ -335,7 +335,7 @@
                         </GroupBox>
 
                         <TextBlock Text="{x:Static p:Localization.Output}" Margin="10, 5, 0, 5" FontSize="14">:</TextBlock>
-                        <TextBox x:Name="TbTextDecryptOutput" Margin="10, 0, 10, 10" Height="110" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
+                        <TextBox x:Name="TbTextDecryptOutput" IsReadOnly="True" Margin="10, 0, 10, 10" Height="110" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14"></TextBox>
 
                     </StackPanel>
                 </TabItem>
@@ -374,7 +374,7 @@
                                 <ComboBoxItem>UTF-32</ComboBoxItem>
                             </ComboBox>
                         </Grid>
-                        <TextBox x:Name="TbHashOutput" Height="130" Margin="10" VerticalScrollBarVisibility="Auto" FontSize="14" TextWrapping="Wrap"></TextBox>
+                        <TextBox x:Name="TbHashOutput" IsReadOnly="True" Height="130" Margin="10" VerticalScrollBarVisibility="Auto" FontSize="14" TextWrapping="Wrap"></TextBox>
                         <GroupBox Header="{x:Static p:Localization.Output}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
