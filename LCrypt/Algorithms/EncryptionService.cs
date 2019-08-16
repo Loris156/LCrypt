@@ -34,10 +34,10 @@ namespace LCrypt.Algorithms
         private readonly Stopwatch _reportStopwatch;
         private long _processedBytes;
 
-        public EncryptionService(SymmetricAlgorithm algorithm, 
-            FileInfo fileInfo, 
-            string destination, 
-            string password, 
+        public EncryptionService(SymmetricAlgorithm algorithm,
+            FileInfo fileInfo,
+            string destination,
+            string password,
             IProgress<EncryptionServiceProgress> progress)
         {
             _algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
@@ -70,7 +70,7 @@ namespace LCrypt.Algorithms
                 using (var destinationStream = new FileStream(_destination, FileMode.Create,
                 FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
                 {
-                    WriteHeaderV1Async(destinationStream, new FileHeaderV1
+                    WriteHeaderV1(destinationStream, new FileHeaderV1
                     {
                         Pbkdf2Iterations = Pbkdf2Iterations,
                         Salt = salt,
@@ -82,12 +82,12 @@ namespace LCrypt.Algorithms
                         _stopwatch.Start();
                         _reportStopwatch.Start();
 
-                        using(var cryptoStream = new CryptoStream(destinationStream, encryptor, CryptoStreamMode.Write))
+                        using (var cryptoStream = new CryptoStream(destinationStream, encryptor, CryptoStreamMode.Write))
                         {
                             var buffer = new byte[FileBufferSize];
 
                             int readBytes;
-                            while((readBytes = await sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                            while ((readBytes = await sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
                             {
                                 await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
                                 _processedBytes += readBytes;
@@ -95,7 +95,7 @@ namespace LCrypt.Algorithms
                                 var bytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds;
                                 var mibPerSecond = Math.Round(bytesPerSecond / (1024 * 1024), 2);
 
-                                if(_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
+                                if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
                                 {
                                     _progress.Report(new EncryptionServiceProgress
                                     {
@@ -114,10 +114,73 @@ namespace LCrypt.Algorithms
 
         public async Task DecryptAsync()
         {
-            throw new NotImplementedException();
+            using (var sourceStream = new FileStream(_fileInfo.FullName, FileMode.Open,
+                FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true))
+            {
+                var version = ReadCommonFileHeader(sourceStream);
+
+                int pbkdf2Iterations;
+                byte[] salt;
+
+                switch (version)
+                {
+                    case 1:
+                        var header = ReadHeaderV1(sourceStream);
+                        pbkdf2Iterations = header.Pbkdf2Iterations;
+                        salt = header.Salt;
+                        _algorithm.IV = header.Iv;
+                        break;
+                    default:
+                        throw new IOException("unknown file version");
+                }
+
+                await Task.Run(() =>
+                {
+                    using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA512))
+                    {
+                        _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
+                    }
+                }).ConfigureAwait(false);
+
+                using (var destinationStream = new FileStream(_destination, FileMode.Create,
+                    FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
+                {
+                    using (var decryptor = _algorithm.CreateDecryptor())
+                    {
+                        _stopwatch.Start();
+                        _reportStopwatch.Start();
+
+                        using (var cryptoStream = new CryptoStream(destinationStream, decryptor, CryptoStreamMode.Write))
+                        {
+                            var buffer = new byte[FileBufferSize];
+
+                            int readBytes;
+                            while ((readBytes = await sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                            {
+                                await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
+                                _processedBytes += readBytes;
+
+                                var bytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds;
+                                var mibPerSecond = Math.Round(bytesPerSecond / (1024 * 1024), 2);
+
+                                if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
+                                {
+                                    _progress.Report(new EncryptionServiceProgress
+                                    {
+                                        ProcessedBytes = _processedBytes,
+                                        MibPerSecond = mibPerSecond
+                                    });
+
+                                    _reportStopwatch.Restart();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        private void WriteHeaderV1Async(Stream stream, FileHeaderV1 header)
+        private void WriteHeaderV1(Stream stream, FileHeaderV1 header)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
@@ -125,7 +188,7 @@ namespace LCrypt.Algorithms
             if (header == null)
                 throw new ArgumentNullException(nameof(header));
 
-            using (var writer = new BeBinaryWriter(stream, new UTF8Encoding(false, true), true))
+            using (var writer = new BeBinaryWriter(stream, new UTF8Encoding(false, true), leaveOpen: true))
             {
                 writer.Write(MagicHeader); // Magic header
                 writer.Write(1); // Header version
@@ -137,6 +200,57 @@ namespace LCrypt.Algorithms
 
                 writer.Write(header.Iv.Length);
                 writer.Write(header.Iv);
+            }
+        }
+
+        private int ReadCommonFileHeader(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            using (var reader = new BeBinaryReader(stream, new UTF8Encoding(false, true), leaveOpen: true))
+            {
+                var magicHeader = reader.ReadBytes(MagicHeader.Length);
+                if (!magicHeader.SequenceEqual(MagicHeader))
+                    throw new IOException("stream does not contain a LCrypt-encrypted file");
+
+                var version = reader.ReadInt32();
+                if (version <= 0)
+                    throw new IOException("file version is invalid");
+
+                return version;
+            }
+        }
+
+        private FileHeaderV1 ReadHeaderV1(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            using (var reader = new BeBinaryReader(stream, new UTF8Encoding(false, true), leaveOpen: true))
+            {
+                var pbkdf2Iterations = reader.ReadInt32();
+                if (pbkdf2Iterations <= 0)
+                    throw new IOException("invalid PBKDF2 iterations");
+
+                var saltLength = reader.ReadInt32();
+                if (saltLength <= 0)
+                    throw new IOException("invalid salt length");
+
+                var salt = reader.ReadBytes(saltLength);
+
+                var ivLength = reader.ReadInt32();
+                if (ivLength <= 0)
+                    throw new IOException("invalid IV");
+
+                var iv = reader.ReadBytes(ivLength);
+
+                return new FileHeaderV1
+                {
+                    Pbkdf2Iterations = pbkdf2Iterations,
+                    Salt = salt,
+                    Iv = iv
+                };
             }
         }
 
