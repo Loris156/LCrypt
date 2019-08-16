@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LCrypt.Algorithms
 {
-    public class EncryptionService
+    public class EncryptionService : IDisposable
     {
         private const int Pbkdf2Iterations = 120000;
         private const int SaltLength = 16;
@@ -178,6 +178,11 @@ namespace LCrypt.Algorithms
                     }
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            _algorithm.Dispose();
         }
 
         private void WriteHeaderV1(Stream stream, FileHeaderV1 header)

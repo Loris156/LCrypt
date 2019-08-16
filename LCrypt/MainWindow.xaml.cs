@@ -340,21 +340,20 @@ namespace LCrypt
                 }
                 else
                 {
-                    using (var algorithm = ((Algorithm)CoBAlgorithm.SelectedIndex).GetAlgorithm())
+                    using (var encryptionService = new EncryptionService(
+                        ((Algorithm)CoBAlgorithm.SelectedIndex).GetAlgorithm(),
+                        _selectedFileInfo,
+                        TbFileDestination.Text,
+                        PbPassword.Password,
+                        new Progress<EncryptionServiceProgress>(progress =>
                     {
-                        var encryptionService = new EncryptionService(algorithm,
-                            _selectedFileInfo,
-                            TbFileDestination.Text,
-                            PbPassword.Password,
-                            new Progress<EncryptionServiceProgress>(progress =>
-                        {
-                            TblSpeed.Text = $"{progress.MibPerSecond} MiB/s";
+                        TblSpeed.Text = $"{progress.MibPerSecond} MiB/s";
 
-                            var progressMiB = Math.Round(progress.ProcessedBytes / (1024d * 1024d), 2);
-                            TblProgress.Text = $"{progressMiB} / {_lengthInMiB} MiB";
-                            PrBFileEncryption.Value = progress.ProcessedBytes;
-                        }));
-
+                        var progressMiB = Math.Round(progress.ProcessedBytes / (1024d * 1024d), 2);
+                        TblProgress.Text = $"{progressMiB} / {_lengthInMiB} MiB";
+                        PrBFileEncryption.Value = progress.ProcessedBytes;
+                    })))
+                    {
                         if (encrypt)
                         {
                             await encryptionService.EncryptAsync();
