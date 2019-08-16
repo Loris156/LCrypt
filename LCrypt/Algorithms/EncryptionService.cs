@@ -34,7 +34,11 @@ namespace LCrypt.Algorithms
         private readonly Stopwatch _reportStopwatch;
         private long _processedBytes;
 
-        public EncryptionService(SymmetricAlgorithm algorithm, FileInfo fileInfo, string destination, string password, IProgress<EncryptionServiceProgress> progress)
+        public EncryptionService(SymmetricAlgorithm algorithm, 
+            FileInfo fileInfo, 
+            string destination, 
+            string password, 
+            IProgress<EncryptionServiceProgress> progress)
         {
             _algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
             _fileInfo = fileInfo ?? throw new ArgumentNullException(nameof(fileInfo));
@@ -53,11 +57,15 @@ namespace LCrypt.Algorithms
             {
                 var salt = GenerateSalt(SaltLength);
 
-                using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA512))
+                // Perform CPU-intensive key derivation on own task
+                await Task.Run(() =>
                 {
-                    _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
-                    _algorithm.GenerateIV();
-                }
+                    using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA512))
+                    {
+                        _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
+                        _algorithm.GenerateIV();
+                    }
+                }).ConfigureAwait(false);
 
                 using (var destinationStream = new FileStream(_destination, FileMode.Create,
                 FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
