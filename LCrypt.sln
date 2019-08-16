@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCrypt", "LCrypt\LCrypt.csproj", "{30171C14-65F3-4379-8F09-B286D69F947B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCrypt.Core", "LCrypt.Core\LCrypt.Core.csproj", "{CACB13B6-E9A3-4316-B537-76EA6C7F67A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCrypt.Core", "LCrypt.Core\LCrypt.Core.csproj", "{CACB13B6-E9A3-4316-B537-76EA6C7F67A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCrypt.CLI", "LCrypt.CLI\LCrypt.CLI.csproj", "{21B53D39-BEA4-44E2-920A-2F70626AA349}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CACB13B6-E9A3-4316-B537-76EA6C7F67A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CACB13B6-E9A3-4316-B537-76EA6C7F67A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CACB13B6-E9A3-4316-B537-76EA6C7F67A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
