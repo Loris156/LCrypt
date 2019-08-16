@@ -61,9 +61,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Algorithms\Checksum.cs" />
-    <Compile Include="Algorithms\Decryption.cs" />
     <Compile Include="Algorithms\DpApi.cs" />
-    <Compile Include="Algorithms\Encryption.cs" />
     <Compile Include="Algorithms\EncryptionService.cs" />
     <Compile Include="Algorithms\EncryptionServiceProgress.cs" />
     <Compile Include="Algorithms\FileHeader.cs" />
