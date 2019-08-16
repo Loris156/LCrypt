@@ -316,6 +316,7 @@ namespace LCrypt
             try
             {
                 var encrypt = RbEncrypt.IsChecked == true;
+                string successMessage;
 
                 if (CoBAlgorithm.Text == "Windows Data Protection (DPAPI)")
                 {
@@ -327,9 +328,15 @@ namespace LCrypt
                             : DataProtectionScope.LocalMachine);
 
                     if (encrypt)
+                    {
                         await dpApi.Encrypt();
+                        successMessage = Localization.SuccessfullyEncrypted;
+                    }
                     else
+                    {
                         await dpApi.Decrypt();
+                        successMessage = Localization.SuccessfullyDecrypted;
+                    }
                 }
                 else
                 {
@@ -349,14 +356,20 @@ namespace LCrypt
                         }));
 
                         if (encrypt)
+                        {
                             await encryptionService.EncryptAsync();
+                            successMessage = Localization.SuccessfullyEncrypted;
+                        }
                         else
+                        {
                             await encryptionService.DecryptAsync();
+                            successMessage = Localization.SuccessfullyDecrypted;
+                        }
                     }
                 }
 
                 await this.ShowMessageAsync("LCrypt",
-                    string.Format(Localization.SuccessfullyEncrypted, _selectedFileInfo.Name, Path.GetFileName(TbFileDestination.Text), CoBAlgorithm.Text),
+                    string.Format(successMessage, _selectedFileInfo.Name, Path.GetFileName(TbFileDestination.Text), CoBAlgorithm.Text),
                     MessageDialogStyle.Affirmative, new MetroDialogSettings
                     {
                         AffirmativeButtonText = "OK",
