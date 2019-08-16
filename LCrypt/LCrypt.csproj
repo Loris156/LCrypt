@@ -38,6 +38,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Be.IO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Be.IO.1.0.0\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+Xamarin.iOS10+MonoTouch10\Be.IO.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -61,6 +64,9 @@
     <Compile Include="Algorithms\Decryption.cs" />
     <Compile Include="Algorithms\DpApi.cs" />
     <Compile Include="Algorithms\Encryption.cs" />
+    <Compile Include="Algorithms\EncryptionService.cs" />
+    <Compile Include="Algorithms\EncryptionServiceProgress.cs" />
+    <Compile Include="Algorithms\FileHeader.cs" />
     <Compile Include="Enumerations\Algorithm.cs" />
     <Compile Include="Enumerations\HashAlgorithm.cs" />
     <Compile Include="Enumerations\Encoding.cs" />

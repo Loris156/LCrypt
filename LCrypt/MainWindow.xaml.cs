@@ -335,32 +335,23 @@ namespace LCrypt
                 {
                     using (var algorithm = ((Algorithm)CoBAlgorithm.SelectedIndex).GetAlgorithm())
                     {
+                        var encryptionService = new EncryptionService(algorithm,
+                            _selectedFileInfo,
+                            TbFileDestination.Text,
+                            PbPassword.Password,
+                            new Progress<EncryptionServiceProgress>(progress =>
+                        {
+                            TblSpeed.Text = $"{progress.MibPerSecond} MiB/s";
+
+                            var progressMiB = Math.Round(progress.ProcessedBytes / (1024d * 1024d), 2);
+                            TblProgress.Text = $"{progressMiB} / {_lengthInMiB} MiB";
+                            PrBFileEncryption.Value = progress.ProcessedBytes;
+                        }));
+
                         if (encrypt)
-                        {
-                            var encryption = new Encryption
-                            {
-                                MainWindow = this,
-                                Algorithm = algorithm,
-                                Source = _selectedFileInfo,
-                                Destination = TbFileDestination.Text,
-                                Password = PbPassword.Password,
-                                LengthInMiB = _lengthInMiB
-                            };
-                            await encryption.Encrypt();
-                        }
+                            await encryptionService.EncryptAsync();
                         else
-                        {
-                            var decryption = new Decryption
-                            {
-                                MainWindow = this,
-                                Algorithm = algorithm,
-                                Source = _selectedFileInfo,
-                                Destination = TbFileDestination.Text,
-                                Password = PbPassword.Password,
-                                LengthInMiB = _lengthInMiB
-                            };
-                            await decryption.Decrypt();
-                        }
+                            await encryptionService.DecryptAsync();
                     }
                 }
 
@@ -401,7 +392,7 @@ namespace LCrypt
                 PrBFileEncryption.Value = 0;
                 PrBFileEncryption.IsIndeterminate = false;
                 TblSpeed.Text = "- MiB/s";
-                TblProgress.Text = "0 / - MiB";
+                TblProgress.Text = "- / - MiB";
             }
         }
 
