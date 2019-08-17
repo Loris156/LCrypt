@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCrypt", "LCrypt\LCrypt.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCrypt.Core", "LCrypt.Core\LCrypt.Core.csproj", "{CACB13B6-E9A3-4316-B537-76EA6C7F67A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCrypt.CLI", "LCrypt.CLI\LCrypt.CLI.csproj", "{21B53D39-BEA4-44E2-920A-2F70626AA349}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCrypt.CLI", "LCrypt.CLI\LCrypt.CLI.csproj", "{21B53D39-BEA4-44E2-920A-2F70626AA349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCrypt.Core.Test", "LCrypt.Core.Test\LCrypt.Core.Test.csproj", "{930A268F-4E01-45FF-8064-6DDD5963D996}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21B53D39-BEA4-44E2-920A-2F70626AA349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{930A268F-4E01-45FF-8064-6DDD5963D996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{930A268F-4E01-45FF-8064-6DDD5963D996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{930A268F-4E01-45FF-8064-6DDD5963D996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{930A268F-4E01-45FF-8064-6DDD5963D996}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
