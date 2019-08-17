@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace LCrypt.CLI.Verbs
+namespace LCrypt.CLI.Commands
 {
     public abstract class CommandBase<TOptions>
         where TOptions : OptionsBase

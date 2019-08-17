@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LCrypt.CLI.Verbs
+namespace LCrypt.CLI.Commands
 {
     [Verb("encrypt", HelpText = "Encrypt files")]
     public class EncryptOptions
@@ -19,7 +19,6 @@ namespace LCrypt.CLI.Verbs
 
         [Option('o', "out-dir")]
         public string OutDir { get; set; }
-
     }
 
     public class Encrypt
@@ -30,9 +29,9 @@ namespace LCrypt.CLI.Verbs
         {
         }
 
-        public override Task<int> Exec()
+        public override async Task<int> Exec()
         {
-            throw new NotImplementedException();
+            return 0;
         }
     }
 }
