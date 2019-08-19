@@ -23,8 +23,8 @@ namespace LCrypt.Core.Crypto
         private static readonly byte[] MagicHeader = new byte[] { 76, 67, 114, 121, 112, 116 };
 
         private readonly SymmetricAlgorithm _algorithm;
-        private readonly FileInfo _fileInfo;
-        private readonly string _destination;
+        private readonly Stream _sourceStream;
+        private readonly Stream _destinationStream;
         private readonly string _password;
         private readonly IProgress<EncryptionServiceProgress> _progress;
 
@@ -33,16 +33,16 @@ namespace LCrypt.Core.Crypto
         private long _processedBytes;
 
         public EncryptionService(SymmetricAlgorithm algorithm,
-            FileInfo fileInfo,
-            string destination,
+            Stream sourceStream,
+            Stream destinationStream,
             string password,
             IProgress<EncryptionServiceProgress> progress)
         {
             _algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
-            _fileInfo = fileInfo ?? throw new ArgumentNullException(nameof(fileInfo));
-            _destination = destination ?? throw new ArgumentNullException(nameof(destination));
+            _sourceStream = sourceStream ?? throw new ArgumentNullException(nameof(sourceStream));
+            _destinationStream = destinationStream ?? throw new ArgumentNullException(nameof(destinationStream));
             _password = password ?? throw new ArgumentNullException(nameof(password));
-            _progress = progress ?? throw new ArgumentNullException(nameof(progress));
+            _progress = progress;
 
             _stopwatch = new Stopwatch();
             _reportStopwatch = new Stopwatch();
@@ -50,60 +50,49 @@ namespace LCrypt.Core.Crypto
 
         public async Task EncryptAsync()
         {
-            using (var sourceStream = new FileStream(_fileInfo.FullName, FileMode.Open,
-                FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true))
+            var salt = GenerateSalt(SaltLength);
+
+            // Perform CPU-intensive key derivation on own task
+            await Task.Run(() =>
             {
-                var salt = GenerateSalt(SaltLength);
-
-                // Perform CPU-intensive key derivation on own task
-                await Task.Run(() =>
+                using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations))
                 {
-                    using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations))
-                    {
-                        _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
-                        _algorithm.GenerateIV();
-                    }
-                }).ConfigureAwait(false);
+                    _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
+                    _algorithm.GenerateIV();
+                }
+            }).ConfigureAwait(false);
 
-                using (var destinationStream = new FileStream(_destination, FileMode.Create,
-                FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
+            WriteHeaderV1(_destinationStream, new FileHeaderV1
+            {
+                Pbkdf2Iterations = Pbkdf2Iterations,
+                Salt = salt,
+                Iv = _algorithm.IV
+            });
+
+            using (var encryptor = _algorithm.CreateEncryptor())
+            {
+                _stopwatch.Start();
+                _reportStopwatch.Start();
+
+                using (var cryptoStream = new CryptoStream(_destinationStream, encryptor, CryptoStreamMode.Write))
                 {
-                    WriteHeaderV1(destinationStream, new FileHeaderV1
-                    {
-                        Pbkdf2Iterations = Pbkdf2Iterations,
-                        Salt = salt,
-                        Iv = _algorithm.IV
-                    });
+                    var buffer = new byte[FileBufferSize];
 
-                    using (var encryptor = _algorithm.CreateEncryptor())
+                    int readBytes;
+                    while ((readBytes = await _sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
                     {
-                        _stopwatch.Start();
-                        _reportStopwatch.Start();
+                        await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
+                        _processedBytes += readBytes;
 
-                        using (var cryptoStream = new CryptoStream(destinationStream, encryptor, CryptoStreamMode.Write))
+                        if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
                         {
-                            var buffer = new byte[FileBufferSize];
-
-                            int readBytes;
-                            while ((readBytes = await sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                            _progress?.Report(new EncryptionServiceProgress
                             {
-                                await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
-                                _processedBytes += readBytes;
+                                ProcessedBytes = _processedBytes,
+                                BytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds
+                            });
 
-                                var bytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds;
-                                var mibPerSecond = Math.Round(bytesPerSecond / (1024 * 1024), 2);
-
-                                if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
-                                {
-                                    _progress.Report(new EncryptionServiceProgress
-                                    {
-                                        ProcessedBytes = _processedBytes,
-                                        BytesPerSecond = mibPerSecond
-                                    });
-
-                                    _reportStopwatch.Restart();
-                                }
-                            }
+                            _reportStopwatch.Restart();
                         }
                     }
                 }
@@ -112,66 +101,55 @@ namespace LCrypt.Core.Crypto
 
         public async Task DecryptAsync()
         {
-            using (var sourceStream = new FileStream(_fileInfo.FullName, FileMode.Open,
-                FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true))
+            var version = ReadCommonFileHeader(_sourceStream);
+
+            int pbkdf2Iterations;
+            byte[] salt;
+
+            switch (version)
             {
-                var version = ReadCommonFileHeader(sourceStream);
+                case 1:
+                    var header = ReadHeaderV1(_sourceStream);
+                    pbkdf2Iterations = header.Pbkdf2Iterations;
+                    salt = header.Salt;
+                    _algorithm.IV = header.Iv;
+                    break;
+                default:
+                    throw new IOException("unknown file version");
+            }
 
-                int pbkdf2Iterations;
-                byte[] salt;
-
-                switch (version)
+            await Task.Run(() =>
+            {
+                using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations))
                 {
-                    case 1:
-                        var header = ReadHeaderV1(sourceStream);
-                        pbkdf2Iterations = header.Pbkdf2Iterations;
-                        salt = header.Salt;
-                        _algorithm.IV = header.Iv;
-                        break;
-                    default:
-                        throw new IOException("unknown file version");
+                    _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
                 }
+            }).ConfigureAwait(false);
 
-                await Task.Run(() =>
+            using (var decryptor = _algorithm.CreateDecryptor())
+            {
+                _stopwatch.Start();
+                _reportStopwatch.Start();
+
+                using (var cryptoStream = new CryptoStream(_destinationStream, decryptor, CryptoStreamMode.Write))
                 {
-                    using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Pbkdf2Iterations))
-                    {
-                        _algorithm.Key = pbkdf2.GetBytes(_algorithm.KeySize / 8);
-                    }
-                }).ConfigureAwait(false);
+                    var buffer = new byte[FileBufferSize];
 
-                using (var destinationStream = new FileStream(_destination, FileMode.Create,
-                    FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
-                {
-                    using (var decryptor = _algorithm.CreateDecryptor())
+                    int readBytes;
+                    while ((readBytes = await _sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
                     {
-                        _stopwatch.Start();
-                        _reportStopwatch.Start();
+                        await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
+                        _processedBytes += readBytes;
 
-                        using (var cryptoStream = new CryptoStream(destinationStream, decryptor, CryptoStreamMode.Write))
+                        if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
                         {
-                            var buffer = new byte[FileBufferSize];
-
-                            int readBytes;
-                            while ((readBytes = await sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                            _progress?.Report(new EncryptionServiceProgress
                             {
-                                await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
-                                _processedBytes += readBytes;
+                                ProcessedBytes = _processedBytes,
+                                BytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds
+                            });
 
-                                var bytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds;
-                                var mibPerSecond = Math.Round(bytesPerSecond / (1024 * 1024), 2);
-
-                                if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
-                                {
-                                    _progress.Report(new EncryptionServiceProgress
-                                    {
-                                        ProcessedBytes = _processedBytes,
-                                        BytesPerSecond = mibPerSecond
-                                    });
-
-                                    _reportStopwatch.Restart();
-                                }
-                            }
+                            _reportStopwatch.Restart();
                         }
                     }
                 }

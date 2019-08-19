@@ -10,6 +10,6 @@ namespace LCrypt.Core.Crypto
     {
         Task EncryptAsync();
 
-        Task DecryptAsync(); 
+        Task DecryptAsync();
     }
 }
