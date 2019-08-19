@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LCrypt.Core.Crypto
 {
-    public class EncryptionServiceProgress
+    public class CryptoOperationProgress
     {
         public long ProcessedBytes { get; set; }
 

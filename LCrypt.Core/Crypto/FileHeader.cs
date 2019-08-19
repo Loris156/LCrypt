@@ -10,6 +10,8 @@ namespace LCrypt.Core.Crypto
 
         public byte[] Salt { get; set; }
 
+        public string Algorithm { get; set; }
+
         public byte[] Iv { get; set; }
     }
 }

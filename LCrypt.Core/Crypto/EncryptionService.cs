@@ -19,14 +19,13 @@ namespace LCrypt.Core.Crypto
 
         private const int ReportIntervalMs = 250;
 
-        ///////////////////////////////////////////////////////// L   C    r    y    p    t ///
-        private static readonly byte[] MagicHeader = new byte[] { 76, 67, 114, 121, 112, 116 };
+
 
         private readonly SymmetricAlgorithm _algorithm;
         private readonly Stream _sourceStream;
         private readonly Stream _destinationStream;
         private readonly string _password;
-        private readonly IProgress<EncryptionServiceProgress> _progress;
+        private readonly IProgress<CryptoOperationProgress> _progress;
 
         private readonly Stopwatch _stopwatch;
         private readonly Stopwatch _reportStopwatch;
@@ -36,7 +35,7 @@ namespace LCrypt.Core.Crypto
             Stream sourceStream,
             Stream destinationStream,
             string password,
-            IProgress<EncryptionServiceProgress> progress)
+            IProgress<CryptoOperationProgress> progress)
         {
             _algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
             _sourceStream = sourceStream ?? throw new ArgumentNullException(nameof(sourceStream));
@@ -86,7 +85,7 @@ namespace LCrypt.Core.Crypto
 
                         if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
                         {
-                            _progress?.Report(new EncryptionServiceProgress
+                            _progress?.Report(new CryptoOperationProgress
                             {
                                 ProcessedBytes = _processedBytes,
                                 BytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds
@@ -143,7 +142,7 @@ namespace LCrypt.Core.Crypto
 
                         if (_reportStopwatch.ElapsedMilliseconds >= ReportIntervalMs)
                         {
-                            _progress?.Report(new EncryptionServiceProgress
+                            _progress?.Report(new CryptoOperationProgress
                             {
                                 ProcessedBytes = _processedBytes,
                                 BytesPerSecond = _processedBytes / _stopwatch.Elapsed.TotalSeconds
