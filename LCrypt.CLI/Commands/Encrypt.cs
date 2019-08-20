@@ -38,6 +38,14 @@ namespace LCrypt.CLI.Commands
             var algorithm = Algorithm.GetByName(Options.Algorithm);
 
             var password = ReadLine.ReadPassword("Enter password: ");
+            {
+                var reenteredPassword = ReadLine.ReadPassword("Re-enter password: ");
+                if (password != reenteredPassword)
+                {
+                    Console.Error.WriteLine("Passwords do not match");
+                    return 1;
+                }
+            }
 
             foreach (var file in Options.Files)
             {
