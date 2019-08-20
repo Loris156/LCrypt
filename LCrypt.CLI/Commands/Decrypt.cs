@@ -1,4 +1,4 @@
-using CommandLine;
+﻿using CommandLine;
 using LCrypt.Core.Crypto;
 using System;
 using System.Collections.Generic;
@@ -33,6 +33,8 @@ namespace LCrypt.CLI.Commands
         public override async Task<int> Exec()
         {
             var password = ReadLine.ReadPassword("Enter password: ");
+            if (string.IsNullOrWhiteSpace(password))
+                return 1;
 
             foreach (var file in Options.Files)
             {

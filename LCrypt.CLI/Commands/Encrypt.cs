@@ -1,4 +1,4 @@
-using CommandLine;
+﻿using CommandLine;
 using LCrypt.Core.Crypto;
 using System;
 using System.Collections;
@@ -38,6 +38,9 @@ namespace LCrypt.CLI.Commands
             var algorithm = Algorithm.GetByName(Options.Algorithm);
 
             var password = ReadLine.ReadPassword("Enter password: ");
+            if (string.IsNullOrWhiteSpace(password))
+                return 1;
+
             {
                 var reenteredPassword = ReadLine.ReadPassword("Re-enter password: ");
                 if (password != reenteredPassword)
