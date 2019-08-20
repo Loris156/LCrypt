@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using LCrypt.Core.Crypto;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace LCrypt.CLI.Commands
         [Value(0, Required = true, HelpText = "List of input files")]
         public IEnumerable<string> Files { get; set; }
 
-        [Option('o', "out-dir")]
+        [Option('o', "out-dir", HelpText = "Set decrypted files output directory")]
         public string OutDir { get; set; }
     }
 

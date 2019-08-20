@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using LCrypt.Core.Crypto;
 using System;
 using System.Collections;
@@ -16,10 +16,10 @@ namespace LCrypt.CLI.Commands
         [Value(0, Required = true, HelpText = "List of input files")]
         public IEnumerable<string> Files { get; set; }
 
-        [Option('a', "algorithm", Default = "aes")]
+        [Option('a', "algorithm", Default = "aes", HelpText = "Set used encryption algorithm (aes, des, tdes, rc2)")]
         public string Algorithm { get; set; }
 
-        [Option('o', "out-dir")]
+        [Option('o', "out-dir", HelpText = "Set encrypted files output directory")]
         public string OutDir { get; set; }
     }
 
