@@ -9,7 +9,5 @@ namespace LCrypt.Core.Crypto
         : IDisposable
     {
         Task EncryptAsync();
-
-        Task DecryptAsync();
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace LCrypt.Core.Crypto
 {
     public interface IDecryptionService
+        : IDisposable
     {
         Task DecryptAsync();
     }
