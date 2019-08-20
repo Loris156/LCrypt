@@ -17,16 +17,16 @@ namespace LCrypt.Core.Test.Crypto
 
         private static readonly byte[] _sourceData = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        private static readonly byte[] _v1Data = new byte[] { 76, 67, 114, 121, 112, 116, 0, 0, 0, 1, 0, 1, 212, 192, 0, 0, 0, 16, 96, 70, 124, 214, 203, 65, 189, 67, 174, 227, 143, 217, 210, 141, 197, 123, 0, 0, 0, 16, 35, 88, 115, 229, 5, 239, 45, 208, 94, 243, 58, 90, 220, 45, 138, 61, 143, 207, 106, 233, 26, 49, 90, 57, 23, 12, 218, 245, 11, 38, 241, 206 };
+        private static readonly byte[] _v1Data = new byte[] { 76, 67, 114, 121, 112, 116, 1, 0, 1, 212, 192, 0, 0, 0, 16, 55, 239, 201, 151, 139, 7, 191, 203, 39, 117, 71, 234, 226, 110, 205, 184, 3, 97, 101, 115, 0, 0, 0, 16, 42, 187, 100, 170, 233, 140, 82, 236, 120, 222, 75, 29, 195, 39, 195, 14, 136, 70, 240, 46, 224, 193, 81, 163, 26, 69, 86, 208, 51, 56, 240, 57 };
 
         [Fact]
         public async Task EncryptAsync()
         {
-            using(var sourceStream = new MemoryStream(_sourceData))
+            using (var sourceStream = new MemoryStream(_sourceData))
             {
-                using(var destinationStream = new MemoryStream())
+                using (var destinationStream = new MemoryStream())
                 {
-                    using (var encryptionService = new EncryptionService(new AesManaged(), sourceStream, destinationStream, Password, null))
+                    using (var encryptionService = new EncryptionService(Algorithm.GetByName("aes"), sourceStream, destinationStream, Password, null))
                     {
                         await encryptionService.EncryptAsync().ConfigureAwait(false);
                     }
@@ -39,11 +39,11 @@ namespace LCrypt.Core.Test.Crypto
         [Fact]
         public async Task DecryptAsync()
         {
-            using(var sourceStream = new MemoryStream(_v1Data))
+            using (var sourceStream = new MemoryStream(_v1Data))
             {
-                using(var destinationStream = new MemoryStream())
+                using (var destinationStream = new MemoryStream())
                 {
-                    using(var encryptionService = new EncryptionService(new AesManaged(), sourceStream, destinationStream, Password, null))
+                    using (var encryptionService = new DecryptionService(sourceStream, destinationStream, Password, null))
                     {
                         await encryptionService.DecryptAsync().ConfigureAwait(false);
                     }
