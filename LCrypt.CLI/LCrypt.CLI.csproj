@@ -13,4 +13,8 @@
     <Folder Include="Util\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LCrypt.Core\LCrypt.Core.csproj" />
+  </ItemGroup>
+
 </Project>
