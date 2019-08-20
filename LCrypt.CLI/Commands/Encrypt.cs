@@ -37,6 +37,8 @@ namespace LCrypt.CLI.Commands
         {
             var algorithm = Algorithm.GetByName(Options.Algorithm);
 
+            var password = ReadLine.ReadPassword("Enter password: ");
+
             foreach (var file in Options.Files)
             {
                 var fileInfo = new FileInfo(file);
@@ -52,7 +54,7 @@ namespace LCrypt.CLI.Commands
                     using(var destinationStream = new FileStream(Path.Combine(outDir, outName), 
                         FileMode.Create, FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
                     {
-                        using (var encryptionService = new EncryptionService(algorithm, sourceStream, destinationStream, "123", null))
+                        using (var encryptionService = new EncryptionService(algorithm, sourceStream, destinationStream, password, null))
                         {
                             await encryptionService.EncryptAsync().ConfigureAwait(false);
                         }

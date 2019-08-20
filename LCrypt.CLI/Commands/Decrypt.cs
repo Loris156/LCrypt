@@ -32,6 +32,8 @@ namespace LCrypt.CLI.Commands
 
         public override async Task<int> Exec()
         {
+            var password = ReadLine.ReadPassword("Enter password: ");
+
             foreach (var file in Options.Files)
             {
                 var fileInfo = new FileInfo(file);
@@ -45,7 +47,7 @@ namespace LCrypt.CLI.Commands
                     using(var destinationStream = new FileStream(Path.Combine(outDir, outName), FileMode.CreateNew,
                         FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
                     {
-                        using (var decryptionService = new DecryptionService(sourceStream, destinationStream, "123", null))
+                        using (var decryptionService = new DecryptionService(sourceStream, destinationStream, password, null))
                         {
                             await decryptionService.DecryptAsync().ConfigureAwait(false);
                         }
