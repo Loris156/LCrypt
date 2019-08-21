@@ -22,35 +22,27 @@ namespace LCrypt.Core.Test.Crypto
         [Fact]
         public async Task EncryptAsync()
         {
-            using (var sourceStream = new MemoryStream(_sourceData))
+            using var sourceStream = new MemoryStream(_sourceData);
+            using var destinationStream = new MemoryStream();
+            using (var encryptionService = new EncryptionService(Algorithm.GetByName("aes"), sourceStream, destinationStream, Password, null))
             {
-                using (var destinationStream = new MemoryStream())
-                {
-                    using (var encryptionService = new EncryptionService(Algorithm.GetByName("aes"), sourceStream, destinationStream, Password, null))
-                    {
-                        await encryptionService.EncryptAsync().ConfigureAwait(false);
-                    }
-
-                    Debug.Assert(destinationStream.ToArray().Length > 0);
-                }
+                await encryptionService.EncryptAsync().ConfigureAwait(false);
             }
+
+            Debug.Assert(destinationStream.ToArray().Length > 0);
         }
 
         [Fact]
         public async Task DecryptAsync()
         {
-            using (var sourceStream = new MemoryStream(_v1Data))
+            using var sourceStream = new MemoryStream(_v1Data);
+            using var destinationStream = new MemoryStream();
+            using (var encryptionService = new DecryptionService(sourceStream, destinationStream, Password, null))
             {
-                using (var destinationStream = new MemoryStream())
-                {
-                    using (var encryptionService = new DecryptionService(sourceStream, destinationStream, Password, null))
-                    {
-                        await encryptionService.DecryptAsync().ConfigureAwait(false);
-                    }
-
-                    Debug.Assert(destinationStream.ToArray().SequenceEqual(_sourceData));
-                }
+                await encryptionService.DecryptAsync().ConfigureAwait(false);
             }
+
+            Debug.Assert(destinationStream.ToArray().SequenceEqual(_sourceData));
         }
     }
 }

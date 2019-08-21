@@ -17,7 +17,7 @@ namespace LCrypt.Core.Crypto
         private readonly Stream _sourceStream;
         private readonly Stream _destinationStream;
         private readonly string _password;
-        private readonly IProgress<CryptoOperationProgress> _progress;
+        private readonly IProgress<CryptoOperationProgress>? _progress;
 
         private readonly Stopwatch _stopwatch;
         private readonly Stopwatch _reportStopwatch;
@@ -26,7 +26,7 @@ namespace LCrypt.Core.Crypto
             Stream sourceStream,
             Stream destinationStream,
             string password,
-            IProgress<CryptoOperationProgress> progress)
+            IProgress<CryptoOperationProgress>? progress)
         {
             _algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
             _sourceStream = sourceStream ?? throw new ArgumentNullException(nameof(sourceStream));
@@ -45,11 +45,9 @@ namespace LCrypt.Core.Crypto
             // Perform CPU-intensive key derivation on own task
             await Task.Run(() =>
             {
-                using (var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Constants.Pbkdf2Iterations))
-                {
-                    _algorithm.SymmetricAlgorithm.Key = pbkdf2.GetBytes(_algorithm.SymmetricAlgorithm.KeySize / 8);
-                    _algorithm.SymmetricAlgorithm.GenerateIV();
-                }
+                using var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, Constants.Pbkdf2Iterations);
+                _algorithm.SymmetricAlgorithm.Key = pbkdf2.GetBytes(_algorithm.SymmetricAlgorithm.KeySize / 8);
+                _algorithm.SymmetricAlgorithm.GenerateIV();
             }).ConfigureAwait(false);
 
             WriteHeaderV1(_destinationStream, new FileHeaderV1
@@ -59,37 +57,33 @@ namespace LCrypt.Core.Crypto
                 Iv = _algorithm.SymmetricAlgorithm.IV
             });
 
-            using (var encryptor = _algorithm.SymmetricAlgorithm.CreateEncryptor())
+            using var encryptor = _algorithm.SymmetricAlgorithm.CreateEncryptor();
+            _stopwatch.Start();
+            _reportStopwatch.Start();
+
+            using var cryptoStream = new CryptoStream(_destinationStream, encryptor, CryptoStreamMode.Write);
+            var buffer = new byte[Constants.FileBufferSize];
+
+            int readBytes;
+            var processedBytes = 0;
+            while ((readBytes = await _sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
             {
-                _stopwatch.Start();
-                _reportStopwatch.Start();
+                await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
+                processedBytes += readBytes;
 
-                using (var cryptoStream = new CryptoStream(_destinationStream, encryptor, CryptoStreamMode.Write))
+                if (_reportStopwatch.ElapsedMilliseconds >= Constants.ReportIntervalMs)
                 {
-                    var buffer = new byte[Constants.FileBufferSize];
-
-                    int readBytes;
-                    var processedBytes = 0;
-                    while ((readBytes = await _sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                    _progress?.Report(new CryptoOperationProgress
                     {
-                        await cryptoStream.WriteAsync(buffer, 0, readBytes).ConfigureAwait(false);
-                        processedBytes += readBytes;
+                        ProcessedBytes = processedBytes,
+                        BytesPerSecond = processedBytes / _stopwatch.Elapsed.TotalSeconds
+                    });
 
-                        if (_reportStopwatch.ElapsedMilliseconds >= Constants.ReportIntervalMs)
-                        {
-                            _progress?.Report(new CryptoOperationProgress
-                            {
-                                ProcessedBytes = processedBytes,
-                                BytesPerSecond = processedBytes / _stopwatch.Elapsed.TotalSeconds
-                            });
-
-                            _reportStopwatch.Restart();
-                        }
-                    }
-
-                    cryptoStream.FlushFinalBlock();
+                    _reportStopwatch.Restart();
                 }
             }
+
+            cryptoStream.FlushFinalBlock();
         }
 
         public void Dispose()
@@ -105,21 +99,19 @@ namespace LCrypt.Core.Crypto
             if (header == null)
                 throw new ArgumentNullException(nameof(header));
 
-            using (var writer = new BeBinaryWriter(stream, new UTF8Encoding(false, true), leaveOpen: true))
-            {
-                writer.Write(Constants.MagicHeader); // Magic header
-                writer.Write((byte)1); // Header version
+            using var writer = new BeBinaryWriter(stream, new UTF8Encoding(false, true), leaveOpen: true);
+            writer.Write(Constants.MagicHeader); // Magic header
+            writer.Write((byte)1); // Header version
 
-                writer.Write(header.Pbkdf2Iterations);
+            writer.Write(header.Pbkdf2Iterations);
 
-                writer.Write(header.Salt.Length);
-                writer.Write(header.Salt);
+            writer.Write(header.Salt.Length);
+            writer.Write(header.Salt);
 
-                writer.Write(_algorithm.Name);
+            writer.Write(_algorithm.Name);
 
-                writer.Write(header.Iv.Length);
-                writer.Write(header.Iv);
-            }
+            writer.Write(header.Iv.Length);
+            writer.Write(header.Iv);
         }
 
         private byte[] GenerateSalt(int length)

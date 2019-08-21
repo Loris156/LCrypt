@@ -40,21 +40,15 @@ namespace LCrypt.CLI.Commands
             {
                 var fileInfo = new FileInfo(file);
 
-                using (var sourceStream = new FileStream(fileInfo.FullName, FileMode.Open, 
-                    FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true))
-                {
-                    var outDir = Options.OutDir ?? fileInfo.Directory.FullName;
-                    string outName = GetDecryptedFileName(fileInfo.Name);
+                using var sourceStream = new FileStream(fileInfo.FullName, FileMode.Open,
+                    FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true);
+                var outDir = Options.OutDir ?? fileInfo.Directory.FullName;
+                string outName = GetDecryptedFileName(fileInfo.Name);
 
-                    using(var destinationStream = new FileStream(Path.Combine(outDir, outName), FileMode.CreateNew,
-                        FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
-                    {
-                        using (var decryptionService = new DecryptionService(sourceStream, destinationStream, password, null))
-                        {
-                            await decryptionService.DecryptAsync().ConfigureAwait(false);
-                        }
-                    }
-                }
+                using var destinationStream = new FileStream(Path.Combine(outDir, outName), FileMode.CreateNew,
+                    FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true);
+                using var decryptionService = new DecryptionService(sourceStream, destinationStream, password, null);
+                await decryptionService.DecryptAsync().ConfigureAwait(false);
             }
 
             return 0;

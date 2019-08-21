@@ -21,19 +21,14 @@ namespace LCrypt.Core.Crypto
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            switch (name)
+            return name switch
             {
-                case "aes":
-                    return new Algorithm(new AesManaged(), "aes");
-                case "des":
-                    return new Algorithm(new DESCryptoServiceProvider(), "des");
-                case "tdes":
-                    return new Algorithm(new TripleDESCryptoServiceProvider(), "tdes");
-                case "rc2":
-                    return new Algorithm(new RC2CryptoServiceProvider(), "rc2");
-                default:
-                    throw new ArgumentException("unknown algorithm name");
-            }
+                "aes" => new Algorithm(new AesManaged(), "aes"),
+                "des" => new Algorithm(new DESCryptoServiceProvider(), "des"),
+                "tdes" => new Algorithm(new TripleDESCryptoServiceProvider(), "tdes"),
+                "rc2" => new Algorithm(new RC2CryptoServiceProvider(), "rc2"),
+                _ => throw new ArgumentException("unknown algorithm name"),
+            };
         }
 
         public void Dispose()

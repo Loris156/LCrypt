@@ -54,23 +54,17 @@ namespace LCrypt.CLI.Commands
             {
                 var fileInfo = new FileInfo(file);
 
-                using(var sourceStream = new FileStream(fileInfo.FullName, FileMode.Open,
-                    FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true))
-                {
-                    var outDir = Options.OutDir ?? fileInfo.Directory.FullName;
-                    var outName = Path.GetFileNameWithoutExtension(fileInfo.Name) + "-encrypted" + fileInfo.Extension + ".lcrypt";
+                using var sourceStream = new FileStream(fileInfo.FullName, FileMode.Open,
+                    FileAccess.Read, FileShare.Read, FileBufferSize, useAsync: true);
+                var outDir = Options.OutDir ?? fileInfo.Directory.FullName;
+                var outName = Path.GetFileNameWithoutExtension(fileInfo.Name) + "-encrypted" + fileInfo.Extension + ".lcrypt";
 
-                    Directory.CreateDirectory(outDir);
+                Directory.CreateDirectory(outDir);
 
-                    using(var destinationStream = new FileStream(Path.Combine(outDir, outName), 
-                        FileMode.Create, FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true))
-                    {
-                        using (var encryptionService = new EncryptionService(algorithm, sourceStream, destinationStream, password, null))
-                        {
-                            await encryptionService.EncryptAsync().ConfigureAwait(false);
-                        }
-                    }
-                }
+                using var destinationStream = new FileStream(Path.Combine(outDir, outName),
+                    FileMode.Create, FileAccess.Write, FileShare.None, FileBufferSize, useAsync: true);
+                using var encryptionService = new EncryptionService(algorithm, sourceStream, destinationStream, password, null);
+                await encryptionService.EncryptAsync().ConfigureAwait(false);
             }
 
             return 0;
