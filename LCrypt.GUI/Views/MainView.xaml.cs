@@ -14,11 +14,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LCrypt.GUI
+namespace LCrypt.GUI.Views
 {
-    public partial class MainWindow : MetroWindow
+    public partial class MainView : MetroWindow
     {
-        public MainWindow()
+        public MainView()
         {
             InitializeComponent();
         }
